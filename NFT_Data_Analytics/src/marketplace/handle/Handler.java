@@ -48,7 +48,7 @@ public class Handler implements IMarketplace {
 
 	@Override
 	public void clearData() {
-		// TODO Auto-generated method stub
+		Crawler.clearAllData();
 		
 	}
 
