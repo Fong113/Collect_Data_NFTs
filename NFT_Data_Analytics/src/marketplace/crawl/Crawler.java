@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import org.apache.commons.io.FileUtils;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -112,6 +114,7 @@ public abstract class Crawler {
 				System.out.println("Done " + binance.getFileName());
 			}
 		}
+		
 		System.out.println("Done Binance");
 		// Rarible
 		for(RaribleChainType chain : RaribleChainType.values()) {
@@ -139,7 +142,15 @@ public abstract class Crawler {
 				System.out.println("Done " + opensea.getFileName());
 			}
 		}
-		System.out.println("Done Opensea");
-		
+		System.out.println("Done Opensea");		
+	}
+	
+	public static void clearAllData() {
+		try {
+			FileUtils.cleanDirectory(new File(".\\data"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
