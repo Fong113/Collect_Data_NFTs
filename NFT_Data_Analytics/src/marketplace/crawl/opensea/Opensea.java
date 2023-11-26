@@ -1,4 +1,4 @@
-package marketplace.crawl;
+package marketplace.crawl.opensea;
 
 import java.util.Map;
 import java.util.Set;
@@ -14,39 +14,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
+import marketplace.crawl.Crawler;
+
 public class Opensea extends Crawler {
 	
-	public enum Chain {
-		ALLCHAIN(""), ARBITRUM("arbitrum"), AVALANCHE("avalanche"), BNB("BSC"), 
-		BASE("base"), ETH("ethereum"), KLAYTN("klaytn"), OPTIMISM("optimism"), 
-		POLYGON("matic"), SOLANA("solana"), ZORA("zora");
-		
-		private String value;
-		
-		private Chain(String value) {
-			this.value = value;
-		}
-	}
-	
-	public enum Period {
-		ONEHOUR("ONE_HOUR"), SIXHOURS("SIX_HOUR"), ONEDAY("ONE_DAY"), ONEWEEK("SEVEN_DAY"), ONEMONTH("THIRTY_DAY");
-		
-		private String value;
-		
-		private Period(String value) {
-			this.value = value;
-		}
-	}
-	
-	public Opensea(Chain chain, Period period, int rows) {
-		super.chain = chain.value;
-		super.period = period.value;
+	public Opensea(String chain, String period, int rows) {
+		super.chain = chain;
+		super.period = period;
 		super.rows = rows;
 	}
 	
-	public Opensea(Chain chain, Period period) {
-		super.chain = chain.value;
-		super.period = period.value;
+	public Opensea(String chain, String period) {
+		super.chain = chain;
+		super.period = period;
 		super.rows = 100;
 	}
 	
@@ -145,7 +125,6 @@ public class Opensea extends Crawler {
 
 	@Override
 	protected String getFileName() {
-		String formatTime = Crawler.getTime("yyy_MM_dd_HH");
-		return ".\\data\\opensea_" + period + "_" + chain + "_" + formatTime + ".json";
+		return ".\\data\\opensea_" + period + "_" + chain + ".json";
 	}
 }

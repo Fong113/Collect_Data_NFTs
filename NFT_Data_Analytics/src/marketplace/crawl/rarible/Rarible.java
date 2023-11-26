@@ -1,4 +1,4 @@
-package marketplace.crawl;
+package marketplace.crawl.rarible;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -9,38 +9,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
-class Rarible extends Crawler {
+import marketplace.crawl.Crawler;
+
+public class Rarible extends Crawler {
 	
-	public enum Chain {
-		ETH("ETHEREUM"), POLYGON("POLYGON"), TEZOS("TEZOS"), IMMUTABLEX("IMMUTABLEX");
-		
-		private String value;
-		
-		private Chain(String value) {
-			this.value = value;
-		}
-	}
-	
-	public enum Period {
-		ONEHOUR("H1"), ONEDAY("DAY"), ONEWEEK("WEEK"), ONEMONTH("MONTH");
-		
-		private String value;
-		
-		private Period(String value) {
-			this.value = value;
-		}
-	}
-	
-	
-	public Rarible(Chain chain, Period period, int rows) {
-		super.chain = chain.value;
-		super.period = period.value;
+	public Rarible(String chain, String period, int rows) {
+		super.chain = chain;
+		super.period = period;
 		super.rows = rows;
 	}
 	
-	public Rarible(Chain chain, Period period) {
-		super.chain = chain.value;
-		super.period = period.value;
+	public Rarible(String chain, String period) {
+		super.chain = chain;
+		super.period = period;
 		super.rows = 100;
 	}
 	
@@ -88,7 +69,6 @@ class Rarible extends Crawler {
 
 	@Override
 	protected String getFileName() {
-		String formatTime = Crawler.getTime("yyy_MM_dd_HH");
-		return ".\\data\\rarible_" + period + "_" + chain + "_" + formatTime + ".json";
+		return ".\\data\\rarible_" + period + "_" + chain + ".json";
 	}
 }

@@ -1,4 +1,4 @@
-package marketplace.crawl;
+package marketplace.crawl.niftygateway;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -9,43 +9,20 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
-class NiftyGateway extends Crawler {
+import marketplace.crawl.Crawler;
+
+public class Niftygateway extends Crawler {
 	
-	public enum Chain {
-		ETH("ETH"), USD("USD");
-		
-		private String value;
-		
-		private Chain(String value) {
-			this.value = value;
-		}
-	}
-	
-	public enum Period {
-		ONEDAY("oneDay"), ONEWEEK("sevenDay"), ONEMONTH("thirtyDay");
-		
-		private String value;
-		
-		private Period(String value) {
-			this.value = value;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-	}
-	
-	
-	public NiftyGateway(Period period, Chain chain, int rows) {
-		super.period = period.value;
-		super.chain = chain.value;
+	public Niftygateway(String period, String chain, int rows) {
+		super.period = period;
+		super.chain = chain;
 		super.rows = rows;
 		
 	}
 	
-	public NiftyGateway(Period period, Chain chain) {
-		super.period = period.value;
-		super.chain = chain.value;
+	public Niftygateway(String period, String chain) {
+		super.period = period;
+		super.chain = chain;
 		super.rows = 100;	
 	}
 	
@@ -109,8 +86,7 @@ class NiftyGateway extends Crawler {
 
 	@Override
 	protected String getFileName() {
-		String formatTime = Crawler.getTime("yyy_MM_dd_HH");
-		return ".\\data\\niftygateway_" + period + "_" + chain + "_" + formatTime + ".json";
+		return ".\\data\\niftygateway_" + period + "_" + chain + ".json";
 	}
 	
 	

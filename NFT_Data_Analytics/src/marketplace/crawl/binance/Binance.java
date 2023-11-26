@@ -1,4 +1,4 @@
-package marketplace.crawl;
+package marketplace.crawl.binance;
 
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -9,33 +9,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
+import marketplace.crawl.Crawler;
+
 public class Binance extends Crawler {
 	
-	public enum Chain {
-		BNB("BSC"), ETH("ETH"), BTC("BTC");
-		
-		private String value;
-		
-		private Chain(String value) {
-			this.value = value;
-		}
-
-	}
-	
-	public enum Period {
-		ONEHOUR("1H"), SIXHOURS("4H"), ONEDAY("24H"), ONEWEEK("7D");
-		
-		private String value;
-		
-		private Period(String value) {
-			this.value = value;
-		}
-	}
-	
-	
-	public Binance(Chain chain, Period period, int rows) {
-		super.chain = chain.value;
-		super.period = period.value;
+	public Binance(String chain, String period, int rows) {
+		super.chain = chain;
+		super.period = period;
 		super.rows = rows;
 	}
 	
@@ -89,7 +69,6 @@ public class Binance extends Crawler {
 
 	@Override
 	protected String getFileName() {
-		String formatTime = Crawler.getTime("yyy_MM_dd_HH");
-		return ".\\data\\binance_" + period + "_" + chain + "_" + formatTime + ".json";
+		return ".\\data\\binance_" + period + "_" + chain + ".json";
 	}
 }
