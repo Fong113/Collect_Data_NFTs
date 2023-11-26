@@ -14,6 +14,19 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import marketplace.crawl.binance.Binance;
+import marketplace.crawl.binance.BinanceChainType;
+import marketplace.crawl.binance.BinancePeriodType;
+import marketplace.crawl.niftygateway.Niftygateway;
+import marketplace.crawl.niftygateway.NiftygatewayChainType;
+import marketplace.crawl.niftygateway.NiftygatewayPeriodType;
+import marketplace.crawl.opensea.Opensea;
+import marketplace.crawl.opensea.OpenseaChainType;
+import marketplace.crawl.opensea.OpenseaPeriodType;
+import marketplace.crawl.rarible.Rarible;
+import marketplace.crawl.rarible.RaribleChainType;
+import marketplace.crawl.rarible.RariblePeriodType;
+
 public abstract class Crawler {
 	protected String period;
 	protected String chain;
@@ -88,5 +101,45 @@ public abstract class Crawler {
 	protected static String getTime(String format) {
 		LocalDateTime time = LocalDateTime.now();
 		return time.format(DateTimeFormatter.ofPattern(format));
+	}
+	
+	public static void crawlAllData() {
+		// Binance
+		for(BinanceChainType chain : BinanceChainType.values()) {
+			for(BinancePeriodType period: BinancePeriodType.values()) {
+				Binance binance = new Binance(chain.getValue(), period.getValue());
+				binance.crawlData();
+				System.out.println("Done " + binance.getFileName());
+			}
+		}
+		System.out.println("Done Binance");
+		// Rarible
+		for(RaribleChainType chain : RaribleChainType.values()) {
+			for(RariblePeriodType period: RariblePeriodType.values()) {
+				Rarible rarible = new Rarible(chain.getValue(), period.getValue());
+				rarible.crawlData();
+				System.out.println("Done " + rarible.getFileName());
+			}
+		}
+		System.out.println("Done Rarible");
+		// Niftygateway
+		for(NiftygatewayChainType chain : NiftygatewayChainType.values()) {
+			for(NiftygatewayPeriodType period: NiftygatewayPeriodType.values()) {
+				Niftygateway niftygateway = new Niftygateway(chain.getValue(), period.getValue());
+				niftygateway.crawlData();
+				System.out.println("Done " + niftygateway.getFileName());
+			}
+		}
+		System.out.println("Done Niftygateway");
+		// Opensea
+		for(OpenseaChainType chain : OpenseaChainType.values()) {
+			for(OpenseaPeriodType period: OpenseaPeriodType.values()) {
+				Opensea opensea = new Opensea(chain.getValue(), period.getValue());
+				opensea.crawlData();
+				System.out.println("Done " + opensea.getFileName());
+			}
+		}
+		System.out.println("Done Opensea");
+		
 	}
 }

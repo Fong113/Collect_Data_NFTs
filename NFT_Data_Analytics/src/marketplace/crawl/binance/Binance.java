@@ -66,9 +66,9 @@ public class Binance extends Crawler {
 		data.add("period", new JsonPrimitive(period));
 		data.add("data", rows);
 	}
-
+	
 	@Override
-	protected String getFileName() {
+	public String getFileName() {
 		return ".\\data\\binance_" + period + "_" + chain + ".json";
 	}
 }

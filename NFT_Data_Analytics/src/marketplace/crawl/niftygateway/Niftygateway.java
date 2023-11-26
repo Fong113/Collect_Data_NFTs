@@ -13,14 +13,14 @@ import marketplace.crawl.Crawler;
 
 public class Niftygateway extends Crawler {
 	
-	public Niftygateway(String period, String chain, int rows) {
+	public Niftygateway(String chain, String period, int rows) {
 		super.period = period;
 		super.chain = chain;
 		super.rows = rows;
 		
 	}
 	
-	public Niftygateway(String period, String chain) {
+	public Niftygateway(String chain, String period) {
 		super.period = period;
 		super.chain = chain;
 		super.rows = 100;	
@@ -30,7 +30,7 @@ public class Niftygateway extends Crawler {
 	@Override
 	protected void getRespone() {
 		String api = "";
-		switch(super.period) {
+		switch(period) {
 		case "oneDay":
 			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size="+ rows +"&sort=-one_day_total_volume";
 			break;
@@ -85,7 +85,7 @@ public class Niftygateway extends Crawler {
 	}
 
 	@Override
-	protected String getFileName() {
+	public String getFileName() {
 		return ".\\data\\niftygateway_" + period + "_" + chain + ".json";
 	}
 	

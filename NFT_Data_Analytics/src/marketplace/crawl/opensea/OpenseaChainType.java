@@ -4,7 +4,7 @@ import marketplace.crawl.ChainType;
 
 public enum OpenseaChainType implements ChainType{
 	
-	ALLCHAIN(""), ARBITRUM("arbitrum"), AVALANCHE("avalanche"), BNB("BSC"), 
+	ARBITRUM("arbitrum"), AVALANCHE("avalanche"), BNB("BSC"), 
 	BASE("base"), ETH("ethereum"), KLAYTN("klaytn"), OPTIMISM("optimism"), 
 	POLYGON("matic"), SOLANA("solana"), ZORA("zora");
 	

@@ -31,8 +31,7 @@ public class Handler implements IMarketplace {
 			colList.add(col);
 		}
 		
-		Trending trend = new Trending(marketplaceType, createdAt, chainStr, periodStr, colList);
-		return trend;
+		return new Trending(marketplaceType, createdAt, chainStr, periodStr, colList);
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class Handler implements IMarketplace {
 
 	@Override
 	public void crawlAllData() {
-		// TODO Auto-generated method stub
+		Crawler.crawlAllData();
 		
 	}
 

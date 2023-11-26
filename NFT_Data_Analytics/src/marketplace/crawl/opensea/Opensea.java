@@ -124,7 +124,7 @@ public class Opensea extends Crawler {
 	}
 
 	@Override
-	protected String getFileName() {
+	public String getFileName() {
 		return ".\\data\\opensea_" + period + "_" + chain + ".json";
 	}
 }

@@ -40,7 +40,6 @@ public class Rarible extends Crawler {
 	
 	@Override
 	protected void preprocessData() {
-		System.out.println(respone);
 		JsonArray rowsRaw = JsonParser.parseString(respone).getAsJsonArray();
 		
 		JsonArray rows = new JsonArray();
@@ -68,7 +67,7 @@ public class Rarible extends Crawler {
 	}
 
 	@Override
-	protected String getFileName() {
+	public String getFileName() {
 		return ".\\data\\rarible_" + period + "_" + chain + ".json";
 	}
 }
