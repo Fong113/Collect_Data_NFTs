@@ -129,7 +129,7 @@ public class Opensea extends Crawler {
 
 	@Override
 	public String getFileName() {
-		return pathSaveFile + "\\opensea_" + period + "_" + chain + ".json";
+		return PATHSAVEFILE + "\\opensea_" + period + "_" + chain + ".json";
 	}
 	
 	public static void crawlAllChainPeriod() {
