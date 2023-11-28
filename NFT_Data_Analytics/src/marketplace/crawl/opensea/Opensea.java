@@ -5,8 +5,10 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,7 +37,9 @@ public class Opensea extends Crawler {
 		System.setProperty("webdriver.chrome.driver", ".\\lib\\ChromeDriver\\chromedriver.exe");
 //		ChromeOptions options = new ChromeOptions();
 //		options.addArguments("--headless");
-		WebDriver driver = new ChromeDriver();
+		ChromeOptions opt = new ChromeOptions();
+        opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
+		WebDriver driver = new ChromeDriver(opt);
         
 		String url = "https://opensea.io/rankings/trending?chain="+ chain +"&sortBy="+ period.toLowerCase() + "_volume";
         driver.navigate().to(url);

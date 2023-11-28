@@ -3,7 +3,7 @@ package marketplace.crawl.binance;
 import marketplace.crawl.PeriodType;
 
 public enum BinancePeriodType implements PeriodType{
-	ONEHOUR("1H"), SIXHOURS("4H"), ONEDAY("24H"), ONEWEEK("7D");
+	ONEHOUR("1H"), SIXHOURS("6H"), ONEDAY("24H"), ONEWEEK("7D");
 	
 	private String value;
 	
