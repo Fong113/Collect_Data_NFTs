@@ -78,6 +78,7 @@ public class Niftygateway extends Crawler {
 			rows.add(row);
 		}
 		
+		data.addProperty("marketplaceName", "Niftygateway");
 		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
@@ -86,7 +87,7 @@ public class Niftygateway extends Crawler {
 
 	@Override
 	public String getFileName() {
-		return ".\\data\\niftygateway_" + period + "_" + chain + ".json";
+		return PATHSAVEFILE + "\\niftygateway_" + period + "_" + chain + ".json";
 	}
 	
 	
@@ -112,5 +113,16 @@ public class Niftygateway extends Crawler {
 	
 	private JsonElement convertValueByNetworkRate(JsonElement jElement, float rate) {
 		return new JsonPrimitive(jElement.getAsFloat() / rate);
+	}
+	
+	public static void crawlAllChainPeriod() {
+		for(NiftygatewayChainType chain : NiftygatewayChainType.values()) {
+			for(NiftygatewayPeriodType period: NiftygatewayPeriodType.values()) {
+				Niftygateway niftygateway = new Niftygateway(chain.getValue(), period.getValue());
+				niftygateway.crawlData();
+				System.out.println("Done " + niftygateway.getFileName());
+			}
+		}
+		System.out.println("Done Niftygateway");
 	}
 }
