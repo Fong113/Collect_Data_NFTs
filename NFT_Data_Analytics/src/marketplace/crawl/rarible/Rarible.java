@@ -35,7 +35,7 @@ public class Rarible extends Crawler {
 			    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 OPR/103.0.0.0")
 			    .method("POST", HttpRequest.BodyPublishers.ofString(requestBody))
 			    .build();
-		respone = Crawler.getResponeRequest(request);		
+		respone = Crawler.getResponeRequest(request);
 	}
 	
 	@Override
@@ -48,8 +48,22 @@ public class Rarible extends Crawler {
 			JsonObject row = new JsonObject();
 			row.add("id", rowRawObj.get("id"));
 			row.add("name", rowRawObj.get("name"));
-			row.add("logo", rowRawObj.getAsJsonObject("collection").get("pic"));
 			
+			String logo = "";
+			JsonObject rowRawObjCollection = rowRawObj.getAsJsonObject("collection");
+			if(isGet(rowRawObjCollection, "pic")) {
+				String pic = rowRawObjCollection.get("pic").getAsString(); 
+				logo =  pic.contains("ipfs") ? "" : pic; 
+			}
+			if(rowRawObjCollection.getAsJsonArray("imageMedia").size() >= 1) {
+				logo = rowRawObjCollection.getAsJsonArray("imageMedia")
+						.get(1)
+						.getAsJsonObject()
+						.get("url")
+						.getAsString();
+			}
+			
+			row.addProperty("logo", logo);
 			JsonObject rowRawObjStatistics = rowRawObj.getAsJsonObject("statistics");
 			row.add("floorPrice", isGet(rowRawObjStatistics, "floorPrice") ? rowRawObjStatistics.getAsJsonObject("floorPrice").get("value") : null);
 			row.add("floorPriceChange", isGet(rowRawObjStatistics, "floorPrice") ? rowRawObjStatistics.getAsJsonObject("floorPrice").get("changePercent") : null);
