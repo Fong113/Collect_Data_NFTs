@@ -22,16 +22,18 @@ import marketplace.crawl.MarketplaceType;
 import marketplace.crawl.PeriodType;
 
 public class Handler implements IMarketplace {
+	private Crawler crawler;
 	
 	@Override
 	public Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period, int rows) {
 		String chainStr = chain.getValue();
 		String periodStr = period.getValue();
 		
-		Crawler crawler = CrawlerFactory.getCrawler(marketplaceType, chain, period, rows);
+		crawler = CrawlerFactory.getCrawler(marketplaceType, chain, period, rows);
 		
 		JsonObject data = crawler.crawlData();
 		String createdAt = data.get("createdAt").getAsString();
+		String currency = data.get("currency").getAsString();
 		ArrayList<Collection> colList = new ArrayList<Collection>();
 		
 		for(JsonElement e : data.getAsJsonArray("data")) {
@@ -39,14 +41,13 @@ public class Handler implements IMarketplace {
 			colList.add(col);
 		}
 		
-		return new Trending(marketplaceType, createdAt, chainStr, periodStr, colList);
+		return new Trending(marketplaceType, createdAt, chainStr, periodStr, currency, colList);
 	}
 
 	@Override
 	public Set<CollectionFilter> getCollectionList(String collectionName) {
 		
-		File path = new File(Crawler.PATHSAVEFILE);
-		File filesList[] = path.listFiles();
+		File filesList[] = Crawler.folderOfMarketplace.listFiles();
 		JsonObject data = null;
 		Set<CollectionFilter> result = new HashSet<CollectionFilter>();
 		
@@ -92,8 +93,30 @@ public class Handler implements IMarketplace {
 	
 	@Override
 	public Set<String> getCollectionNameList() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> result = new HashSet<String>();
+		File filesList[] = Crawler.folderOfMarketplace.listFiles();
+		JsonObject data = null;
+		
+		for(File f : filesList) {
+			try (Scanner sc = new Scanner(f)) {
+				data = JsonParser.parseString(sc.nextLine()).getAsJsonObject();
+				
+				if(!data.get("data").isJsonNull()) {
+					for(int i = 0; i < 2; i++) {						
+						result.add(data.getAsJsonArray("data").get(i).getAsJsonObject().get("name").getAsString());
+					}
+				}
+				
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+			    e.printStackTrace();
+			} catch (JsonSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 
 }

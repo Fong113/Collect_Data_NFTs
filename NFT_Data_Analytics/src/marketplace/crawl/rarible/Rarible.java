@@ -43,6 +43,7 @@ public class Rarible extends Crawler {
 		JsonArray rowsRaw = JsonParser.parseString(respone).getAsJsonArray();
 		
 		JsonArray rows = new JsonArray();
+		String currency = "";
 		for(JsonElement rowRaw : rowsRaw) {
 			JsonObject rowRawObj = rowRaw.getAsJsonObject();
 			JsonObject row = new JsonObject();
@@ -72,12 +73,17 @@ public class Rarible extends Crawler {
 			row.add("owners", isGet(rowRawObjStatistics, "owners") ? rowRawObjStatistics.get("owners") : null);
 			row.add("items", isGet(rowRawObjStatistics, "items") ? rowRawObjStatistics.get("items") : null);
 			rows.add(row);
+			
+			if(currency.equals("")) {
+				currency = isGet(rowRawObjStatistics, "floorPrice") ? rowRawObjStatistics.getAsJsonObject("floorPrice").get("currency").getAsString() : "";
+			}
 		}
 		
 		data.addProperty("marketplaceName", "Rarible");
 		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
+		data.addProperty("currency", currency);
 		data.add("data", rows);
 	}
 

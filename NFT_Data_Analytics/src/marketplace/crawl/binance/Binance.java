@@ -46,6 +46,7 @@ public class Binance extends Crawler {
 				.getAsJsonArray("rows");
 		
 		JsonArray rows = new JsonArray();
+		
 		for(JsonElement rowRaw : rowsRaw) {
 			JsonObject rowRawObj = rowRaw.getAsJsonObject();
 			JsonObject row = new JsonObject();
@@ -65,6 +66,7 @@ public class Binance extends Crawler {
 		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
+		data.add("currency", new JsonPrimitive(chain));
 		data.add("data", rows);
 	}
 	
