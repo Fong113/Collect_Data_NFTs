@@ -68,7 +68,7 @@ public class Opensea extends Crawler {
         Set<Entry<String, JsonElement>> entrySet = recordsRaw.entrySet();
         
         int index = -2;
-
+        String currency = "";
         for(Map.Entry<String,JsonElement> entry : entrySet){
         	if(index <= 0) {
         		index++;
@@ -90,7 +90,8 @@ public class Opensea extends Crawler {
         		curRow.add("id", e.get("__id"));
         		curRow.add("name", e.get("name"));
         		curRow.add("logo", e.get("logo"));
-        		curRow.add("floorPriceChange", e.get("floorPricePercentChange(statsTimeWindow:\"" + period + "\")"));        		
+        		curRow.add("floorPriceChange", e.get("floorPricePercentChange(statsTimeWindow:\"" + period + "\")"));
+        		
         	}
         	
         	
@@ -103,6 +104,10 @@ public class Opensea extends Crawler {
         	
         	if(key.endsWith("floorPrice")) {
         		curRow.add("floorPrice", e.get("unit"));
+        		
+        		if(currency.equals("")) {
+        			currency = e.get("symbol").getAsString();
+        		}
         	}
         	
         	if(key.endsWith("volume")) {
@@ -124,6 +129,7 @@ public class Opensea extends Crawler {
         data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
+		data.addProperty("currency", currency);
 		data.add("data", rows);
 	}
 

@@ -82,6 +82,7 @@ public class Niftygateway extends Crawler {
 		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
+		data.add("currency", new JsonPrimitive(chain));
 		data.add("data", rows);
 	}
 

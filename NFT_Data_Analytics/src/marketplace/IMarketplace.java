@@ -9,7 +9,7 @@ import marketplace.handle.CollectionFilter;
 import marketplace.handle.Trending;
 
 public interface IMarketplace {
-	Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period, int row);
+	Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period, int rows);
 	Set<CollectionFilter> getCollectionList(String collectionName);
 	Set<String> getCollectionNameList();
 	void crawlAllData();

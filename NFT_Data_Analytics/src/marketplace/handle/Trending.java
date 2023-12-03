@@ -9,6 +9,7 @@ public class Trending {
 	private String createdAt;
 	private String chain;
 	private String period;
+	private String currency;
 	private ArrayList<Collection> data;
 
 	public Trending(MarketplaceType marketPlace, String createdAt, String chain, String period, ArrayList<Collection> data) {
@@ -37,5 +38,13 @@ public class Trending {
 
 	public ArrayList<Collection> getData() {
 		return data;
+	}
+
+	public String getUnit() {
+		return currency;
+	}
+
+	public void setUnit(String unit) {
+		this.currency = unit;
 	}
 }

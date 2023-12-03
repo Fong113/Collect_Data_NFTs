@@ -37,13 +37,14 @@ public abstract class Crawler {
 	protected String respone;
 	protected int rows;
 	protected JsonObject data = new JsonObject();	
-	public static final String PATHSAVEFILE = ".\\data\\marketplace";
+	protected static final String PATHSAVEFILE = ".\\data\\marketplace";
+	public static final File folderOfMarketplace = new File(PATHSAVEFILE);
 	
 	protected abstract void getRespone();
 	
 	protected abstract void preprocessData();
 	
-	protected void saveToFile(File file) {
+	protected void saveDataToFile(File file) {
 		try {
 			FileWriter writer = new FileWriter(file);
 			writer.write(data.toString());
@@ -70,14 +71,13 @@ public abstract class Crawler {
 		} else {
 			getRespone();
 			preprocessData();
-			saveToFile(file);
+			saveDataToFile(file);
 		}
 		
 		return data;
 	}
 	
 	protected abstract String getFileName();
-	
 	
 	protected static boolean isGet(JsonObject jObject ,String property) {
 		if(!jObject.has(property) || jObject.get(property).isJsonNull()) {			
@@ -106,7 +106,7 @@ public abstract class Crawler {
 		LocalDateTime time = LocalDateTime.now();
 		return time.format(DateTimeFormatter.ofPattern(format));
 	}
-	
+		
 	public static void crawlAllData() {
 		// Binance
 		Binance.crawlAllChainPeriod();
@@ -126,4 +126,5 @@ public abstract class Crawler {
 			e.printStackTrace();
 		}
 	}
+
 }

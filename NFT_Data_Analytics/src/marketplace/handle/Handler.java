@@ -22,13 +22,14 @@ import marketplace.crawl.MarketplaceType;
 import marketplace.crawl.PeriodType;
 
 public class Handler implements IMarketplace {
+	private Crawler crawler;
 	
 	@Override
 	public Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period, int rows) {
 		String chainStr = chain.getValue();
 		String periodStr = period.getValue();
 		
-		Crawler crawler = CrawlerFactory.getCrawler(marketplaceType, chain, period, rows);
+		crawler = CrawlerFactory.getCrawler(marketplaceType, chain, period, rows);
 		
 		JsonObject data = crawler.crawlData();
 		String createdAt = data.get("createdAt").getAsString();
@@ -45,8 +46,7 @@ public class Handler implements IMarketplace {
 	@Override
 	public Set<CollectionFilter> getCollectionList(String collectionName) {
 		
-		File path = new File(Crawler.PATHSAVEFILE);
-		File filesList[] = path.listFiles();
+		File filesList[] = Crawler.folderOfMarketplace.listFiles();
 		JsonObject data = null;
 		Set<CollectionFilter> result = new HashSet<CollectionFilter>();
 		
@@ -92,7 +92,6 @@ public class Handler implements IMarketplace {
 	
 	@Override
 	public Set<String> getCollectionNameList() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
