@@ -17,7 +17,7 @@ public class ShowArticlesByTags implements IArticleManager {
         ShowArticlesByTags.articles = articles;
     }
     
-    @Override
+    // Chỉ để test trong console
     public void filterArticlesByTags() {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.print("Nhập tags (cách nhau bởi dấu phẩy cách): ");
@@ -42,6 +42,7 @@ public class ShowArticlesByTags implements IArticleManager {
         }
     }
     
+ // function chính
     @Override
     public List<Article> filterArticlesByTags(String[] targetTags) {
         List<Article> filteredArticles = new ArrayList<>();

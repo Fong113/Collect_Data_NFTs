@@ -10,7 +10,6 @@ import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
 
 import blog_news.Article;
-import blog_news.helper.DateIO;
 import blog_news.helper.JsonIO;
 
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class Cointelegraph_crawler implements ICrawler {
 	    	WebDriver driver = new ChromeDriver();
 	        driver.manage().window().maximize();
 	        driver.get(baseUrl);
-	        for (int i = 0; i <= 5; i++) {
+	        for (int i = 1; i <= 5; i++) {
 	                	((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
 	                	((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -500);");
 	                	try {
@@ -63,7 +62,7 @@ public class Cointelegraph_crawler implements ICrawler {
 	                Elements articles = doc.select("article");
 	
 	                if (articles.isEmpty()) {
-	                    System.out.println("No more articles. Crawling completed.");
+//	                    System.out.println("No more articles. Crawling completed.");
 	                }
 	
 	                
@@ -97,7 +96,7 @@ public class Cointelegraph_crawler implements ICrawler {
 	                    // Lấy ngày xuất bản
 	                    String publishDateStr = articleDoc.select("div.post-meta__publish-date time").attr("datetime");
 	                    if (!publishDateStr.isEmpty()) {
-	                        currentArticle.setPublishDate(DateIO.formatDate(publishDateStr));
+	                        currentArticle.setPublishDate(Article.formatDate(publishDateStr));
 	                    }
 	
 	                    existingArticles.add(currentArticle);
@@ -109,7 +108,7 @@ public class Cointelegraph_crawler implements ICrawler {
 	            e.printStackTrace();
 	        } finally {
 	            // Đóng trình duyệt
-	        	System.out.println("Crawl https://cointelegraph.com/tags/nft done!!!");
+//	        	System.out.println("Crawl https://cointelegraph.com/tags/nft done!!!");
 	            driver.quit();
 	        }
 	    	return existingArticles;
