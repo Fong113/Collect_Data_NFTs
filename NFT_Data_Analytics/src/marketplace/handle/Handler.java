@@ -93,7 +93,30 @@ public class Handler implements IMarketplace {
 	
 	@Override
 	public Set<String> getCollectionNameList() {
-		return null;
+		Set<String> result = new HashSet<String>();
+		File filesList[] = Crawler.folderOfMarketplace.listFiles();
+		JsonObject data = null;
+		
+		for(File f : filesList) {
+			try (Scanner sc = new Scanner(f)) {
+				data = JsonParser.parseString(sc.nextLine()).getAsJsonObject();
+				
+				if(!data.get("data").isJsonNull()) {
+					for(int i = 0; i < 2; i++) {						
+						result.add(data.getAsJsonArray("data").get(i).getAsJsonObject().get("name").getAsString());
+					}
+				}
+				
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+			    e.printStackTrace();
+			} catch (JsonSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 
 }
