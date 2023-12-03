@@ -69,7 +69,7 @@ public class JsonIO<T> {
         try {
             // Mở file và ghi một danh sách rỗng để xóa nội dung
             Files.write(Path.of(filePath), Collections.emptyList(), StandardOpenOption.TRUNCATE_EXISTING);
-            System.out.println("Dữ liệu trong blog_news.json đã được xóa.");
+//            System.out.println("Dữ liệu trong blog_news.json đã được xóa.");
         } catch (IOException e) {
             e.printStackTrace();
         }

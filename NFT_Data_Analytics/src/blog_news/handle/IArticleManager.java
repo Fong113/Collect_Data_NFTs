@@ -3,6 +3,7 @@ package blog_news.handle;
 import java.util.List;
 
 public interface IArticleManager {
-	 void filterArticlesByTags();
-	 List<?> filterArticlesByTags(String[] targetTags);
+//	 void filterArticlesByTags(); // Chỉ để test trong console
+	// function chính
+	 List<?> filterArticlesByTags(String[] targetTags); 
 }

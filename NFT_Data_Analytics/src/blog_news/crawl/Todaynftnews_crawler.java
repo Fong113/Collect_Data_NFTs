@@ -10,20 +10,14 @@ import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
 
 import blog_news.Article;
-import blog_news.helper.DateIO;
 import blog_news.helper.JsonIO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.JavascriptExecutor;
 
 
@@ -59,17 +53,17 @@ public class Todaynftnews_crawler implements ICrawler {
 //        List<Article> articleList = new ArrayList<>();
         
     	try {
-    		    for (int morePage = 1; morePage < 5; morePage++) {
+    		    for (int morePage = 1; morePage <= 5; morePage++) {
     		    	 try {
     		    		 	Thread.sleep(1000);
     		    	        WebElement closeButton = driver.findElement(By.cssSelector(".pum-close.popmake-close"));
     		    	        closeButton.click();
-    		    	        System.out.println("Popup đã được đóng.");
-    		    	        Thread.sleep(3000);
+//    		    	        System.out.println("Popup đã được đóng.");
+    		    	        Thread.sleep(1000);
     		    	        clickLoadMoreButton(driver);
     		    	    } catch (Exception e) {
     		    	        // Xử lý exception
-    		    	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
+//    		    	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
     		    	    } finally {
     		    	        // Thực hiện thao tác clickLoadMoreButton dù có exception hay không
     		    	        clickLoadMoreButton(driver);
@@ -103,19 +97,19 @@ public class Todaynftnews_crawler implements ICrawler {
                     Element dateElement = articleDoc.select("div.right span.thetime span").first();
                     String publishDateStr = dateElement.text();
                     if (!publishDateStr.isEmpty()) {
-                        currentArticle.setPublishDate(DateIO.formatCustomDate(publishDateStr));
+                        currentArticle.setPublishDate(Article.formatCustomDate(publishDateStr));
                     }
 
                     existingArticles.add(currentArticle);
 
-                    System.out.println("Processed article: " + currentArticle.getTitle());
+//                    System.out.println("Processed article: " + currentArticle.getTitle());
             }
                 	                
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             // Đóng trình duyệt
-        	System.out.println("Crawl https://todaynftnews.com/tags/nft done!!!");
+//        	System.out.println("Crawl https://todaynftnews.com/tags/nft done!!!");
             driver.quit();
         }
     	return existingArticles;
@@ -126,7 +120,7 @@ public class Todaynftnews_crawler implements ICrawler {
 	        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
 	        // Scroll đến vị trí gần cuối trang
-	        jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight - 100);");
+	        jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight - 1000);");
 
 	        // Chờ một chút để trang có thể load thêm dữ liệu (có thể điều chỉnh thời gian này)
 	        Thread.sleep(1000);
@@ -146,7 +140,7 @@ public class Todaynftnews_crawler implements ICrawler {
             // Thực hiện click vào nút Load more posts
             loadMoreButton.click();
 	        
-	        Thread.sleep(1000); // Đợi một khoảng thời gian để trang load thêm dữ liệu
+	        Thread.sleep(2000); // Đợi một khoảng thời gian để trang load thêm dữ liệu
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
