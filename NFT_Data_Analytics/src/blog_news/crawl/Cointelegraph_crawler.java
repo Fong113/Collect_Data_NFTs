@@ -1,4 +1,4 @@
-package blog_news;
+package blog_news.crawl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import com.google.gson.reflect.TypeToken;
 
+import blog_news.Article;
 import blog_news.helper.DateIO;
 import blog_news.helper.JsonIO;
 
@@ -21,20 +22,33 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Cointelegraph_crawler implements ICrawler {
     	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
-    	private final String PATH = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\cointelegraph_news.json";
+    	private final static String PATH = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\blog_news.json";
     	String baseUrl = "https://cointelegraph.com/tags/nft";
     	
     	@Override
-    	public void crawl() {		
-    		Article_IO.writeToJson(crawlCoinTelegraph(), PATH);
+    	public void crawl() {
+    	    List<Article> existingArticles = Article_IO.loadJson(getPATH());
+
+    	    if (existingArticles == null || existingArticles.isEmpty()) {
+    	        // Nếu danh sách là null hoặc trống, khởi tạo danh sách mới
+    	        existingArticles = new ArrayList<>();
+    	    } else {
+                // Reset idCounter based on the maximum ID in existing articles
+                int maxId = existingArticles.stream().mapToInt(Article::getId).max().orElse(0);
+                Article.resetIdCounter(maxId);
+            }
+
+    	    List<Article> crawledArticles = crawlCoinTelegraph(existingArticles);
+    	    Article_IO.writeToJson(crawledArticles, getPATH());
     	}
+
+
     	
-    	private List<Article> crawlCoinTelegraph(){
+    	private List<Article> crawlCoinTelegraph(List<Article> existingArticles){
 	    	System.setProperty("webdriver.chrome.driver", "E:\\chromedriver-win64\\chromedriver.exe");
 	    	WebDriver driver = new ChromeDriver();
 	        driver.manage().window().maximize();
 	        driver.get(baseUrl);
-	        List<Article> articleList = new ArrayList<>();
 	        for (int i = 0; i <= 5; i++) {
 	                	((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
 	                	((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -500);");
@@ -86,7 +100,7 @@ public class Cointelegraph_crawler implements ICrawler {
 	                        currentArticle.setPublishDate(DateIO.formatDate(publishDateStr));
 	                    }
 	
-	                    articleList.add(currentArticle);
+	                    existingArticles.add(currentArticle);
 	
 	                    System.out.println("Processed article: " + currentArticle.getTitle());
 	                }
@@ -98,7 +112,11 @@ public class Cointelegraph_crawler implements ICrawler {
 	        	System.out.println("Crawl https://cointelegraph.com/tags/nft done!!!");
 	            driver.quit();
 	        }
-	    	return articleList;
+	    	return existingArticles;
     	}
+
+		public static String getPATH() {
+			return PATH;
+		}
     	
 }
