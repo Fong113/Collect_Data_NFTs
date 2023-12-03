@@ -33,6 +33,7 @@ public class Handler implements IMarketplace {
 		
 		JsonObject data = crawler.crawlData();
 		String createdAt = data.get("createdAt").getAsString();
+		String currency = data.get("currency").getAsString();
 		ArrayList<Collection> colList = new ArrayList<Collection>();
 		
 		for(JsonElement e : data.getAsJsonArray("data")) {
@@ -40,7 +41,7 @@ public class Handler implements IMarketplace {
 			colList.add(col);
 		}
 		
-		return new Trending(marketplaceType, createdAt, chainStr, periodStr, colList);
+		return new Trending(marketplaceType, createdAt, chainStr, periodStr, currency, colList);
 	}
 
 	@Override

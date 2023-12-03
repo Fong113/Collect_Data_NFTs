@@ -12,11 +12,14 @@ public class Trending {
 	private String currency;
 	private ArrayList<Collection> data;
 
-	public Trending(MarketplaceType marketPlace, String createdAt, String chain, String period, ArrayList<Collection> data) {
+	public Trending(MarketplaceType marketPlace, String createdAt, String chain, String period, String currency,
+			ArrayList<Collection> data) {
+		super();
 		this.marketPlace = marketPlace;
 		this.createdAt = createdAt;
 		this.chain = chain;
 		this.period = period;
+		this.currency = currency;
 		this.data = data;
 	}
 
@@ -40,11 +43,11 @@ public class Trending {
 		return data;
 	}
 
-	public String getUnit() {
+	public String getCurrency() {
 		return currency;
 	}
 
-	public void setUnit(String unit) {
+	public void setCurrency(String unit) {
 		this.currency = unit;
 	}
 }
