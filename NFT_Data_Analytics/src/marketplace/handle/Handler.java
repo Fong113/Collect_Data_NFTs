@@ -1,10 +1,18 @@
 package marketplace.handle;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import marketplace.IMarketplace;
 import marketplace.crawl.ChainType;
@@ -35,9 +43,38 @@ public class Handler implements IMarketplace {
 	}
 
 	@Override
-	public Collection getCollection(String collectionName, ChainType chain, PeriodType period) {
+	public Set<CollectionFilter> getCollectionList(String collectionName) {
 		
-		return null;
+		File path = new File(Crawler.PATHSAVEFILE);
+		File filesList[] = path.listFiles();
+		JsonObject data = null;
+		Set<CollectionFilter> result = new HashSet<CollectionFilter>();
+		
+		for(File f : filesList) {
+			try (Scanner sc = new Scanner(f)) {
+				data = JsonParser.parseString(sc.nextLine()).getAsJsonObject();
+				
+				if(!data.get("data").isJsonNull()) {
+					for(JsonElement e : data.get("data").getAsJsonArray()) {
+						if(e.getAsJsonObject().get("name").getAsString().contains(collectionName)) {
+							CollectionFilter col = new Gson().fromJson(e, CollectionFilter.class);
+							col.setMarketPlaceName(data.get("marketplaceName").getAsString());
+							col.setChain(data.get("chain").getAsString());
+							col.setPeriod(data.get("period").getAsString());
+							result.add(col);
+						}
+					}
+				}
+				
+			} catch (IOException e) {
+				System.out.println("An error occurred.");
+			    e.printStackTrace();
+			} catch (JsonSyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -50,6 +87,13 @@ public class Handler implements IMarketplace {
 	public void clearData() {
 		Crawler.clearAllData();
 		
+	}
+
+	
+	@Override
+	public Set<String> getCollectionNameList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

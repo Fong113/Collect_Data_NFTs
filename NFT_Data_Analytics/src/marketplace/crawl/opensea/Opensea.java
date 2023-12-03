@@ -35,8 +35,7 @@ public class Opensea extends Crawler {
 	@Override
 	protected void getRespone() {
 		System.setProperty("webdriver.chrome.driver", ".\\lib\\ChromeDriver\\chromedriver.exe");
-//		ChromeOptions options = new ChromeOptions();
-//		options.addArguments("--headless");
+
 		ChromeOptions opt = new ChromeOptions();
         opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
 		WebDriver driver = new ChromeDriver(opt);
@@ -91,7 +90,7 @@ public class Opensea extends Crawler {
         		curRow.add("id", e.get("__id"));
         		curRow.add("name", e.get("name"));
         		curRow.add("logo", e.get("logo"));
-        		curRow.add("floorPriceChange", e.get("floorPricePercentChange(statsTimeWindow:\"" + period + "\")"));
+        		curRow.add("floorPriceChange", e.get("floorPricePercentChange(statsTimeWindow:\"" + period + "\")"));        		
         	}
         	
         	
@@ -121,6 +120,7 @@ public class Opensea extends Crawler {
         	
         }
         
+		data.addProperty("marketplaceName", "Opensea");
         data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
@@ -129,6 +129,17 @@ public class Opensea extends Crawler {
 
 	@Override
 	public String getFileName() {
-		return ".\\data\\opensea_" + period + "_" + chain + ".json";
+		return PATHSAVEFILE + "\\opensea_" + period + "_" + chain + ".json";
+	}
+	
+	public static void crawlAllChainPeriod() {
+		for(OpenseaChainType chain : OpenseaChainType.values()) {
+			for(OpenseaPeriodType period: OpenseaPeriodType.values()) {
+				Opensea opensea = new Opensea(chain.getValue(), period.getValue());
+				opensea.crawlData();
+				System.out.println("Done " + opensea.getFileName());
+			}
+		}
+		System.out.println("Done Opensea");	
 	}
 }
