@@ -2,6 +2,9 @@ package blog_news;
 import java.util.List;
 
 public class Article {
+	private static int idCounter = 1;
+
+	private int id;
     private String title;
     private String absoluteURL;
     private String fullContent;
@@ -9,10 +12,11 @@ public class Article {
     private String publishDate;
     
     public Article() {
-    	
+        this.id = idCounter++;
     }
-    
+
     public Article(String title, String absoluteURL, String fullContent, List<String> tags, String publishDate) {
+        this.id = idCounter++;
         this.title = title;
         this.absoluteURL = absoluteURL;
         this.fullContent = fullContent;
@@ -21,6 +25,10 @@ public class Article {
     }
     
     // Getters/Setters
+    public int getId() {
+        return id;
+    }
+    
     public String getTitle() {
         return title;
     }
@@ -64,13 +72,18 @@ public class Article {
     @Override
     public String toString() {
         return "Article{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", absoluteURL='" + absoluteURL + '\'' +
                 ", content='" + fullContent + '\'' +
                 ", tags=" + tags +
                 ", publishDate='" + publishDate + '\'' +
                 '}';
     }
+
+	public static void resetIdCounter(int maxId) {
+		idCounter = maxId + 1;	
+	}
 }
 
 

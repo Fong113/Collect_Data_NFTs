@@ -4,11 +4,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.apache.commons.io.FileUtils;
 
 public class JsonIO<T> {
 	private final Type TYPE;   //the type of objects to be deserialized from Json
@@ -57,5 +62,16 @@ public class JsonIO<T> {
 		}
 		return list;
 	}
+	
+	public static void clearBlogNewsData() {
+        String filePath = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\blog_news.json";
 
+        try {
+            // Mở file và ghi một danh sách rỗng để xóa nội dung
+            Files.write(Path.of(filePath), Collections.emptyList(), StandardOpenOption.TRUNCATE_EXISTING);
+            System.out.println("Dữ liệu trong blog_news.json đã được xóa.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package blog_news;
+package blog_news.crawl;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import com.google.gson.reflect.TypeToken;
 
+import blog_news.Article;
 import blog_news.helper.DateIO;
 import blog_news.helper.JsonIO;
 
@@ -29,20 +30,33 @@ import org.openqa.selenium.JavascriptExecutor;
 
 public class Todaynftnews_crawler implements ICrawler {
 	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
-	final String PATH = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\todaynft_news.json";
+	private final static String PATH = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\blog_news.json";
 	private String baseUrl = "https://www.todaynftnews.com/nft-news/";
 	
 	@Override
-	public void crawl() {		
-		Article_IO.writeToJson(crawlTodayNFTnews(), PATH);
+	public void crawl() {
+	    List<Article> existingArticles = Article_IO.loadJson(getPATH());
+
+	    if (existingArticles == null || existingArticles.isEmpty()) {
+	        // Nếu danh sách là null hoặc trống, khởi tạo danh sách mới
+	        existingArticles = new ArrayList<>();
+	    } else {
+            // Reset idCounter based on the maximum ID in existing articles
+            int maxId = existingArticles.stream().mapToInt(Article::getId).max().orElse(0);
+            Article.resetIdCounter(maxId);
+        }
+
+	    List<Article> crawledArticles = crawlTodayNFTnews(existingArticles);
+	    Article_IO.writeToJson(crawledArticles, getPATH());
 	}
+
 	
-	private List<Article> crawlTodayNFTnews(){
+	private List<Article> crawlTodayNFTnews(List<Article> existingArticles){
     	System.setProperty("webdriver.chrome.driver", "E:\\chromedriver-win64\\chromedriver.exe");
     	WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get(baseUrl);
-        List<Article> articleList = new ArrayList<>();
+//        List<Article> articleList = new ArrayList<>();
         
     	try {
     		    for (int morePage = 1; morePage < 5; morePage++) {
@@ -51,7 +65,7 @@ public class Todaynftnews_crawler implements ICrawler {
     		    	        WebElement closeButton = driver.findElement(By.cssSelector(".pum-close.popmake-close"));
     		    	        closeButton.click();
     		    	        System.out.println("Popup đã được đóng.");
-    		    	        Thread.sleep(1000);
+    		    	        Thread.sleep(3000);
     		    	        clickLoadMoreButton(driver);
     		    	    } catch (Exception e) {
     		    	        // Xử lý exception
@@ -92,7 +106,7 @@ public class Todaynftnews_crawler implements ICrawler {
                         currentArticle.setPublishDate(DateIO.formatCustomDate(publishDateStr));
                     }
 
-                    articleList.add(currentArticle);
+                    existingArticles.add(currentArticle);
 
                     System.out.println("Processed article: " + currentArticle.getTitle());
             }
@@ -104,7 +118,7 @@ public class Todaynftnews_crawler implements ICrawler {
         	System.out.println("Crawl https://todaynftnews.com/tags/nft done!!!");
             driver.quit();
         }
-    	return articleList;
+    	return existingArticles;
 	}
 	
 	private static void scrollNearEnd(WebDriver driver) {
@@ -136,6 +150,10 @@ public class Todaynftnews_crawler implements ICrawler {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+	}
+
+	public static String getPATH() {
+		return PATH;
 	}
 
 }
