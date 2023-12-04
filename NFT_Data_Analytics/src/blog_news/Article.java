@@ -1,9 +1,5 @@
 package blog_news;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class Article {
 	private static int idCounter = 1;
