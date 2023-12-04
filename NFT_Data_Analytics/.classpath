@@ -6,17 +6,17 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.base.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.controls.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.fxml.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.graphics.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.media.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.swing.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx.web.jar"/>
+	<classpathentry kind="lib" path="lib/JavaFX/lib/javafx-swt.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.15.0.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.10.1.jar"/>
 	<classpathentry kind="lib" path="lib/jsoup-1.16.2.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.base.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.controls.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.fxml.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.graphics.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.media.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.swing.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx.web.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/JavaFX/lib/javafx-swt.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/selenium-server-standalone-3.141.59.jar"/>
-	<classpathentry kind="lib" path="E:/NFTs/BTL.OOP.GROUP24/NFT_Data_Analytics/lib/commons-io-2.15.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-server-standalone-3.141.59.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
