@@ -7,43 +7,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
-public class ShowArticlesByTags implements IArticleManager {
+public class ShowArticlesByTags {
     private static List<Article> articles;
-    private int articleCount = 1;
 
     public ShowArticlesByTags(List<Article> articles) {
         ShowArticlesByTags.articles = articles;
     }
     
-    // Chỉ để test trong console
-    public void filterArticlesByTags() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Nhập tags (cách nhau bởi dấu phẩy cách): ");
-            if (scanner.hasNextLine()) {
-                String inputTags = scanner.nextLine();
-                inputTags = '#' + inputTags.replaceAll("\\s*,\\s*", ",#");
-
-                // Chia chuỗi tags thành danh sách các tag
-                String[] targetTags = inputTags.split(",\\s*");
-                // Lọc danh sách bài viết theo tags nhập từ bàn phím
-                List<Article> filteredArticles = filterArticlesByTags(targetTags);
-
-                // In danh sách bài viết đã lọc
-                System.out.println("Search by tags '" + Arrays.toString(targetTags) + "':");
-                for (Article article : filteredArticles) {
-                    System.out.println(articleCount + ". " + article.getTitle());
-                    articleCount++;
-                }
-            } else {
-                System.out.println("Không có dữ liệu để đọc.");
-            }
-        }
-    }
-    
  // function chính
-    @Override
     public List<Article> filterArticlesByTags(String[] targetTags) {
         List<Article> filteredArticles = new ArrayList<>();
         List<String> targetTagsList = Arrays.asList(targetTags);
@@ -89,5 +61,4 @@ public class ShowArticlesByTags implements IArticleManager {
 
         return filteredArticles;
     }
-
 }
