@@ -49,11 +49,12 @@ public abstract class SeleniumCrawl {
 	
 	public void searchByTag(String tag) {
 		
+		driver.findElement(By.xpath("//a[@data-testid='AppTabBar_Explore_Link']")).click();
 		WebElement search = driver.findElement(By.xpath("//input[@data-testid='SearchBox_Search_Input']"));
         search.sendKeys(tag);
         search.sendKeys(Keys.ENTER);
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']")));
         
 	}
 	
@@ -82,7 +83,7 @@ public abstract class SeleniumCrawl {
          return tags;
 	}
 	public String getImageURL(WebElement tweet) {
-		List<WebElement> images = tweet.findElements(By.xpath(".//div[@data-testid='tweetPhoto']//img[@draggable='true']"));   
+		List<WebElement> images = tweet.findElements(By.xpath(".//div[@data-testid='tweetPhoto']//img"));   
         if (!images.isEmpty()) {
             return images.get(0).getAttribute("src");
         } else {
@@ -90,13 +91,32 @@ public abstract class SeleniumCrawl {
         }
 	}
 	public String getTimePost(WebElement tweet) {
-		return "aoma";
+		WebElement timePost = tweet.findElement(By.xpath(".//div[@data-testid='User-Name']//time"));
+		String date = timePost.getAttribute("datetime");
+		return date;
 	}
+	
+	public ArrayList<Collection> getArrayTweetList(List<WebElement> articleList){
+		
+		 ArrayList<Collection> tweetList = new ArrayList<>();
+		 int id = 0;
+		 for(WebElement tweet : articleList) {
+	            String author = getAuthor(tweet);
+	            String[] tags = getTag(tweet);
+	            String content = getContent(tweet);
+	        	String imageURL = getImageURL(tweet);
+	        	String date = getTimePost(tweet);
+	        	tweetList.add( new Collection(id,author, content, tags, imageURL, date ));
+	        	id++;
+			}
+			return tweetList;
+	}
+	
 	
 	public void putToFile(String fileName, ArrayList<Collection> tweetList) {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		
-		String pathFile = ".\\data\\" + fileName;
+		String pathFile = ".\\data\\" + fileName + ".json";
 		try {
         	FileWriter writer = new FileWriter(pathFile);
         	gson.toJson(tweetList, writer);
