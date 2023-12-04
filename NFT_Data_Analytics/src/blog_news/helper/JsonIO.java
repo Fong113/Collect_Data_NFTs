@@ -13,8 +13,6 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.apache.commons.io.FileUtils;
-
 public class JsonIO<T> {
 	private final Type TYPE;   //the type of objects to be deserialized from Json
 	FileWriter fileWriter;
