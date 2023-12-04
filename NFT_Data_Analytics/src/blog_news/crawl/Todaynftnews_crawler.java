@@ -10,6 +10,7 @@ import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
 
 import blog_news.Article;
+import blog_news.helper.DateIO;
 import blog_news.helper.JsonIO;
 
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public class Todaynftnews_crawler implements ICrawler {
                     Element dateElement = articleDoc.select("div.right span.thetime span").first();
                     String publishDateStr = dateElement.text();
                     if (!publishDateStr.isEmpty()) {
-                        currentArticle.setPublishDate(Article.formatCustomDate(publishDateStr));
+                        currentArticle.setPublishDate(DateIO.formatCustomDate(publishDateStr));
                     }
 
                     existingArticles.add(currentArticle);

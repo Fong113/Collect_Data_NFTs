@@ -10,6 +10,7 @@ import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
 
 import blog_news.Article;
+import blog_news.helper.DateIO;
 import blog_news.helper.JsonIO;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class Cointelegraph_crawler implements ICrawler {
 	                    // Lấy ngày xuất bản
 	                    String publishDateStr = articleDoc.select("div.post-meta__publish-date time").attr("datetime");
 	                    if (!publishDateStr.isEmpty()) {
-	                        currentArticle.setPublishDate(Article.formatDate(publishDateStr));
+	                        currentArticle.setPublishDate(DateIO.formatDate(publishDateStr));
 	                    }
 	
 	                    existingArticles.add(currentArticle);
