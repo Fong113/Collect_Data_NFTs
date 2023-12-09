@@ -10,24 +10,19 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
+import marketplace.crawl.MarketplaceType;
 
 public class Binance extends Crawler {
-	
-	public Binance(String chain, String period, int rows) {
-		super.chain = chain;
-		super.period = period;
-		super.rows = rows;
-	}
 	
 	public Binance(String chain, String period) {
 		super.chain = chain;
 		super.period = period;
-		super.rows = 100;
+		super.marketplaceName = MarketplaceType.BINANCE.getValue();
 	}
 	
 	@Override
 	protected void getRespone() {
-		String requestBody = "{\"network\":\""+ chain + "\",\"period\":\"" + period + "\",\"sortType\":\"volumeDesc\",\"page\":1,\"rows\":"+ rows +"}";
+		String requestBody = "{\"network\":\""+ chain + "\",\"period\":\"" + period + "\",\"sortType\":\"volumeDesc\",\"page\":1,\"rows\":100}";
 		HttpRequest request = HttpRequest.newBuilder()
 			    .uri(URI.create("https://www.binance.com/bapi/nft/v1/friendly/nft/ranking/trend-collection"))
 			    .header("Content-Type", "application/json") 
@@ -63,27 +58,10 @@ public class Binance extends Crawler {
 		}
 		
 		data.addProperty("marketplaceName", "Binance");
-		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
+		data.add("createdAt", new JsonPrimitive(Crawler.getTimeCrawl("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
 		data.add("currency", new JsonPrimitive(chain));
 		data.add("data", rows);
-	}
-	
-	@Override
-	public String getFileName() {
-		return PATHSAVEFILE + "\\binance_" + period + "_" + chain + ".json";
-	}
-	
-	public static void crawlAllChainPeriod() {
-		for(BinanceChainType chain : BinanceChainType.values()) {
-			for(BinancePeriodType period: BinancePeriodType.values()) {
-				Binance binance = new Binance(chain.getValue(), period.getValue());
-				binance.crawlData();
-				System.out.println("Done " + binance.getFileName());
-			}
-		}
-		
-		System.out.println("Done Binance");
 	}
 }

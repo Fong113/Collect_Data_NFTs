@@ -17,7 +17,7 @@ import com.google.gson.JsonSyntaxException;
 import marketplace.IMarketplace;
 import marketplace.crawl.ChainType;
 import marketplace.crawl.Crawler;
-import marketplace.crawl.CrawlerFactory;
+import marketplace.crawl.CrawlerTrendingManager;
 import marketplace.crawl.MarketplaceType;
 import marketplace.crawl.PeriodType;
 
@@ -29,7 +29,7 @@ public class Handler implements IMarketplace {
 		String chainStr = chain.getValue();
 		String periodStr = period.getValue();
 		
-		crawler = CrawlerFactory.getCrawler(marketplaceType, chain, period, rows);
+		crawler = CrawlerTrendingManager.getCrawler(marketplaceType, chain, period, rows);
 		
 		JsonObject data = crawler.crawlData();
 		String createdAt = data.get("createdAt").getAsString();

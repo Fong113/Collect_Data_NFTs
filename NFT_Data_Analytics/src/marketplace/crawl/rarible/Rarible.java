@@ -10,25 +10,20 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
+import marketplace.crawl.MarketplaceType;
 
 public class Rarible extends Crawler {
-	
-	public Rarible(String chain, String period, int rows) {
-		super.chain = chain;
-		super.period = period;
-		super.rows = rows;
-	}
 	
 	public Rarible(String chain, String period) {
 		super.chain = chain;
 		super.period = period;
-		super.rows = 100;
+		super.marketplaceName = MarketplaceType.RARIBLE.getValue();
 	}
 	
 	
 	@Override
 	protected void getRespone() {
-		String requestBody = "{\"size\":"+ rows +",\"filter\":{\"verifiedOnly\":false,\"sort\":\"VOLUME_DESC\",\"blockchains\":[\""+ chain +"\"],\"showInRanking\":false,\"period\":\"" + period + "\",\"hasCommunityMarketplace\":false,\"currency\":\"NATIVE\"}}";
+		String requestBody = "{\"size\":100 ,\"filter\":{\"verifiedOnly\":false,\"sort\":\"VOLUME_DESC\",\"blockchains\":[\""+ chain +"\"],\"showInRanking\":false,\"period\":\"" + period + "\",\"hasCommunityMarketplace\":false,\"currency\":\"NATIVE\"}}";
 		HttpRequest request = HttpRequest.newBuilder()
 			    .uri(URI.create("https://rarible.com/marketplace/api/v4/collections/search"))
 			    .header("Content-Type", "application/json") 
@@ -80,26 +75,10 @@ public class Rarible extends Crawler {
 		}
 		
 		data.addProperty("marketplaceName", "Rarible");
-		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
+		data.add("createdAt", new JsonPrimitive(Crawler.getTimeCrawl("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
 		data.addProperty("currency", currency);
 		data.add("data", rows);
-	}
-
-	@Override
-	public String getFileName() {
-		return PATHSAVEFILE + "\\rarible_" + period + "_" + chain + ".json";
-	}
-	
-	public static void crawlAllChainPeriod() {
-		for(RaribleChainType chain : RaribleChainType.values()) {
-			for(RariblePeriodType period: RariblePeriodType.values()) {
-				Rarible rarible = new Rarible(chain.getValue(), period.getValue());
-				rarible.crawlData();
-				System.out.println("Done " + rarible.getFileName());
-			}
-		}
-		System.out.println("Done Rarible");
 	}
 }
