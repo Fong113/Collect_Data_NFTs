@@ -19,7 +19,7 @@ import marketplace.crawl.rarible.RariblePeriodType;
 public class CrawlerTrendingManager implements ICrawlerManager{	
 	public CrawlerTrendingManager() {}
 	
-	public static final Crawler getCrawler(MarketplaceType marketplaceType, String chain, String period) {
+	private static final Crawler getCrawler(MarketplaceType marketplaceType, String chain, String period) {
 		switch(marketplaceType) {
 		case BINANCE:
 			 return new Binance(chain, period);
@@ -33,14 +33,7 @@ public class CrawlerTrendingManager implements ICrawlerManager{
 		return null;
 	}
 	
-	@Override
-	public void crawlSingleTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period) {
-		Crawler crawler = getCrawler(marketplaceType, chain.getValue(), period.getValue());
-		crawler.crawlTrendingAndSaveToFile();
-	}
-	
-	@Override
-	public void crawlAllTrendingofMarketplace(MarketplaceType marketplaceType) {
+	private void crawlAllTrendingofMarketplace(MarketplaceType marketplaceType) {
 		List<String> chains = new ArrayList<String>();
 		List<String> periods = new ArrayList<String>();
 		switch(marketplaceType) {
