@@ -2,7 +2,9 @@ package blog_news.handle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.google.gson.reflect.TypeToken;
@@ -31,45 +33,89 @@ public class HandleArticleManager implements IArticleManager {
     	return ArticleManager.findArticleById(id);
     };
     
+    @Override
+	public Map<String, Integer> findHotTagsForDay(String day) {
+		return ArticleManager.findHotTagsForDay(day);
+	}
+    
+    @Override
+	public Map<String, Integer> findHotTagsForWeek(String startDate) {
+		return ArticleManager.findHotTagsForWeek(startDate);
+	}
+    
+    @Override
+	public Map<String, Integer> findHotTagsForMonth(String month) {
+		return ArticleManager.findHotTagsForMonth(month);
+	}
+    
     public void test(HandleArticleManager handleArticleManager) {
     	try (Scanner scanner = new Scanner(System.in)) {
-    	    System.out.print("Enter the article ID: ");
-    	    int inputId = scanner.nextInt();
+//    	    System.out.print("Enter the article ID: ");
+//    	    int inputId = scanner.nextInt();
+//
+//    	    // Find the article by ID
+//    	    Article foundArticle = findArticleById(inputId);
+//
+//    	    // Display the information or handle the case when the article is not found
+//    	    if (foundArticle != null) {
+//    	        System.out.println("Article found:");
+//    	        System.out.println(foundArticle);
+//    	    } else {
+//    	        System.out.println("Article with ID " + inputId + " not found.");
+//    	    }
+//
+//    	    // Clear the buffer
+//    	    scanner.nextLine();
+//
+//    	    System.out.print("Nhập tags (cách nhau bởi dấu phẩy cách): ");
+//    	    if (scanner.hasNextLine()) {
+//    	        String inputTags = scanner.nextLine();
+//    	        inputTags = '#' + inputTags.replaceAll("\\s*,\\s*", ",#");
+//
+//    	        // Chia chuỗi tags thành danh sách các tag
+//    	        String[] targetTags = inputTags.split(",\\s*");
+//    	        // Lọc danh sách bài viết theo tags nhập từ bàn phím
+//    	        List<Article> filteredArticles = filterArticlesByTags(targetTags);
+//
+//    	        // In danh sách bài viết đã lọc
+//    	        System.out.println("Search by tags '" + Arrays.toString(targetTags) + "':");
+//    	        for (Article article : filteredArticles) {
+//    	            System.out.println(articleCount + ". " + article);
+//    	            articleCount++;
+//    	        }
+//
+//    	    } else {
+//    	        System.out.println("Không có dữ liệu để đọc.");
+//    	    }
+    		
+//    		System.out.print("Nhập ngày (dd/MM/yyyy): ");
+    		System.out.print("Nhập tháng (MM): ");
+            String userInput = scanner.nextLine();
 
-    	    // Find the article by ID
-    	    Article foundArticle = findArticleById(inputId);
+            // Hiển thị thông tin ngày đã nhập
+//            System.out.println("Ngày đã nhập: " + userInput);
+            System.out.println("Ngày đã nhập: " + userInput);
+            // Gọi phương thức
+//            Map<String, Integer> hotTagsMap = findHotTagsForDay(userInput);
+//            Map<String, Integer> hotTagsMap = findHotTagsForWeek(userInput);
+            Map<String, Integer> hotTagsMap = findHotTagsForMonth(userInput);
+            List<Map.Entry<String, Integer>> hotTagsList = new ArrayList<>(hotTagsMap.entrySet());
 
-    	    // Display the information or handle the case when the article is not found
-    	    if (foundArticle != null) {
-    	        System.out.println("Article found:");
-    	        System.out.println(foundArticle);
-    	    } else {
-    	        System.out.println("Article with ID " + inputId + " not found.");
-    	    }
+            // Sắp xếp List theo giảm dần số lần xuất hiện
+            hotTagsList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
-    	    // Clear the buffer
-    	    scanner.nextLine();
-
-    	    System.out.print("Nhập tags (cách nhau bởi dấu phẩy cách): ");
-    	    if (scanner.hasNextLine()) {
-    	        String inputTags = scanner.nextLine();
-    	        inputTags = '#' + inputTags.replaceAll("\\s*,\\s*", ",#");
-
-    	        // Chia chuỗi tags thành danh sách các tag
-    	        String[] targetTags = inputTags.split(",\\s*");
-    	        // Lọc danh sách bài viết theo tags nhập từ bàn phím
-    	        List<Article> filteredArticles = filterArticlesByTags(targetTags);
-
-    	        // In danh sách bài viết đã lọc
-    	        System.out.println("Search by tags '" + Arrays.toString(targetTags) + "':");
-    	        for (Article article : filteredArticles) {
-    	            System.out.println(articleCount + ". " + article);
-    	            articleCount++;
-    	        }
-
-    	    } else {
-    	        System.out.println("Không có dữ liệu để đọc.");
-    	    }
+            // In kết quả tags hot theo xếp hạng
+//            System.out.println("Top tags hot cho ngày " + userInput + ":");
+//            System.out.println("Top tags hot cho tuần bắt đầu từ " + userInput + ":");
+            System.out.println("Top tags hot cho tháng " + userInput + ":");
+            int count = 0;
+            for (Map.Entry<String, Integer> entry : hotTagsList) {
+                System.out.println("Top " + (count + 1) + ": " +entry.getKey() + ": " + entry.getValue() + " bài");
+                count++;
+                if (count == 5) {
+                    break; // Đã in ra top 5, thoát khỏi vòng lặp
+                }
+            }
     	}
     }
     
@@ -83,6 +129,8 @@ public class HandleArticleManager implements IArticleManager {
         handleArticleManager.test(handleArticleManager);
 
     }
+
+	
 	
 
 }

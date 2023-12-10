@@ -1,6 +1,7 @@
 package blog_news.handle;
 
 import java.util.List;
+import java.util.Map;
 
 import blog_news.Article;
 
@@ -20,6 +21,24 @@ public class ArticleManager implements IArticleManager {
 	public Article findArticleById(int id) {
 		ShowAnArticle showAnArticle = new ShowAnArticle(articles);
 		return showAnArticle.findArticleById(id);
+	}
+
+	@Override
+	public Map<String, Integer> findHotTagsForDay(String day) {
+		FindHotTags FindHotTags = new FindHotTags(articles);
+		return FindHotTags.findHotTagsForDay(day);
 	} 
+	
+	@Override
+	public Map<String, Integer> findHotTagsForWeek(String startDate){
+		FindHotTags FindHotTags = new FindHotTags(articles);
+		return FindHotTags.findHotTagsForWeek(startDate);
+	}
+	
+	@Override
+	public Map<String, Integer> findHotTagsForMonth(String month){
+		FindHotTags FindHotTags = new FindHotTags(articles);
+		return FindHotTags.findHotTagsForMonth(month);
+	}
 	
 }
