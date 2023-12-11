@@ -62,7 +62,7 @@ public class JsonIO<T> {
 	}
 	
 	public static void clearBlogNewsData() {
-        String filePath = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\blog_news.json";
+        String filePath = "E:\\Java\\BTL_OOP\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\blog_news.json";
 
         try {
             // Mở file và ghi một danh sách rỗng để xóa nội dung

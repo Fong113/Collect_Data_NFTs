@@ -19,7 +19,7 @@ public class HandleArticleManager implements IArticleManager {
 	 public HandleArticleManager(List<Article> articles) {
 	     this.ArticleManager = new ArticleManager(articles);
 	 }	
-	
+
 	// function chính
 	@Override
 	public List<Article> filterArticlesByTags(String[] targetTags) {
