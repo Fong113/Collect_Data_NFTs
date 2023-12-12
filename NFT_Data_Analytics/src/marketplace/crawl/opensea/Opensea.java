@@ -2,6 +2,7 @@ package marketplace.crawl.opensea;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.Map.Entry;
 
 import org.openqa.selenium.By;
@@ -17,41 +18,39 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
+import marketplace.crawl.MarketplaceType;
 
 public class Opensea extends Crawler {
-	
-	public Opensea(String chain, String period, int rows) {
-		super.chain = chain;
-		super.period = period;
-		super.rows = rows;
-	}
 	
 	public Opensea(String chain, String period) {
 		super.chain = chain;
 		super.period = period;
-		super.rows = 100;
+		super.marketplaceName = MarketplaceType.OPENSEA.getValue();
 	}
 	
 	@Override
 	protected void getRespone() {
 		System.setProperty("webdriver.chrome.driver", ".\\lib\\ChromeDriver\\chromedriver.exe");
-
 		ChromeOptions opt = new ChromeOptions();
-        opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
+		opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
+		opt.addArguments("--headless");
+		opt.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36");
 		WebDriver driver = new ChromeDriver(opt);
-        
-		String url = "https://opensea.io/rankings/trending?chain="+ chain +"&sortBy="+ period.toLowerCase() + "_volume";
-        driver.navigate().to(url);
-        try {
-			Thread.sleep(4000);
+		try {
+			Thread.sleep(1000);
+			String url = "https://opensea.io/rankings/trending?chain="+ chain +"&sortBy="+ period.toLowerCase() + "_volume";
+			driver.get(url);
+			respone =  driver.findElement(By.cssSelector("script[id=__NEXT_DATA__]"))
+					.getAttribute("innerHTML");
+//        driver.manage().deleteAllCookies();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {			
+			driver.quit();
 		}
-        respone =  driver.findElement(By.cssSelector("script[id=__NEXT_DATA__]"))
-        		.getAttribute("innerHTML");
-        
-        driver.quit();
+		
 	}
 	
 	@Override
@@ -91,7 +90,6 @@ public class Opensea extends Crawler {
         		curRow.add("name", e.get("name"));
         		curRow.add("logo", e.get("logo"));
         		curRow.add("floorPriceChange", e.get("floorPricePercentChange(statsTimeWindow:\"" + period + "\")"));
-        		
         	}
         	
         	
@@ -99,7 +97,6 @@ public class Opensea extends Crawler {
         		curRow.add("owners", e.get("numOwners"));
         		curRow.add("items", e.get("totalSupply"));
         		curRow.add("volumeChange", e.get("volumeChange"));
-//        		curRow.add("numOfSales", e.get("numOfSales"));
         	}
         	
         	if(key.endsWith("floorPrice")) {
@@ -115,7 +112,6 @@ public class Opensea extends Crawler {
         	}
         	
         	if(key.endsWith(":edges:" + index) || index == 100) {
-        		
         		if(!curRow.has("floorPrice")) {
         			curRow.add("floorPrice", null);
         		}
@@ -126,26 +122,10 @@ public class Opensea extends Crawler {
         }
         
 		data.addProperty("marketplaceName", "Opensea");
-        data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
+        data.add("createdAt", new JsonPrimitive(Crawler.getTimeCrawl("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
 		data.addProperty("currency", currency);
 		data.add("data", rows);
-	}
-
-	@Override
-	public String getFileName() {
-		return PATHSAVEFILE + "\\opensea_" + period + "_" + chain + ".json";
-	}
-	
-	public static void crawlAllChainPeriod() {
-		for(OpenseaChainType chain : OpenseaChainType.values()) {
-			for(OpenseaPeriodType period: OpenseaPeriodType.values()) {
-				Opensea opensea = new Opensea(chain.getValue(), period.getValue());
-				opensea.crawlData();
-				System.out.println("Done " + opensea.getFileName());
-			}
-		}
-		System.out.println("Done Opensea");	
 	}
 }

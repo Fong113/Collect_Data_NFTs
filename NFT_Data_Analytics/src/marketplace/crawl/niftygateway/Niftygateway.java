@@ -10,20 +10,14 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
+import marketplace.crawl.MarketplaceType;
 
 public class Niftygateway extends Crawler {
-	
-	public Niftygateway(String chain, String period, int rows) {
-		super.period = period;
-		super.chain = chain;
-		super.rows = rows;
-		
-	}
 	
 	public Niftygateway(String chain, String period) {
 		super.period = period;
 		super.chain = chain;
-		super.rows = 100;	
+		super.marketplaceName = MarketplaceType.NIFTYGATEWAY.getValue();
 	}
 	
 	
@@ -32,13 +26,13 @@ public class Niftygateway extends Crawler {
 		String api = "";
 		switch(period) {
 		case "oneDay":
-			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size="+ rows +"&sort=-one_day_total_volume";
+			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size=100&sort=-one_day_total_volume";
 			break;
 		case "sevenDay":
-			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size="+ rows +"&sort=-seven_day_total_volume";
+			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size=100&sort=-seven_day_total_volume";
 			break;
 		case "thirtyDay":
-			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size="+ rows +"&sort=-thirty_day_total_volume";
+			api = "https://api.niftygateway.com/stats/rankings/?page=1&page_size=100&sort=-thirty_day_total_volume";
 			break;
 		}
 		
@@ -71,7 +65,6 @@ public class Niftygateway extends Crawler {
 			row.add("volume",  isGet(rowRawObj, period + "TotalVolume") ? convertValueByNetworkRate(rowRawObj.get(period + "TotalVolume"), rate) : null);
 			row.add("volumeChange", isGet(rowRawObj, period + "Change") ? convertValueByNetworkRate(rowRawObj.get(period + "Change"), 1) : null);
 			row.add("floorPrice", isGet(rowRawObj, "floorPrice") ? convertValueByNetworkRate(rowRawObj.get("floorPrice"), rate) : null);
-//			row.add("avgPrice", isGet(rowRawObj, "avgSalePrice") ? convertValueByNetworkRate(rowRawObj.get("avgSalePrice"), rate) : null);
 			row.add("floorPriceChange", null);
 			row.add("items", rowRawObj.get("totalSupply"));
 			row.add("owners", rowRawObj.get("numOwners"));
@@ -79,18 +72,12 @@ public class Niftygateway extends Crawler {
 		}
 		
 		data.addProperty("marketplaceName", "Niftygateway");
-		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
+		data.add("createdAt", new JsonPrimitive(Crawler.getTimeCrawl("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
 		data.add("currency", new JsonPrimitive(chain));
 		data.add("data", rows);
 	}
-
-	@Override
-	public String getFileName() {
-		return PATHSAVEFILE + "\\niftygateway_" + period + "_" + chain + ".json";
-	}
-	
 	
 	private float getFixRates() {		
 		HttpRequest request = HttpRequest.newBuilder()
@@ -114,16 +101,5 @@ public class Niftygateway extends Crawler {
 	
 	private JsonElement convertValueByNetworkRate(JsonElement jElement, float rate) {
 		return new JsonPrimitive(jElement.getAsFloat() / rate);
-	}
-	
-	public static void crawlAllChainPeriod() {
-		for(NiftygatewayChainType chain : NiftygatewayChainType.values()) {
-			for(NiftygatewayPeriodType period: NiftygatewayPeriodType.values()) {
-				Niftygateway niftygateway = new Niftygateway(chain.getValue(), period.getValue());
-				niftygateway.crawlData();
-				System.out.println("Done " + niftygateway.getFileName());
-			}
-		}
-		System.out.println("Done Niftygateway");
 	}
 }

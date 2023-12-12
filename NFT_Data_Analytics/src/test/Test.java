@@ -1,21 +1,35 @@
 package test;
 
+import java.util.Set;
+
 import marketplace.IMarketplace;
-import marketplace.crawl.ChainType;
+import marketplace.crawl.CrawlerManager;
+import marketplace.crawl.ICrawlerManager;
 import marketplace.crawl.MarketplaceType;
 import marketplace.crawl.opensea.OpenseaChainType;
 import marketplace.crawl.opensea.OpenseaPeriodType;
-import marketplace.handle.Collection;
-import marketplace.handle.Handler;
-import marketplace.handle.Trending;
+import marketplace.handler.MarketplaceHandler;
+import marketplace.model.Collection;
+import marketplace.model.CollectionFilter;
+import marketplace.model.Trending;
 
 public class Test {
 	public static void main(String[] args) {
-		IMarketplace m = new Handler();
-		Trending trend = m.getTrending(MarketplaceType.OPENSEA, OpenseaChainType.ETH, OpenseaPeriodType.ONEDAY, 100);
+		ICrawlerManager test = new CrawlerManager();
+		test.crawlAllTrending();
+
+		IMarketplace m = new MarketplaceHandler();
 		
-		for(Collection c : trend.getData()) {
+		Trending t =  m.getTrending(MarketplaceType.OPENSEA, OpenseaChainType.ETH, OpenseaPeriodType.ONEDAY);
+		
+		for(Collection c : t.getData()) {
 			System.out.println(c.toString());
 		}
+		
+//		Set<CollectionFilter> cs = m.filterCollectionListByName("A");
+//		
+//		for(CollectionFilter cf : cs) {
+//			System.out.println(cf.toString());
+//		}
 	}
 }

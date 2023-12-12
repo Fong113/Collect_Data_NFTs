@@ -1,5 +1,8 @@
 package marketplace.crawl.rarible;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import marketplace.crawl.PeriodType;
 
 public enum RariblePeriodType implements PeriodType{
@@ -14,5 +17,13 @@ public enum RariblePeriodType implements PeriodType{
 	@Override
 	public String getValue() {
 		return value;
+	}
+	
+	public static List<String> getValues() {
+		List<String> values = new ArrayList<String>();
+		for(RariblePeriodType r : RariblePeriodType.values()) {
+			values.add(r.value);
+		}
+		return values;
 	}
 }
