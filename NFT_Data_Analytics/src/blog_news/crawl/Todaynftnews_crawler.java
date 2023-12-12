@@ -20,14 +20,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.JavascriptExecutor;
-
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 public class Todaynftnews_crawler implements ICrawler {
 	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
-	private final static String PATH = "E:\\NFTs\\BTL.OOP.GROUP24\\NFT_Data_Analytics\\data\\blog_news.json";
+	private final static String PATH = ".\\data\\blog_news.json";
 	private String baseUrl = "https://www.todaynftnews.com/nft-news/";
 	
+	public static String getPATH() {
+		return PATH;
+	}
 	@Override
 	public void crawl() {
 	    List<Article> existingArticles = Article_IO.loadJson(getPATH());
@@ -54,21 +59,8 @@ public class Todaynftnews_crawler implements ICrawler {
 //        List<Article> articleList = new ArrayList<>();
         
     	try {
-    		    for (int morePage = 1; morePage <= 5; morePage++) {
-    		    	 try {
-    		    		 	Thread.sleep(1000);
-    		    	        WebElement closeButton = driver.findElement(By.cssSelector(".pum-close.popmake-close"));
-    		    	        closeButton.click();
-//    		    	        System.out.println("Popup đã được đóng.");
-    		    	        Thread.sleep(1000);
-    		    	        clickLoadMoreButton(driver);
-    		    	    } catch (Exception e) {
-    		    	        // Xử lý exception
-//    		    	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
-    		    	    } finally {
-    		    	        // Thực hiện thao tác clickLoadMoreButton dù có exception hay không
-    		    	        clickLoadMoreButton(driver);
-    		    	    }
+    		    for (int morePage = 2; morePage <= 6; morePage++) {
+    		    	clickLoadMoreButton(driver);
     		    }
 
                 Document doc = Jsoup.parse(driver.getPageSource());
@@ -103,14 +95,14 @@ public class Todaynftnews_crawler implements ICrawler {
 
                     existingArticles.add(currentArticle);
 
-//                    System.out.println("Processed article: " + currentArticle.getTitle());
+                    System.out.println("Processed article: " + currentArticle.getTitle());
             }
                 	                
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             // Đóng trình duyệt
-//        	System.out.println("Crawl https://todaynftnews.com/tags/nft done!!!");
+        	System.out.println("Crawl https://todaynftnews.com/tags/nft done!!!");
             driver.quit();
         }
     	return existingArticles;
@@ -121,34 +113,57 @@ public class Todaynftnews_crawler implements ICrawler {
 	        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
 
 	        // Scroll đến vị trí gần cuối trang
-	        jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight - 1000);");
-
-	        // Chờ một chút để trang có thể load thêm dữ liệu (có thể điều chỉnh thời gian này)
-	        Thread.sleep(1000);
+	        jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight-1000);");
+	        Thread.sleep(2000); // Đợi 2 giây để trang load thêm dữ liệu
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	}
-	
+
 	private static void clickLoadMoreButton(WebDriver driver) {
 	    try {
-	    	// Scroll xuống gần cuối trang
+	        // Đóng popup nếu có
+	        closePopup(driver);
+
+	        // Scroll xuống gần cuối trang
 	        scrollNearEnd(driver);
 
 	        List<WebElement> loadMoreButtons = driver.findElements(By.cssSelector("div#load-posts a"));
-	        WebElement loadMoreButton = loadMoreButtons.get(0);
-	        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(false);", loadMoreButton);
-            // Thực hiện click vào nút Load more posts
-            loadMoreButton.click();
-	        
-	        Thread.sleep(2000); // Đợi một khoảng thời gian để trang load thêm dữ liệu
+	        if (!loadMoreButtons.isEmpty()) {
+	            WebElement loadMoreButton = loadMoreButtons.get(0);
+	            // Thực hiện click vào nút Load more posts
+	            loadMoreButton.click();
+
+	            waitForPageLoad(driver); // Đợi một khoảng thời gian để trang load thêm dữ liệu
+	        } else {
+	            System.out.println("Không tìm thấy nút Load more posts.");
+	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
 	}
 
-	public static String getPATH() {
-		return PATH;
+	private static void closePopup(WebDriver driver) {
+	    try {
+	        WebDriverWait popupWait = new WebDriverWait(driver, 5); // Thời gian chờ cho popup
+	        popupWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".pum-close.popmake-close")));
+	        WebElement closeButton = driver.findElement(By.cssSelector(".pum-close.popmake-close"));
+	        closeButton.click();
+	        System.out.println("Popup đã được đóng.");
+	        Thread.sleep(1000);
+	    } catch (Exception e) {
+	        // Xử lý exception
+	        // Nếu popup không xuất hiện hoặc đã hết thời gian chờ, tiếp tục thực hiện các bước tiếp theo
+	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
+	    }
+	}
+
+	private static void waitForPageLoad(WebDriver driver) {
+	    WebDriverWait wait = new WebDriverWait(driver, 30);
+
+	    // Sử dụng expected condition để kiểm tra trạng thái của trang
+	    wait.until((ExpectedCondition<Boolean>) wd ->
+	            ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	}
 
 }
