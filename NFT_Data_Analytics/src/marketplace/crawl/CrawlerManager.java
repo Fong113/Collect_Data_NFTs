@@ -16,8 +16,8 @@ import marketplace.crawl.rarible.Rarible;
 import marketplace.crawl.rarible.RaribleChainType;
 import marketplace.crawl.rarible.RariblePeriodType;
 
-public class CrawlerTrendingManager implements ICrawlerManager{	
-	public CrawlerTrendingManager() {}
+public class CrawlerManager implements ICrawlerManager{	
+	public CrawlerManager() {}
 	
 	private static final Crawler getCrawler(MarketplaceType marketplaceType, String chain, String period) {
 		switch(marketplaceType) {
@@ -70,7 +70,12 @@ public class CrawlerTrendingManager implements ICrawlerManager{
 	}
 	
 	@Override
-	public String getFilename(MarketplaceType marketplaceType, ChainType chain, PeriodType period) {
-		return Crawler.getFileName(marketplaceType.getValue(), chain.getValue(), period.getValue());
+	public String getFileSaveData(MarketplaceType marketplaceType, ChainType chain, PeriodType period) {
+		return Crawler.getFileSaveData(marketplaceType.getValue(), period.getValue(), chain.getValue());
+	}
+	
+	@Override
+	public String getPathSaveData() {
+		return Crawler.PATHSAVEDATA;
 	}
 }

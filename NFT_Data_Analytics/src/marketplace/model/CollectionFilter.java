@@ -1,4 +1,4 @@
-package marketplace.handle;
+package marketplace.model;
 
 public class CollectionFilter extends Collection {
 	private String marketplaceName;

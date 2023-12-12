@@ -6,7 +6,8 @@ import java.util.List;
 import marketplace.crawl.PeriodType;
 
 public enum BinancePeriodType implements PeriodType{
-	ONEHOUR("1H"), SIXHOURS("6H"), ONEDAY("24H"), ONEWEEK("7D");
+//	SIXHOURS("6H"),
+	ONEHOUR("1H"), ONEDAY("24H"), ONEWEEK("7D");
 	
 	private String value;
 	

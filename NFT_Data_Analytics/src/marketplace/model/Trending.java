@@ -1,21 +1,19 @@
-package marketplace.handle;
+package marketplace.model;
 
 import java.util.ArrayList;
 
-import marketplace.crawl.MarketplaceType;
-
 public class Trending {
-	private MarketplaceType marketPlace;
+	private String marketplaceName;
 	private String createdAt;
 	private String chain;
 	private String period;
 	private String currency;
 	private ArrayList<Collection> data;
 
-	public Trending(MarketplaceType marketPlace, String createdAt, String chain, String period, String currency,
+	public Trending(String marketplaceName, String createdAt, String chain, String period, String currency,
 			ArrayList<Collection> data) {
 		super();
-		this.marketPlace = marketPlace;
+		this.marketplaceName = marketplaceName;
 		this.createdAt = createdAt;
 		this.chain = chain;
 		this.period = period;
@@ -23,8 +21,8 @@ public class Trending {
 		this.data = data;
 	}
 
-	public MarketplaceType getMarketPlace() {
-		return marketPlace;
+	public String getMarketplaceName() {
+		return marketplaceName;
 	}
 
 	public String getCreatedAt() {

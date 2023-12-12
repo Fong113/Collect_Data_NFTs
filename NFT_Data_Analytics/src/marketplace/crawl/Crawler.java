@@ -16,7 +16,7 @@ public abstract class Crawler {
 	protected String chain;
 	protected String respone;
 	protected JsonObject data = new JsonObject();
-	protected static final String PATHSAVEFILE = ".\\data\\marketplace";
+	protected static final String PATHSAVEDATA = ".\\data\\marketplace";
 	
 	protected abstract void getRespone();
 	
@@ -34,15 +34,15 @@ public abstract class Crawler {
 	}
 	
 	public JsonObject crawlTrendingAndSaveToFile() {
-		File file = new File(getFileName(marketplaceName, period, chain));
+		File file = new File(getFileSaveData(marketplaceName, period, chain));
 		getRespone();
 		preprocessData();
 		saveDataToFile(file);
 		return data;
 	}
 	
-	protected static String getFileName(String marketplaceName, String period, String chain) {
-		return PATHSAVEFILE + "\\" + marketplaceName + "_" + period + "_" + chain + ".json";
+	protected static String getFileSaveData(String marketplaceName, String period, String chain) {
+		return PATHSAVEDATA + "\\" + marketplaceName + "_" + period + "_" + chain + ".json";
 	}
 	
 	protected static boolean isGet(JsonObject jObject ,String property) {

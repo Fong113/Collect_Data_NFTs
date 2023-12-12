@@ -32,19 +32,25 @@ public class Opensea extends Crawler {
 	protected void getRespone() {
 		System.setProperty("webdriver.chrome.driver", ".\\lib\\ChromeDriver\\chromedriver.exe");
 		ChromeOptions opt = new ChromeOptions();
-		opt.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+		opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
 		opt.addArguments("--headless");
 		opt.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36");
 		WebDriver driver = new ChromeDriver(opt);
-		driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
-		
-		String url = "https://opensea.io/rankings/trending?chain="+ chain +"&sortBy="+ period.toLowerCase() + "_volume";
-		driver.get(url);
-        respone =  driver.findElement(By.cssSelector("script[id=__NEXT_DATA__]"))
-        		.getAttribute("innerHTML");
+		try {
+			Thread.sleep(1000);
+			String url = "https://opensea.io/rankings/trending?chain="+ chain +"&sortBy="+ period.toLowerCase() + "_volume";
+			driver.get(url);
+			respone =  driver.findElement(By.cssSelector("script[id=__NEXT_DATA__]"))
+					.getAttribute("innerHTML");
 //        driver.manage().deleteAllCookies();
-        
-        driver.quit();
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {			
+			driver.quit();
+		}
+		
 	}
 	
 	@Override

@@ -1,12 +1,13 @@
-package marketplace.handle;
+package marketplace.handler;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -16,38 +17,50 @@ import com.google.gson.JsonSyntaxException;
 
 import marketplace.IMarketplace;
 import marketplace.crawl.ChainType;
-import marketplace.crawl.Crawler;
-import marketplace.crawl.CrawlerTrendingManager;
+import marketplace.crawl.CrawlerManager;
+import marketplace.crawl.ICrawlerManager;
 import marketplace.crawl.MarketplaceType;
 import marketplace.crawl.PeriodType;
+import marketplace.model.Collection;
+import marketplace.model.CollectionFilter;
+import marketplace.model.Trending;
 
-public class Handler implements IMarketplace {
-	private Crawler crawler;
+public class MarketplaceHandler implements IMarketplace {
 	
-	@Override
-	public Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period, int rows) {
-		String chainStr = chain.getValue();
-		String periodStr = period.getValue();
-		
-		crawler = CrawlerTrendingManager.getCrawler(marketplaceType, chain, period, rows);
-		
-		JsonObject data = crawler.crawlData();
-		String createdAt = data.get("createdAt").getAsString();
-		String currency = data.get("currency").getAsString();
-		ArrayList<Collection> colList = new ArrayList<Collection>();
-		
-		for(JsonElement e : data.getAsJsonArray("data")) {
-			Collection col = new Gson().fromJson(e, Collection.class);
-			colList.add(col);
-		}
-		
-		return new Trending(marketplaceType, createdAt, chainStr, periodStr, currency, colList);
+	private ICrawlerManager crawlerManager;
+	private File DB;
+	
+	public MarketplaceHandler() {
+		crawlerManager = new CrawlerManager();
+		DB = new File(crawlerManager.getPathSaveData()); 
 	}
 
 	@Override
-	public Set<CollectionFilter> getCollectionList(String collectionName) {
+	public Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period) {
+		File fileSaveTrendingData = new File(crawlerManager.getFileSaveData(marketplaceType, chain, period));
 		
-		File filesList[] = Crawler.folderOfMarketplace.listFiles();
+		try(Scanner sc = new Scanner(fileSaveTrendingData)) {
+			ArrayList<Collection> colList = new ArrayList<Collection>();
+			JsonObject data = JsonParser.parseString(sc.nextLine()).getAsJsonObject();
+				
+			String createdAt = data.get("createdAt").getAsString();
+			String currency = data.get("currency").getAsString();
+				
+			for(JsonElement e : data.getAsJsonArray("data")) {
+				Collection col = new Gson().fromJson(e, Collection.class);
+				colList.add(col);
+			}
+			
+			return new Trending(marketplaceType.getValue(), createdAt, chain.getValue(), period.getValue(), currency, colList);			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public Set<CollectionFilter> filterCollectionListByName(String collectionName) {
+		File filesList[] = DB.listFiles();
 		JsonObject data = null;
 		Set<CollectionFilter> result = new HashSet<CollectionFilter>();
 		
@@ -79,22 +92,9 @@ public class Handler implements IMarketplace {
 	}
 
 	@Override
-	public void crawlAllData() {
-		Crawler.crawlAllData();
-		
-	}
-
-	@Override
-	public void clearData() {
-		Crawler.clearAllData();
-		
-	}
-
-	
-	@Override
 	public Set<String> getCollectionNameList() {
 		Set<String> result = new HashSet<String>();
-		File filesList[] = Crawler.folderOfMarketplace.listFiles();
+		File filesList[] = DB.listFiles();
 		JsonObject data = null;
 		
 		for(File f : filesList) {
@@ -119,4 +119,14 @@ public class Handler implements IMarketplace {
 		return result;
 	}
 
+	@Override
+	public void clearData() {
+		try {
+			FileUtils.cleanDirectory(DB);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

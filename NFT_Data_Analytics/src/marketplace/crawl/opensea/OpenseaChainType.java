@@ -10,7 +10,8 @@ public enum OpenseaChainType implements ChainType{
 //	ARBITRUM("arbitrum"), AVALANCHE("avalanche"),  
 //	BASE("base"), ETH("ethereum"), KLAYTN("klaytn"), OPTIMISM("optimism"), 
 //	POLYGON("matic"), SOLANA("solana"), ZORA("zora");
-	BNB("BSC"), ETH("ethereum"), POLYGON("matic");
+	BNB("BSC"), ETH("ethereum"); 
+//	POLYGON("matic");
 	
 	private String value;
 	
