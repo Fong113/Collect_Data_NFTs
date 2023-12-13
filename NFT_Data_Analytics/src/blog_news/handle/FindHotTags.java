@@ -1,5 +1,7 @@
 package blog_news.handle;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,10 +17,12 @@ public class FindHotTags {
     public FindHotTags(List<Article> articles) {
         FindHotTags.articles = articles;
     }
-
+    
     // Hot tags của 1 ngày
-    public Map<String, Integer> findHotTagsForDay(String day) {
+    public Map<String, Integer> findHotTagsForDay() {
+    	String day = findLatestDate();
         Map<String, Integer> tagCountMap = new HashMap<>();
+//        System.out.println(day);
         for (Article article : articles) {
             if (isHotForDay(article, day)) {
                 List<String> tags = article.getTags();
@@ -40,24 +44,13 @@ public class FindHotTags {
         return publishDate.getTime() >= startOfDay.getTime() && publishDate.getTime() < endOfDay.getTime();
     }
     
-    // Hot tags của 1 tuần
-    public Map<String, Integer> findHotTagsForWeek(String startDate) {
+ // Hot tags của 1 tuần
+    public Map<String, Integer> findHotTagsForWeek() {
+    	String day = findLatestDate();
         Map<String, Integer> tagCountMap = new HashMap<>();
-        
-        // Parse ngày bắt đầu của tuần
-        Date startOfWeek = DateIO.startOfDay(startDate);
-
-        // Tính toán ngày kết thúc của tuần
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startOfWeek);
-        calendar.add(Calendar.DAY_OF_WEEK, 6); // Số ngày trong một tuần
-        Date endOfWeek = DateIO.endOfDay(DateIO.formatDateToString(calendar.getTime()));
-        System.out.println("Start: " + startOfWeek); // có thể bỏ
-        System.out.println("End: " + endOfWeek); // có thể bỏ
+//        System.out.println(day);
         for (Article article : articles) {
-            Date publishDate = DateIO.parseCustomDate(article.getPublishDate());
-            // Kiểm tra xem bài viết có được xuất bản trong khoảng thời gian của tuần không
-            if (publishDate.getTime() >= startOfWeek.getTime() && publishDate.getTime() <= endOfWeek.getTime()) {
+            if (isHotForWeek(article, day)) {
                 List<String> tags = article.getTags();
                 for (String tag : tags) {
                     // Loại bỏ hai tags "NFT market" và "NFT"
@@ -67,13 +60,31 @@ public class FindHotTags {
                 }
             }
         }
+
         return tagCountMap;
     }
+
+    private boolean isHotForWeek(Article article, String day) {
+        Date publishDate = DateIO.parseCustomDate(article.getPublishDate());
+        // Parse ngày gần nhất
+        Date endOfWeek = DateIO.startOfDay(day);
+
+        // Tính toán ngày của 7 ngày trước
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endOfWeek);
+        calendar.add(Calendar.DAY_OF_WEEK, -7); // Số ngày trong một tuần
+        Date startOfWeek = DateIO.endOfDay(DateIO.formatDateToString(calendar.getTime()));
+        // Kiểm tra xem bài viết có được xuất bản trong khoảng thời gian của tuần không
+        return publishDate.getTime() >= startOfWeek.getTime() && publishDate.getTime() <= endOfWeek.getTime();
+    }
+
     
-    public Map<String, Integer> findHotTagsForMonth(String month) {
+    public Map<String, Integer> findHotTagsForMonth() {
+    	String day = findLatestDate();
+//    	String latestMonth = getLatestMonth();
         Map<String, Integer> tagCountMap = new HashMap<>();
         for (Article article : articles) {
-            if (isHotForMonth(article, month)) {
+            if (isHotForMonth(article, day)) {
                 List<String> tags = article.getTags();
                 for (String tag : tags) {
                 	if (!tag.equalsIgnoreCase("#NFT market") && !tag.equalsIgnoreCase("#NFT")) {
@@ -84,20 +95,63 @@ public class FindHotTags {
         }
         return tagCountMap;
     }
+    
+//    private String getLatestMonth() {
+//        String latestMonth = null;
+//        for (Article article : articles) {
+//            Date publishDate = DateIO.parseCustomDate(article.getPublishDate());
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTime(publishDate);
+//            int articleMonth = calendar.get(Calendar.MONTH) + 1; // Tháng bắt đầu từ 0
+//
+//            // Chuyển đổi số tháng thành chuỗi
+//            String articleMonthString = String.valueOf(articleMonth);
+//
+//            if (latestMonth == null || articleMonth > Integer.parseInt(latestMonth)) {
+//                latestMonth = articleMonthString;
+//            }
+//        }
+//        return latestMonth;
+//    }
 
-    private boolean isHotForMonth(Article article, String month) {
-        Date publishDate = DateIO.parseCustomDate(article.getPublishDate());
+
+    private boolean isHotForMonth(Article article, String day) {
+    	Date publishDate = DateIO.parseCustomDate(article.getPublishDate());
+    	
+    	
+        // Tính toán ngày bắt đầu và kết thúc của khoảng 30 ngày
+        Date endOfMonth = DateIO.startOfDay(day);
+     
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(publishDate);
-
-        int articleMonth = calendar.get(Calendar.MONTH) + 1; // Tháng bắt đầu từ 0
-        int targetMonth = Integer.parseInt(month);
-
-        // Kiểm tra xem bài viết có được xuất bản trong tháng cần kiểm tra không
-        return articleMonth == targetMonth;
+        calendar.setTime(endOfMonth);
+        calendar.add(Calendar.MONTH, -1); // Giảm một tháng
+        Date startOfMonth = DateIO.endOfDay(DateIO.formatDateToString(calendar.getTime()));
+        // Kiểm tra xem bài viết có được xuất bản trong khoảng thời gian của 30 ngày từ ngày bắt đầu không
+        return publishDate.getTime() >= startOfMonth.getTime() && publishDate.getTime() <= endOfMonth.getTime();
     }
+    
+    public String findLatestDate() {
+        if (articles.isEmpty()) {
+            return null;
+        }
+        String latestDateStr = null;
+        LocalDate latestDate = null;
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
+        // Tìm ngày gần nhất
+        for (Article article : articles) {
+            String articleDateStr = article.getPublishDate();
+            LocalDate articleLocalDate = LocalDate.parse(articleDateStr, formatter);
+
+            if (latestDate == null || articleLocalDate.isAfter(latestDate)) {
+                latestDate = articleLocalDate;
+                latestDateStr = articleDateStr;
+            }
+        }
+
+        return latestDateStr;
+    }    
 }
 
 

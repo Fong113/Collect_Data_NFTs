@@ -35,21 +35,21 @@ public class ArticleManager implements IArticleManager {
 	}
 
 	@Override
-	public Map<String, Integer> findHotTagsForDay(String day) {
+	public Map<String, Integer> findHotTagsForDay() {
 		FindHotTags FindHotTags = new FindHotTags(articles);
-		return FindHotTags.findHotTagsForDay(day);
+		return FindHotTags.findHotTagsForDay();
 	} 
 	
 	@Override
-	public Map<String, Integer> findHotTagsForWeek(String startDate){
+	public Map<String, Integer> findHotTagsForWeek(){
 		FindHotTags FindHotTags = new FindHotTags(articles);
-		return FindHotTags.findHotTagsForWeek(startDate);
+		return FindHotTags.findHotTagsForWeek();
 	}
 	
 	@Override
-	public Map<String, Integer> findHotTagsForMonth(String month){
+	public Map<String, Integer> findHotTagsForMonth(){
 		FindHotTags FindHotTags = new FindHotTags(articles);
-		return FindHotTags.findHotTagsForMonth(month);
+		return FindHotTags.findHotTagsForMonth();
 	}
 
 	
