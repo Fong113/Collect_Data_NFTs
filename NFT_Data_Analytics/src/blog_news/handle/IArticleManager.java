@@ -13,8 +13,8 @@ public interface IArticleManager {
 	 public String getAllArticles();
 	 public Set<String> extractUniqueTags();
 	 public Article findArticleById(int id);
-	 public Map<String, Integer> findHotTagsForDay(String day);
-	 public Map<String, Integer> findHotTagsForWeek(String startDate);
-	 public Map<String, Integer> findHotTagsForMonth(String month);
+	 public Map<String, Integer> findHotTagsForDay();
+	 public Map<String, Integer> findHotTagsForWeek();
+	 public Map<String, Integer> findHotTagsForMonth();
 	 
 }

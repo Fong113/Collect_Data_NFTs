@@ -44,18 +44,18 @@ public class HandleArticleManager implements IArticleManager {
     };
     
     @Override
-	public Map<String, Integer> findHotTagsForDay(String day) {
-		return ArticleManager.findHotTagsForDay(day);
+	public Map<String, Integer> findHotTagsForDay() {
+		return ArticleManager.findHotTagsForDay();
 	}
     
     @Override
-	public Map<String, Integer> findHotTagsForWeek(String startDate) {
-		return ArticleManager.findHotTagsForWeek(startDate);
+	public Map<String, Integer> findHotTagsForWeek() {
+		return ArticleManager.findHotTagsForWeek();
 	}
     
     @Override
-	public Map<String, Integer> findHotTagsForMonth(String month) {
-		return ArticleManager.findHotTagsForMonth(month);
+	public Map<String, Integer> findHotTagsForMonth() {
+		return ArticleManager.findHotTagsForMonth();
 	}
     
     public void test(HandleArticleManager handleArticleManager) {
@@ -99,25 +99,25 @@ public class HandleArticleManager implements IArticleManager {
 //    	    }
     		
 //    		System.out.print("Nhập ngày (dd/MM/yyyy): ");
-    		System.out.print("Nhập tháng (MM): ");
-            String userInput = scanner.nextLine();
+//    		System.out.print("Nhập tháng (MM): ");
+//            String userInput = scanner.nextLine();
 
             // Hiển thị thông tin ngày đã nhập
 //            System.out.println("Ngày đã nhập: " + userInput);
-            System.out.println("Ngày đã nhập: " + userInput);
+//            System.out.println("Ngày đã nhập: " + userInput);
             // Gọi phương thức
-//            Map<String, Integer> hotTagsMap = findHotTagsForDay(userInput);
-//            Map<String, Integer> hotTagsMap = findHotTagsForWeek(userInput);
-            Map<String, Integer> hotTagsMap = findHotTagsForMonth(userInput);
+//            Map<String, Integer> hotTagsMap = findHotTagsForDay();
+//            Map<String, Integer> hotTagsMap = findHotTagsForWeek();
+            Map<String, Integer> hotTagsMap = findHotTagsForMonth();
             List<Map.Entry<String, Integer>> hotTagsList = new ArrayList<>(hotTagsMap.entrySet());
 
             // Sắp xếp List theo giảm dần số lần xuất hiện
             hotTagsList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
             // In kết quả tags hot theo xếp hạng
-//            System.out.println("Top tags hot cho ngày " + userInput + ":");
-//            System.out.println("Top tags hot cho tuần bắt đầu từ " + userInput + ":");
-            System.out.println("Top tags hot cho tháng " + userInput + ":");
+//            System.out.println("Top tags hot trong ngày:");
+//            System.out.println("Top tags hot trong 7 ngày gần nhất:");
+            System.out.println("Top tags hot trong tháng:");
             int count = 0;
             for (Map.Entry<String, Integer> entry : hotTagsList) {
                 System.out.println("Top " + (count + 1) + ": " +entry.getKey() + ": " + entry.getValue() + " bài");
@@ -137,15 +137,15 @@ public class HandleArticleManager implements IArticleManager {
         
         HandleArticleManager handleArticleManager = new HandleArticleManager();
         
-//        handleArticleManager.test(handleArticleManager);
+        handleArticleManager.test(handleArticleManager);
         
         // test getAllAricles
 //        String foundArticle = handleArticleManager.getAllArticles();
 //        System.out.println(foundArticle);
         
         //test Get Tags
-        Set<String> result = handleArticleManager.extractUniqueTags();
-        System.out.println(result);
+//        Set<String> result = handleArticleManager.extractUniqueTags();
+//        System.out.println(result);
     }
 
 }

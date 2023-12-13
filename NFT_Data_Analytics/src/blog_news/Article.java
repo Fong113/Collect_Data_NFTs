@@ -1,10 +1,5 @@
 package blog_news;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.google.gson.reflect.TypeToken;
-
-import blog_news.helper.JsonIO;
 
 public class Article {
 	private final static String PATH = ".\\data\\blog_news.json";
