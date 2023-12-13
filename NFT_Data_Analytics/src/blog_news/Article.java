@@ -1,7 +1,13 @@
 package blog_news;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+
+import blog_news.helper.JsonIO;
+
 public class Article {
+	private final static String PATH = ".\\data\\blog_news.json";
 	private static int idCounter = 1;
 
 	private int id;
@@ -23,6 +29,10 @@ public class Article {
         this.tags = tags;
         this.publishDate = publishDate;
     }
+    
+    public static String getPATH() {
+		return PATH;
+	}
     
     // Getters/Setters
     public int getId() {
@@ -71,14 +81,28 @@ public class Article {
 
     @Override
     public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", absoluteURL='" + absoluteURL + '\'' +
-                ", content='" + fullContent + '\'' +
-                ", tags=" + tags +
-                ", publishDate='" + publishDate + '\'' +
-                '}';
+    	StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("{\n");
+        jsonBuilder.append("  \"id\": ").append(id).append(",\n");
+        jsonBuilder.append("  \"title\": \"").append(title).append("\",\n");
+        jsonBuilder.append("  \"absoluteURL\": \"").append(absoluteURL).append("\",\n");
+        jsonBuilder.append("  \"fullContent\": \"").append(fullContent).append("\",\n");
+        
+        // Xử lý danh sách tags
+        jsonBuilder.append("  \"tags\": [");
+        for (String tag : tags) {
+            jsonBuilder.append("\"").append(tag).append("\", ");
+        }
+        if (!tags.isEmpty()) {
+            // Loại bỏ dấu phẩy cuối cùng nếu danh sách tags không rỗng
+            jsonBuilder.setLength(jsonBuilder.length() - 2);
+        }
+        jsonBuilder.append("],\n");
+        
+        jsonBuilder.append("  \"publishDate\": \"").append(publishDate).append("\"\n");
+        jsonBuilder.append("}");
+        
+        return jsonBuilder.toString();
     }
 
 	public static void resetIdCounter(int maxId) {

@@ -2,6 +2,7 @@ package blog_news.handle;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import blog_news.Article;
 
@@ -10,7 +11,17 @@ public class ArticleManager implements IArticleManager {
 	public ArticleManager(List<Article> articles) {
 		ArticleManager.articles = articles;
 	}
-
+	
+	@Override
+	public String getAllArticles() {
+		ShowAllAriticles showAllArticle = new ShowAllAriticles(articles);
+		return showAllArticle.getAllArticles();
+	}
+	@Override
+	public Set<String> extractUniqueTags() {
+		TagProcessor showAlltags = new TagProcessor(articles);
+		return showAlltags.extractUniqueTags();	
+	}
 	@Override
 	public List<Article> filterArticlesByTags(String[] targetTags) {
 		ShowArticlesByTags showArticlesByTags = new ShowArticlesByTags(articles);
@@ -40,5 +51,7 @@ public class ArticleManager implements IArticleManager {
 		FindHotTags FindHotTags = new FindHotTags(articles);
 		return FindHotTags.findHotTagsForMonth(month);
 	}
+
+	
 	
 }

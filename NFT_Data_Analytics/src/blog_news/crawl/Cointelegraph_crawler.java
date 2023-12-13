@@ -22,16 +22,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Cointelegraph_crawler implements ICrawler {
     	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
-    	private final static String PATH = ".\\data\\blog_news.json";
+//    	private final static String PATH = ".\\data\\blog_news.json";
     	String baseUrl = "https://cointelegraph.com/tags/nft";
-    	
-		public static String getPATH() {
-			return PATH;
-		}
+
   
     	@Override
     	public void crawl() {
-    	    List<Article> existingArticles = Article_IO.loadJson(getPATH());
+    	    List<Article> existingArticles = Article_IO.loadJson(Article.getPATH());
 
     	    if (existingArticles == null || existingArticles.isEmpty()) {
     	        // Nếu danh sách là null hoặc trống, khởi tạo danh sách mới
@@ -43,7 +40,7 @@ public class Cointelegraph_crawler implements ICrawler {
             }
 
     	    List<Article> crawledArticles = crawlCoinTelegraph(existingArticles);
-    	    Article_IO.writeToJson(crawledArticles, getPATH());
+    	    Article_IO.writeToJson(crawledArticles, Article.getPATH());
     	}
 
     	private List<Article> crawlCoinTelegraph(List<Article> existingArticles){

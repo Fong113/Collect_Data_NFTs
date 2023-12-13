@@ -27,15 +27,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Todaynftnews_crawler implements ICrawler {
 	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
-	private final static String PATH = ".\\data\\blog_news.json";
+//	private final static String PATH = ".\\data\\blog_news.json";
 	private String baseUrl = "https://www.todaynftnews.com/nft-news/";
 	
-	public static String getPATH() {
-		return PATH;
-	}
 	@Override
 	public void crawl() {
-	    List<Article> existingArticles = Article_IO.loadJson(getPATH());
+	    List<Article> existingArticles = Article_IO.loadJson(Article.getPATH());
 
 	    if (existingArticles == null || existingArticles.isEmpty()) {
 	        // Nếu danh sách là null hoặc trống, khởi tạo danh sách mới
@@ -47,7 +44,7 @@ public class Todaynftnews_crawler implements ICrawler {
         }
 
 	    List<Article> crawledArticles = crawlTodayNFTnews(existingArticles);
-	    Article_IO.writeToJson(crawledArticles, getPATH());
+	    Article_IO.writeToJson(crawledArticles, Article.getPATH());
 	}
 
 	
