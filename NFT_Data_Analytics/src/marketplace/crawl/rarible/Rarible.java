@@ -10,7 +10,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
-import marketplace.crawl.MarketplaceType;
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
+import marketplace.crawl.type.MarketplaceType;
 
 public class Rarible extends Crawler {
 	
@@ -22,15 +24,17 @@ public class Rarible extends Crawler {
 	
 	
 	@Override
-	protected void getRespone() {
+	protected void getData() throws CrawlTimeoutException, InternetConnectionException, Exception{
 		String requestBody = "{\"size\":100 ,\"filter\":{\"verifiedOnly\":false,\"sort\":\"VOLUME_DESC\",\"blockchains\":[\""+ chain +"\"],\"showInRanking\":false,\"period\":\"" + period + "\",\"hasCommunityMarketplace\":false,\"currency\":\"NATIVE\"}}";
 		HttpRequest request = HttpRequest.newBuilder()
 			    .uri(URI.create("https://rarible.com/marketplace/api/v4/collections/search"))
 			    .header("Content-Type", "application/json") 
 			    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 OPR/103.0.0.0")
+			    .timeout(timeOut)
 			    .method("POST", HttpRequest.BodyPublishers.ofString(requestBody))
 			    .build();
-		respone = Crawler.getResponeRequest(request);
+		
+		respone = sendRequest(request);
 	}
 	
 	@Override

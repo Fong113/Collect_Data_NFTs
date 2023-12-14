@@ -4,21 +4,29 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.http.HttpClient;
+import java.net.http.HttpConnectTimeoutException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import com.google.gson.JsonObject;
 
-public abstract class Crawler {
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
+
+public abstract class Crawler  {
 	protected String marketplaceName;
 	protected String period;
 	protected String chain;
 	protected String respone;
 	protected JsonObject data = new JsonObject();
+	protected Duration timeOut = Duration.ofSeconds(15);
 	protected static final String PATHSAVEDATA = ".\\data\\marketplace";
 	
-	protected abstract void getRespone();
+	
+	protected abstract void getData() throws CrawlTimeoutException, InternetConnectionException, Exception;
 	
 	protected abstract void preprocessData();
 	
@@ -28,17 +36,29 @@ public abstract class Crawler {
 			writer.write(data.toString());
 			writer.close();
 		} catch (IOException e) {
-			System.out.println("An error occurred.");
 		    e.printStackTrace();
 		}
 	}
 	
-	public JsonObject crawlTrendingAndSaveToFile() {
+	public void crawlTrendingAndSaveToFile() throws CrawlTimeoutException, InternetConnectionException, Exception {
 		File file = new File(getFileSaveData(marketplaceName, period, chain));
-		getRespone();
-		preprocessData();
-		saveDataToFile(file);
-		return data;
+		getData();
+		preprocessData();			
+		saveDataToFile(file);	
+	}
+	
+	
+	protected static String sendRequest(HttpRequest request) throws CrawlTimeoutException, InternetConnectionException, Exception {
+		try {
+			HttpResponse<String> res = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			 return res.body();
+		} catch (HttpConnectTimeoutException e) {			
+			throw new CrawlTimeoutException("Time out", e);
+		} catch (IOException e) {
+				throw new InternetConnectionException("Check your internet connection", e);				
+		} catch (Exception e) {
+			throw new Exception("Something went wrong", e);
+		}
 	}
 	
 	protected static String getFileSaveData(String marketplaceName, String period, String chain) {
@@ -50,22 +70,6 @@ public abstract class Crawler {
 			return false;
 		}
 		return true;
-	}
-	
-	protected static String getResponeRequest(HttpRequest request) {
-		HttpResponse<String> res = null;
-		try {
-			res = HttpClient.newHttpClient()
-						.send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-		 return res.body();
 	}
 	
 	protected static String getTimeCrawl(String format) {
