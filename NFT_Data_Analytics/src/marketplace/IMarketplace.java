@@ -5,6 +5,7 @@ import java.util.Set;
 import marketplace.crawl.ChainType;
 import marketplace.crawl.MarketplaceType;
 import marketplace.crawl.PeriodType;
+import marketplace.handle.Collection;
 import marketplace.handle.CollectionFilter;
 import marketplace.handle.Trending;
 

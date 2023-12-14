@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ScrollPane layoutY="76.0" prefHeight="200.0" prefWidth="915.0">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="198.0" prefWidth="1150.0">
+                    <children>
+                        <TableView fx:id="tableView" layoutX="-1.0" prefHeight="198.0" prefWidth="1150.0">
+                            <columns>
+                                <TableColumn fx:id="columnNumber" prefWidth="42" text="#" />
+                                <TableColumn fx:id="columnLogo" prefWidth="100" text="Logo" />
+                                <TableColumn fx:id="columnName" prefWidth="161" text="Name" />
+                                <TableColumn fx:id="columnVolume" minWidth="0.0" prefWidth="54" text="Volume" />
+                                <TableColumn fx:id="columnVolumeChange" prefWidth="65" text="Volume Change" />
+                                <TableColumn fx:id="columnFloorPrice" prefWidth="98" text="Floor Price" />
+                                <TableColumn fx:id="columnFloorPriceChange" prefWidth="116" text="Floor Price Change" />
+                                <TableColumn fx:id="columnItems" prefWidth="75.0" text="Items" />
+                                <TableColumn fx:id="columnOwners" prefWidth="75.0" text="Owners" />
+                                <TableColumn fx:id="columnCurrency" prefWidth="94" text="Currency" />
+                                <TableColumn fx:id="columnChain" prefWidth="89" text="Chain" />
+                                <TableColumn fx:id="columnPeriod" prefWidth="76.0" text="Period" />
+                                <TableColumn fx:id="columnMarketplace" prefWidth="123" text="Marketplace" />
+                            </columns>
+                        </TableView>
+                        <Label fx:id="noResultsLabel" layoutX="10.0" layoutY="10.0" text="No results found." visible="false" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+        <Button fx:id="searchButton" layoutX="46.0" layoutY="25.0" mnemonicParsing="false" text="Search" />
+        <TextField fx:id="searchTextField" layoutX="114.0" layoutY="25.0" />
+    </children>
+</AnchorPane>
