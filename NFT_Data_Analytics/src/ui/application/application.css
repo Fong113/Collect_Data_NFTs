@@ -16,7 +16,7 @@
 .article-title {
     -fx-font-weight: bold;
     -fx-font-size: 16px;
-    -fx-text-fill: rgba(40, 70, 100, 0.8); 
+    -fx-text-fill: rgba(40, 70, 120, 0.8); 
 }
 
 .article-date {
@@ -30,4 +30,15 @@
 
 .tag-label{
 	
+}
+
+.tweet-author{
+	-fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: rgba(40, 70, 120, 0.8); 
+}
+
+.tweet-content {
+	-fx-font-style: italic; 
+    -fx-font-size: 12px;
 }

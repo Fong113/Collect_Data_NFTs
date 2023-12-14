@@ -11,13 +11,13 @@ import java.lang.reflect.Type;
 import com.google.gson.reflect.TypeToken;
 
 import blog_news.Article;
-import blog_news.crawl.Todaynftnews_crawler;
 import blog_news.handle.HandleArticleManager;
 import blog_news.helper.JsonIO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
@@ -25,15 +25,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
+import twitter.ITwitter;
+import twitter.handle.Tweet;
+import twitter.handle.Handle;
 
 public class Controller implements Initializable {
 	@FXML
@@ -55,6 +52,8 @@ public class Controller implements Initializable {
 	@FXML
 	private Pagination blogPagination;
 	@FXML
+	private Pagination tweetPagination;
+	@FXML
 	private ChoiceBox<String> hourChoice;
 	@FXML
 	private ChoiceBox<String> typeTagChoice;
@@ -65,6 +64,9 @@ public class Controller implements Initializable {
 
 	private HandleArticleManager articleManager;
     private List<Article> currentArticles = new ArrayList<Article>();
+    
+    private ITwitter twitterData = new Handle();
+    private List<Tweet> currentTweets = twitterData.getTweetsNFTs();
     private final int itemsPerPage = 5; 
 
     @Override
@@ -73,9 +75,8 @@ public class Controller implements Initializable {
         JsonIO<Article> jsonIO = new JsonIO<>(aListType);
         currentArticles = jsonIO.loadJson("data/blog_news.json");
         articleManager = new HandleArticleManager(currentArticles);
+        
 
-        
-        
         setChoiceBox();
         displayAllTags(tagsBox);
     }
@@ -95,32 +96,55 @@ public class Controller implements Initializable {
         if (selectedTab == blogTab) {
         	if (!searchText.isEmpty()) {
             	currentArticles = articleManager.filterArticlesByTags(new String[]{searchText});
-            	setupPagination();
+            	setupPagination(currentArticles);
             }
         } else if (selectedTab == twitterTab) {
-            searchTwitter();
-        }
-    }
-
-    private void setupPagination() {
-        int pageCount = (int) Math.ceil((double) currentArticles.size() / itemsPerPage);
-        blogPagination.setPageCount(pageCount);
-        blogPagination.setPageFactory(this::createPage);
-    }
-
-    private Node createPage(int pageIndex) {
-        VBox box = new VBox(5);
-        int start = pageIndex * itemsPerPage;
-        int end = Math.min(start + itemsPerPage, currentArticles.size());
-        for (int i = start; i < end; i++) {
-            Article article = currentArticles.get(i);
-            box.getChildren().add(createArticleNode(article));
-            
-            if (i < end - 1) {
-                box.getChildren().add(new Separator());
+        	if (!searchText.isEmpty()) {
+            	currentTweets = twitterData.getTweetsByTag(searchText);
+            	setupPagination(currentTweets);
             }
         }
-        return new ScrollPane(box);
+    }
+
+    private void setupPagination(List<?> items) {
+        int pageCount = (int) Math.ceil((double) items.size() / itemsPerPage);
+        Pagination targetPagination = null;
+        
+        if (items.get(0) instanceof Article) {
+        	targetPagination = blogPagination;
+        } else if (items.get(0) instanceof Tweet) {
+        	targetPagination = tweetPagination;
+        }
+        targetPagination.setPageCount(pageCount);
+        targetPagination.setPageFactory(pageIndex -> createPage(items, pageIndex));
+    }
+
+    private Node createPage(List<?> items, int pageIndex) {
+        if (items.isEmpty()) {
+            return new ScrollPane();
+        }
+
+        VBox targetBox = null;
+        if (items.get(0) instanceof Article) {
+            articlesBlog.getChildren().clear();
+            targetBox = articlesBlog;
+        } else if (items.get(0) instanceof Tweet) {
+            articlesTwitter.getChildren().clear();
+            targetBox = articlesTwitter;
+        }
+
+        int start = pageIndex * itemsPerPage;
+        int end = Math.min(start + itemsPerPage, items.size());
+        for (int i = start; i < end; i++) {
+            Object item = items.get(i);
+            Node node = (item instanceof Article) ? createArticleNode((Article) item) 
+                                                 : createTweetNode((Tweet) item);
+            targetBox.getChildren().add(node);
+            if (i < end - 1) {
+                targetBox.getChildren().add(new Separator());
+            }
+        }
+        return new ScrollPane(targetBox);
     }
 
     private Node createArticleNode(Article article) {
@@ -129,29 +153,30 @@ public class Controller implements Initializable {
 
         Label titleLabel = new Label(article.getTitle());
         titleLabel.getStyleClass().add("article-title");
-        titleLabel.setOnMouseClicked(event -> showArticleInWebView(article.getAbsoluteURL()));
+        titleLabel.setWrapText(true);
 
         Label dateLabel = new Label(article.getPublishDate());
         dateLabel.getStyleClass().add("article-date");
 
         Label contentLabel = new Label(article.getFullContent());
         contentLabel.getStyleClass().add("article-content");
-        contentLabel.setWrapText(true);
+        contentLabel.setTextOverrun(OverrunStyle.ELLIPSIS);
         
         articleBox.getChildren().addAll(titleLabel, contentLabel, dateLabel);
-
         return articleBox;
     }
-    private void showArticleInWebView(String url) {
-        Stage stage = new Stage();
-        
-        WebView webView = new WebView();
-        webView.getEngine().load(url);
-        
-        Scene scene = new Scene(webView);
-        stage.setScene(scene);
-        
-        stage.show();
+    private Node createTweetNode(Tweet tweet) {
+        VBox tweetBox = new VBox(10);
+        tweetBox.getStyleClass().add("tweet-box");
+
+        Label authorLabel = new Label(tweet.getAuthor());
+        authorLabel.getStyleClass().add("tweet-author");
+
+        Label contentLabel = new Label(tweet.getContent());
+        contentLabel.getStyleClass().add("tweet-content");
+
+        tweetBox.getChildren().addAll(authorLabel, contentLabel);
+        return tweetBox;
     }
     
     private void displayAllTags(VBox tagsContainer) {
@@ -172,9 +197,5 @@ public class Controller implements Initializable {
                 tagsContainer.getChildren().add(new Separator());
             }
         }
-    }
-
-    private void searchTwitter() {
-    
     }
 }

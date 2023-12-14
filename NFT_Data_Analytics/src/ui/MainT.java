@@ -10,7 +10,7 @@ public class MainT extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/ui/application/TagUI.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/ui/application/Tag.fxml"));
 			
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/ui/application/application.css").toExternalForm());

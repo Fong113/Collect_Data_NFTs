@@ -28,7 +28,8 @@
     <content>
         <AnchorPane prefHeight="200.0" prefWidth="1000.0">
             <children>
-                <Pagination fx:id="blogPagination" layoutX="3.0" layoutY="10.0" prefHeight="380.0" prefWidth="617.0" />
+                <Pagination fx:id="blogPagination" layoutX="3.0" layoutY="10.0" prefHeight="398.0" prefWidth="605.0" />
+                        <VBox fx:id="articlesBlog" layoutX="19.0" layoutY="31.0" prefHeight="290.0" prefWidth="585.0" />
             </children>
         </AnchorPane>
     </content>
@@ -37,11 +38,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ScrollPane layoutX="9.0" layoutY="14.0" prefHeight="380.0" prefWidth="617.0">
-                           <content>
-                              <VBox fx:id="articlesTwitter" prefHeight="356.0" prefWidth="617.0" />
-                           </content>
-                        </ScrollPane>
+                        <Pagination fx:id="tweetPagination" layoutX="10.0" layoutY="14.0" prefHeight="398.0" prefWidth="605.0" />
+                        <VBox fx:id="articlesTwitter" layoutX="20.0" layoutY="28.0" prefHeight="290.0" prefWidth="585.0" />
                      </children></AnchorPane>
               </content>
             </Tab>
@@ -55,7 +53,7 @@
          </children></AnchorPane>
       <AnchorPane layoutX="377.0" layoutY="52.8" prefHeight="63.0" prefWidth="623.0" AnchorPane.leftAnchor="377.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
          <children>
-            <TextField fx:id="searchField" alignment="CENTER" layoutX="533.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="34.0" prefWidth="246.0" promptText="Search By Hastag/Tag/Keywords " AnchorPane.bottomAnchor="14.000000000000007" AnchorPane.rightAnchor="221.0" AnchorPane.topAnchor="14.0">
+            <TextField fx:id="searchField" alignment="CENTER" layoutX="533.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#search" prefHeight="34.0" prefWidth="246.0" promptText="Search By Hastag/Tag/Keywords " AnchorPane.bottomAnchor="14.000000000000007" AnchorPane.rightAnchor="221.0" AnchorPane.topAnchor="14.0">
                <font>
                   <Font size="14.0" />
                </font>
