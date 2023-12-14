@@ -3,12 +3,11 @@ package marketplace.crawl.opensea;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.PeriodType;
+import marketplace.crawl.type.PeriodType;
 
 public enum OpenseaPeriodType implements PeriodType{
 //	ONEHOUR("ONE_HOUR"), SIXHOURS("SIX_HOUR"), 
-	ONEDAY("ONE_DAY"), ONEWEEK("SEVEN_DAY"); 
-//	ONEMONTH("THIRTY_DAY");
+	ONEDAY("ONE_DAY"), ONEWEEK("SEVEN_DAY"), ONEMONTH("THIRTY_DAY");
 	
 	private String value;
 	

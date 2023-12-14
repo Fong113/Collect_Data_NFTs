@@ -1,15 +1,18 @@
 package marketplace.crawl.opensea;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,7 +21,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
-import marketplace.crawl.MarketplaceType;
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
+import marketplace.crawl.type.MarketplaceType;
 
 public class Opensea extends Crawler {
 	
@@ -29,25 +34,34 @@ public class Opensea extends Crawler {
 	}
 	
 	@Override
-	protected void getRespone() {
+	protected void getData() throws CrawlTimeoutException, InternetConnectionException, Exception{
 		System.setProperty("webdriver.chrome.driver", ".\\lib\\ChromeDriver\\chromedriver.exe");
 		ChromeOptions opt = new ChromeOptions();
-		opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
+		opt.setPageLoadStrategy(PageLoadStrategy.NONE);
 		opt.addArguments("--headless");
 		opt.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36");
 		WebDriver driver = new ChromeDriver(opt);
+		driver.manage().timeouts().pageLoadTimeout(timeOut);
+		driver.manage().timeouts().scriptTimeout(timeOut);
+		
 		try {
-			Thread.sleep(1000);
 			String url = "https://opensea.io/rankings/trending?chain="+ chain +"&sortBy="+ period.toLowerCase() + "_volume";
 			driver.get(url);
+			WebDriverWait wait = new WebDriverWait(driver, timeOut);
+			wait.until(ExpectedConditions.attributeContains(By.cssSelector("script[id=__NEXT_DATA__]"), "id", "__NEXT_DATA__"));
 			respone =  driver.findElement(By.cssSelector("script[id=__NEXT_DATA__]"))
 					.getAttribute("innerHTML");
 //        driver.manage().deleteAllCookies();
 			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {			
+		} catch (TimeoutException e) {
+			throw new CrawlTimeoutException("Time out");
+		} catch (WebDriverException e) {
+//			e.printStackTrace();
+			throw new InternetConnectionException("Check your connection");
+		} catch (Exception e) {
+			throw new Exception("Something went wrong");
+		}
+		finally {			
 			driver.quit();
 		}
 		

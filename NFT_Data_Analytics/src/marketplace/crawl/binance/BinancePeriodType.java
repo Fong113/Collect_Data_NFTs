@@ -3,7 +3,7 @@ package marketplace.crawl.binance;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.PeriodType;
+import marketplace.crawl.type.PeriodType;
 
 public enum BinancePeriodType implements PeriodType{
 //	SIXHOURS("6H"),

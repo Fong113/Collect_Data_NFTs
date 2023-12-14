@@ -6,6 +6,8 @@ import java.util.List;
 import marketplace.crawl.binance.Binance;
 import marketplace.crawl.binance.BinanceChainType;
 import marketplace.crawl.binance.BinancePeriodType;
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
 import marketplace.crawl.niftygateway.Niftygateway;
 import marketplace.crawl.niftygateway.NiftygatewayChainType;
 import marketplace.crawl.niftygateway.NiftygatewayPeriodType;
@@ -15,6 +17,9 @@ import marketplace.crawl.opensea.OpenseaPeriodType;
 import marketplace.crawl.rarible.Rarible;
 import marketplace.crawl.rarible.RaribleChainType;
 import marketplace.crawl.rarible.RariblePeriodType;
+import marketplace.crawl.type.ChainType;
+import marketplace.crawl.type.MarketplaceType;
+import marketplace.crawl.type.PeriodType;
 
 public class CrawlerManager implements ICrawlerManager{	
 	public CrawlerManager() {}
@@ -33,7 +38,7 @@ public class CrawlerManager implements ICrawlerManager{
 		return null;
 	}
 	
-	private void crawlAllTrendingofMarketplace(MarketplaceType marketplaceType) {
+	private void crawlAllTrendingofMarketplace(MarketplaceType marketplaceType) throws CrawlTimeoutException, InternetConnectionException, Exception {
 		List<String> chains = new ArrayList<String>();
 		List<String> periods = new ArrayList<String>();
 		switch(marketplaceType) {
@@ -58,14 +63,19 @@ public class CrawlerManager implements ICrawlerManager{
 		for(String chain : chains) 
 			for(String period : periods) {
 				Crawler crawler = getCrawler(marketplaceType, chain, period);
-				crawler.crawlTrendingAndSaveToFile();
+				try {
+					crawler.crawlTrendingAndSaveToFile();					
+				} catch (CrawlTimeoutException e) {
+					System.out.println(marketplaceType.getValue() + " " + chain + " " + period + " time out");
+					throw e;
+				}
 			}
 	}
 	
 	@Override
-	public void crawlAllTrending() {
+	public void crawlAllTrending() throws CrawlTimeoutException, InternetConnectionException, Exception {
 		for(MarketplaceType m : MarketplaceType.values()) {
-			crawlAllTrendingofMarketplace(m);
+			crawlAllTrendingofMarketplace(m);				
 		}
 	}
 	

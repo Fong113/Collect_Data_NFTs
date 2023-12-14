@@ -3,7 +3,7 @@ package marketplace.crawl.opensea;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.ChainType;
+import marketplace.crawl.type.ChainType;
 
 public enum OpenseaChainType implements ChainType{
 	

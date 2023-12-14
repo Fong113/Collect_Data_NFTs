@@ -3,6 +3,8 @@ package marketplace.crawl.binance;
 import java.net.URI;
 import java.net.http.HttpRequest;
 
+import org.openqa.selenium.TimeoutException;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -10,7 +12,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
-import marketplace.crawl.MarketplaceType;
+import marketplace.crawl.exception.InternetConnectionException;
+import marketplace.crawl.type.MarketplaceType;
 
 public class Binance extends Crawler {
 	
@@ -21,15 +24,17 @@ public class Binance extends Crawler {
 	}
 	
 	@Override
-	protected void getRespone() {
+	protected void getData() throws TimeoutException, InternetConnectionException, Exception {
 		String requestBody = "{\"network\":\""+ chain + "\",\"period\":\"" + period + "\",\"sortType\":\"volumeDesc\",\"page\":1,\"rows\":100}";
 		HttpRequest request = HttpRequest.newBuilder()
 			    .uri(URI.create("https://www.binance.com/bapi/nft/v1/friendly/nft/ranking/trend-collection"))
 			    .header("Content-Type", "application/json") 
 			    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 OPR/103.0.0.0")
+			    .timeout(timeOut)
 			    .method("POST", HttpRequest.BodyPublishers.ofString(requestBody))
 			    .build();
-		respone = Crawler.getResponeRequest(request);
+		
+		respone = sendRequest(request);
 	
 	}
 	

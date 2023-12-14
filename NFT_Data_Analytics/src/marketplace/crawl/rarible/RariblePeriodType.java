@@ -3,7 +3,7 @@ package marketplace.crawl.rarible;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.PeriodType;
+import marketplace.crawl.type.PeriodType;
 
 public enum RariblePeriodType implements PeriodType{
 	ONEHOUR("H1"), ONEDAY("DAY"), ONEWEEK("WEEK"), ONEMONTH("MONTH");

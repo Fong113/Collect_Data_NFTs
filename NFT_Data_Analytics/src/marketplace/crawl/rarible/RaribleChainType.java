@@ -3,12 +3,13 @@ package marketplace.crawl.rarible;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.ChainType;
+import marketplace.crawl.type.ChainType;
 
 public enum RaribleChainType implements ChainType{
 	
 //	IMMUTABLEX("IMMUTABLEX");
-	ETH("ETHEREUM"), POLYGON("POLYGON"), TEZOS("TEZOS"); 
+//	TEZOS("TEZOS"); 
+	ETH("ETHEREUM"), POLYGON("POLYGON"); 
 	
 	private String value;
 	

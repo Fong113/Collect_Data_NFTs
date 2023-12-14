@@ -3,11 +3,12 @@ package marketplace.crawl.binance;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.ChainType;
+import marketplace.crawl.type.ChainType;
 
 public enum BinanceChainType implements ChainType {
 	
-	BNB("BSC"), ETH("ETH"), BTC("BTC");
+//	BTC("BTC");
+	BNB("BSC"), ETH("ETH"); 
 	
 	private String value;
 	

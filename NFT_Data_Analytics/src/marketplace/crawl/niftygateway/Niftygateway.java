@@ -10,7 +10,9 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import marketplace.crawl.Crawler;
-import marketplace.crawl.MarketplaceType;
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
+import marketplace.crawl.type.MarketplaceType;
 
 public class Niftygateway extends Crawler {
 	
@@ -22,7 +24,7 @@ public class Niftygateway extends Crawler {
 	
 	
 	@Override
-	protected void getRespone() {
+	protected void getData() throws CrawlTimeoutException, InternetConnectionException, Exception{
 		String api = "";
 		switch(period) {
 		case "oneDay":
@@ -40,16 +42,18 @@ public class Niftygateway extends Crawler {
 			    .uri(URI.create(api))
 			    .header("Content-Type", "application/json") 
 			    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 OPR/103.0.0.0")
+			    .timeout(timeOut)
 			    .method("GET", HttpRequest.BodyPublishers.noBody())
 			    .build();
-		respone = Crawler.getResponeRequest(request);
+		
+		respone = sendRequest(request);
 		
 	}
 	
 	@Override
 	protected void preprocessData() {
 		
-		float rate = chain.equals("USD") ? 100 : getFixRates() * 100;
+		double rate = chain.equals("USD") ? 100 : 0.5 * 100;
 		
 		JsonArray rowsRaw = JsonParser.parseString(respone)
 				.getAsJsonObject()
@@ -79,27 +83,7 @@ public class Niftygateway extends Crawler {
 		data.add("data", rows);
 	}
 	
-	private float getFixRates() {		
-		HttpRequest request = HttpRequest.newBuilder()
-			    .uri(URI.create("https://api.niftygateway.com/v1/fxrates/?source_currency=ETH&base_currency=USD&order_by=-created_at&limit=1"))
-			    .header("Content-Type", "application/json") 
-			    .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 OPR/103.0.0.0")
-			    .method("GET", HttpRequest.BodyPublishers.noBody())
-			    .build();
-		
-		String res = Crawler.getResponeRequest(request);
-		
-		return JsonParser.parseString(res)
-				.getAsJsonObject()
-				.getAsJsonArray("results")
-				.get(0)
-				.getAsJsonObject()
-				.get("price")
-				.getAsFloat();
-		
-	}
-	
-	private JsonElement convertValueByNetworkRate(JsonElement jElement, float rate) {
+	private JsonElement convertValueByNetworkRate(JsonElement jElement, double rate) {
 		return new JsonPrimitive(jElement.getAsFloat() / rate);
 	}
 }

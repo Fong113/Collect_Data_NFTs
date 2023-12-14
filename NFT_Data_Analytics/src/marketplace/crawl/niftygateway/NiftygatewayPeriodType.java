@@ -3,7 +3,7 @@ package marketplace.crawl.niftygateway;
 import java.util.ArrayList;
 import java.util.List;
 
-import marketplace.crawl.PeriodType;
+import marketplace.crawl.type.PeriodType;
 
 public enum NiftygatewayPeriodType implements PeriodType{
 	ONEDAY("oneDay"), ONEWEEK("sevenDay"), ONEMONTH("thirtyDay");
