@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -53,8 +54,8 @@ public class MarketplaceHandler implements IMarketplace {
 			}
 			
 			return new Trending(marketplaceType.getValue(), createdAt, chain.getValue(), period.getValue(), currency, colList);			
-		} catch (FileNotFoundException e) {
-			throw new DataNotFoundException("Data not found");
+		} catch (FileNotFoundException | NoSuchElementException e) {
+			throw new DataNotFoundException("Data not found", e);
 		} catch (Exception e) {
 			throw e;
 		}
