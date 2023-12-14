@@ -1,12 +1,11 @@
 package ui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.concurrent.CompletableFuture;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -14,8 +13,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -23,11 +25,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.IMarketplace;
-import marketplace.crawl.ChainType;
 import marketplace.crawl.MarketplaceType;
-import marketplace.crawl.PeriodType;
 import marketplace.crawl.binance.BinanceChainType;
 import marketplace.crawl.binance.BinancePeriodType;
 import marketplace.crawl.niftygateway.NiftygatewayChainType;
@@ -39,8 +42,6 @@ import marketplace.crawl.rarible.RariblePeriodType;
 import marketplace.handle.Collection;
 import marketplace.handle.Handler;
 import marketplace.handle.Trending;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class CollectionController implements Initializable {
 
@@ -87,6 +88,10 @@ public class CollectionController implements Initializable {
 	private Label labelTimeCrawl;
 	
 	
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
+	
 	private ObservableList<Collection> collectionList;
 
 	ObservableList<String> listMarket = FXCollections.observableArrayList("Opensea", "Binance", "Rarible",
@@ -98,6 +103,14 @@ public class CollectionController implements Initializable {
 	String marketValueCurrent;
 	String chainValueCurrent;
 	String periodValueCurrent;
+	
+	 public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
+		  root = FXMLLoader.load(getClass().getResource("Tag.fxml"));
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();
+		 }
 	
 	public void marketComboBoxChanged(ActionEvent e) {
 		String marketValue = marketComboBox.getValue();
@@ -191,6 +204,7 @@ public class CollectionController implements Initializable {
 	}
 
 	public void clickBtnCrawl(ActionEvent e) {
+//		m.clearData();
 		m.crawlAllData();
 		LocalDateTime currentTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

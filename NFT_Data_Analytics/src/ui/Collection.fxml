@@ -8,107 +8,103 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CollectionController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: #8eb1c2;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.CollectionController">
    <children>
-      <HBox prefHeight="50.0" prefWidth="1000.0">
+      <HBox alignment="CENTER" cacheShape="false" prefHeight="50.0" prefWidth="1000.0">
          <children>
-            <Label alignment="CENTER" prefHeight="45.0" prefWidth="792.0" text="Nhat" textOverrun="WORD_ELLIPSIS">
+            <Button fx:id="btnCrawl" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#clickBtnCrawl" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Crawl" textFill="WHITE">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
-            </Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="45.0" prefWidth="847.0" text="Toan" textFill="#222020">
+            </Button>
+            <Button fx:id="btnMarket" alignment="CENTER" lineSpacing="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="299.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Marketplace" textFill="WHITE">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
-            </Label>
-            <VBox prefHeight="200.0" prefWidth="100.0" />
-            <Label alignment="CENTER" prefHeight="45.0" prefWidth="700.0" text="Khoi">
+               <graphic>
+                  <SVGPath content="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" fill="WHITE" translateX="-10.0" />
+               </graphic>
+            </Button>
+            <Button fx:id="btnBlogAndTwitter" alignment="CENTER" mnemonicParsing="false" onAction="#switchToSceneBlogAndTwitter" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Blog and Twitter" textFill="WHITE">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="20.0" />
                </font>
-            </Label>
+               <graphic>
+                  <SVGPath content="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15" fill="WHITE" translateX="-10.0" />
+               </graphic>
+            </Button>
+            <Button fx:id="BtnContrast" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Contrast" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+               <graphic>
+                  <SVGPath content="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0m-8 5v1H4.5a.502.502 0 0 0-.093.009A7.029 7.029 0 0 1 3.1 13zm0-1H2.255a6.998 6.998 0 0 1-.581-1H8zm-6.71-2a6.96 6.96 0 0 1-.22-1H8v1zM1 8c0-.34.024-.673.07-1H8v1zm.29-2c.103-.345.231-.68.384-1H8v1zm.965-2c.25-.36.534-.694.846-1H8v1zm2.137-2A6.967 6.967 0 0 1 8 1v1z" fill="WHITE" translateX="-10.0" />
+               </graphic>
+            </Button>
          </children>
       </HBox>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4aa8ff" height="9.0" layoutX="-4.0" layoutY="48.0" stroke="BLACK" strokeType="INSIDE" width="1000.0" />
-      <TableView fx:id="table" layoutX="40.0" layoutY="183.0" prefHeight="391.0" prefWidth="920.0">
+      <TableView fx:id="table" layoutX="33.0" layoutY="184.0" prefHeight="390.0" prefWidth="930.0" style="-fx-background-color: #c8dfea; -fx-border-style: solid;">
         <columns>
-            <TableColumn fx:id="numberCol" prefWidth="34.666656494140625" text="#" />
-            <TableColumn fx:id="logoCol" text="Logo" />
-          <TableColumn fx:id="nameCol" prefWidth="228.00001525878906" text="Name" />
-            <TableColumn fx:id="volumeCol" prefWidth="77.33328247070312" text="Volume" />
-            <TableColumn fx:id="volumeChangeCol" prefWidth="96.66668701171875" text="Volume&#10;change" />
-            <TableColumn fx:id="floorPriceCol" minWidth="5.33331298828125" prefWidth="96.66668701171875" text="Floor&#10;Price" />
-            <TableColumn fx:id="floorPriceChangeCol" prefWidth="97.3333740234375" text="Floor Price&#10;Change" />
-            <TableColumn fx:id="itemsCol" prefWidth="81.3333740234375" text="Items" />
-            <TableColumn fx:id="ownersCol" prefWidth="73.33331298828125" text="Owners" />
+            <TableColumn fx:id="numberCol" prefWidth="41.555545806884766" style="-fx-background-color: #c8dfea;" text="#" />
+            <TableColumn fx:id="logoCol" prefWidth="82.44445419311523" style="-fx-background-color: #c8dfea;" text="Logo" />
+          <TableColumn fx:id="nameCol" prefWidth="207.1111297607422" style="-fx-background-color: #c8dfea;" text="Name" />
+            <TableColumn fx:id="volumeCol" prefWidth="98.4444580078125" style="-fx-background-color: #c8dfea;" text="Volume" />
+            <TableColumn fx:id="volumeChangeCol" prefWidth="112.00003051757812" style="-fx-background-color: #c8dfea;" text="Volume&#10;change" />
+            <TableColumn fx:id="floorPriceCol" minWidth="5.33331298828125" prefWidth="116.4444580078125" style="-fx-background-color: #c8dfea;" text="Floor&#10;Price" />
+            <TableColumn fx:id="floorPriceChangeCol" prefWidth="107.3333740234375" style="-fx-background-color: #c8dfea;" text="Floor Price&#10;Change" />
+            <TableColumn fx:id="itemsCol" prefWidth="75.33331298828125" style="-fx-background-color: #c8dfea;" text="Items" />
+            <TableColumn fx:id="ownersCol" prefWidth="71.5555419921875" style="-fx-background-color: #c8dfea;" text="Owners" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <VBox layoutX="55.0" layoutY="59.0" prefHeight="74.0" prefWidth="154.0">
+      <VBox layoutX="70.0" layoutY="70.0" prefHeight="74.0" prefWidth="154.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="155.0" text="Market place" textAlignment="CENTER">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Century Gothic Bold" size="18.0" />
                </font>
             </Label>
-            <ComboBox fx:id="marketComboBox" minHeight="-Infinity" onAction="#marketComboBoxChanged" prefHeight="34.0" prefWidth="159.0" promptText="Market place" />
+            <ComboBox fx:id="marketComboBox" minHeight="-Infinity" onAction="#marketComboBoxChanged" prefHeight="34.0" prefWidth="159.0" promptText="Market place" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
          </children>
       </VBox>
-      <VBox layoutX="242.0" layoutY="59.0" prefHeight="74.0" prefWidth="154.0">
+      <VBox layoutX="266.0" layoutY="70.0" prefHeight="74.0" prefWidth="154.0">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="155.0" text="Chain type" textAlignment="CENTER">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Century Gothic Bold" size="18.0" />
                </font>
             </Label>
-            <ComboBox fx:id="chainComboBox" minHeight="-Infinity" onAction="#chainComboBoxChanged" prefHeight="34.0" prefWidth="157.0" promptText="Chain type" />
+            <ComboBox fx:id="chainComboBox" minHeight="-Infinity" onAction="#chainComboBoxChanged" prefHeight="34.0" prefWidth="157.0" promptText="Chain type" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
          </children>
       </VBox>
-      <VBox layoutX="431.0" layoutY="59.0" prefHeight="74.0" prefWidth="154.0">
+      <VBox layoutX="461.0" layoutY="70.0" prefHeight="74.0" prefWidth="154.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="155.0" text="Period type" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="48.0" prefWidth="250.0" text="Period type" textAlignment="CENTER">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Century Gothic Bold" size="18.0" />
                </font>
             </Label>
-            <ComboBox fx:id="periodComboBox" minHeight="-Infinity" onAction="#periodComboBoxChanged" prefHeight="34.0" prefWidth="157.0" promptText="Period type" />
+            <ComboBox fx:id="periodComboBox" minHeight="-Infinity" onAction="#periodComboBoxChanged" prefHeight="34.0" prefWidth="157.0" promptText="Period type" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
          </children>
       </VBox>
-      <Button fx:id="btnShow" layoutX="289.0" layoutY="141.0" mnemonicParsing="false" onAction="#clickBtnShow" prefHeight="34.0" prefWidth="58.0" text="Show" />
-      <VBox layoutX="615.0" layoutY="74.0" prefHeight="89.0" prefWidth="325.0">
-         <children>
-            <HBox prefHeight="71.0" prefWidth="325.0">
-               <children>
-                  <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="143.0" text="Crawl data" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="btnCrawl" mnemonicParsing="false" onAction="#clickBtnCrawl" prefHeight="35.0" prefWidth="61.0" text="Crawl" />
-               </children>
-            </HBox>
-            <HBox prefHeight="62.0" prefWidth="325.0">
-               <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="41.0" prefWidth="149.0" text="Time crawl:" textAlignment="CENTER">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="labelTimeCrawl" alignment="BASELINE_CENTER" prefHeight="44.0" prefWidth="184.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="106.0" layoutX="612.0" layoutY="66.0" stroke="BLACK" strokeType="INSIDE" width="6.0" />
+      <Button fx:id="btnShow" alignment="CENTER" contentDisplay="CENTER" layoutX="663.0" layoutY="107.0" mnemonicParsing="false" onAction="#clickBtnShow" prefHeight="39.0" prefWidth="82.0" style="-fx-background-color: #253f4b; -fx-background-radius: 50;" text="Show" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></Button>
+      <Label layoutX="819.0" layoutY="70.0" prefHeight="30.0" prefWidth="116.0" text="Time crawl">
+         <font>
+            <Font name="Century Gothic Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="labelTimeCrawl" alignment="CENTER" layoutX="795.0" layoutY="107.0" prefHeight="39.0" prefWidth="164.0">
+         <font>
+            <Font name="System Italic" size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
