@@ -1,4 +1,5 @@
 package twitter.handle;
+
 import java.time.LocalDate;
 
 public class Tweet {
@@ -9,7 +10,7 @@ public class Tweet {
 	private String[] tags;
 	private String imageURL;
 	private LocalDate date;
-	 
+
 	private static int nextId = 1;
 
 	public Tweet(String author, String content, String[] tags, String imageURL, LocalDate date) {
@@ -20,10 +21,12 @@ public class Tweet {
 		this.imageURL = imageURL;
 		this.date = date;
 	}
+
 	public Tweet() {
-        this.id = nextId;
-        nextId++;
-    }
+		this.id = nextId;
+		nextId++;
+	}
+
 	public int getId() {
 		return id;
 	}

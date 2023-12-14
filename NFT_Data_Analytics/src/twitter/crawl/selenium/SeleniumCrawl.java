@@ -2,6 +2,7 @@ package twitter.crawl.selenium;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,16 +27,16 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class SeleniumCrawl {
-	
+
 	protected static WebDriver driver = new ChromeDriver(new ChromeOptions().addArguments("--headless"));
 //	protected static WebDriver driver = new ChromeDriver();
-    protected final int POST_QUANTITY = 100;
-    
+	protected final int POST_QUANTITY = 5;
+
 	public void visitWebsite(String pathToWebsite) {
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//		driver.manage().window().setPosition(new Point(-2000, 0));
-//		driver.navigate().to(pathToWebsite);
-        driver.get(pathToWebsite);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+		// driver.manage().window().setPosition(new Point(-2000, 0));
+		//driver.navigate().to(pathToWebsite);
+		driver.get(pathToWebsite);
 	}
 
 	public void enterUsername(String usename) {
@@ -59,7 +60,7 @@ public abstract class SeleniumCrawl {
 		WebElement search = driver.findElement(By.xpath("//input[@data-testid='SearchBox_Search_Input']"));
 		search.sendKeys(tag);
 		search.sendKeys(Keys.ENTER);
-		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 		wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']")));
 
@@ -67,31 +68,39 @@ public abstract class SeleniumCrawl {
 
 	public ArrayList<Tweet> getArrayTweetList() {
 		System.out.println("Getting tweet......");
-		List<WebElement> posts = driver
-				.findElements(By.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
-		ArrayList<Tweet> tweetList = getArrayTweetList(posts);
-    
-		
-        while (posts.size() < POST_QUANTITY) {
-            
-            WebElement body = driver.findElement(By.tagName("body"));
-            body.sendKeys(Keys.END);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
-            try {
+		List<WebElement> posts = driver
+				.findElements(By.xpath(
+						"//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
+		ArrayList<Tweet> tweetList = getArrayTweetList(posts);
+
+		while (posts.size() < POST_QUANTITY) {
+
+			WebElement body = driver.findElement(By.tagName("body"));
+			body.sendKeys(Keys.END);
+			
+			
+			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-            List<WebElement> newPosts = driver.findElements(By.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
+			List<WebElement> newPosts = driver.findElements(By.xpath(
+					"//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
 
-            for (WebElement post : newPosts) {
-                if (!posts.contains(post)) {
-                	posts.add(post);
-                	tweetList.add(getTweet(post));	
-                }
-            }
-        }	
+			for (WebElement post : newPosts) {
+				if (!posts.contains(post)) {
+					posts.add(post);
+					tweetList.add(getTweet(post));
+				}
+			}
+		}
 		return tweetList;
 	}
 
@@ -137,7 +146,7 @@ public abstract class SeleniumCrawl {
 	public ArrayList<Tweet> getArrayTweetList(List<WebElement> articleList) {
 
 		ArrayList<Tweet> tweetList = new ArrayList<>();
-	
+
 		for (WebElement tweet : articleList) {
 			String author = getAuthor(tweet);
 			String[] tags = getTag(tweet);
@@ -148,31 +157,30 @@ public abstract class SeleniumCrawl {
 		}
 		return tweetList;
 	}
-	
+
 	public Tweet getTweet(WebElement tweet) {
 
-			String author = getAuthor(tweet);
-			String[] tags = getTag(tweet);
-			String content = getContent(tweet);
-			String imageURL = getImageURL(tweet);
-			LocalDate date = getTimePost(tweet);
+		String author = getAuthor(tweet);
+		String[] tags = getTag(tweet);
+		String content = getContent(tweet);
+		String imageURL = getImageURL(tweet);
+		LocalDate date = getTimePost(tweet);
 
-		return (new Tweet( author, content, tags, imageURL, date));
+		return (new Tweet(author, content, tags, imageURL, date));
 	}
-
 
 	public void putToFile(String fileName, List<Tweet> tweetList) {
 		Gson gson = new GsonBuilder()
 				.disableHtmlEscaping()
 				.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-                .create();
+				.create();
 		String convertFileName = fileName.replace(" ", "_").toLowerCase();
 		String pathFile = ".\\data\\" + convertFileName + ".json";
 		try {
 			FileWriter writer = new FileWriter(pathFile);
 			gson.toJson(tweetList, writer);
 			writer.close();
-			System.out.println("Add file " + fileName +" succ");
+			System.out.println("Add file " + fileName + " succ");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

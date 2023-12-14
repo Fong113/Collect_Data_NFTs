@@ -16,15 +16,14 @@ public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
 	};
 
 	@Override
-	public List<Tweet>  getTweetsNFTs() {
+	public List<Tweet> getTweetsNFTs() {
 
 		searchByTag("(nft OR nfts) (#nft OR #nfts)");
 		scrollDown();
 		List<Tweet> tweetList = getArrayTweetList();
-		
+
 		putToFile("NFTs", tweetList);
-	
-		
+
 		return tweetList;
 	};
 
@@ -32,10 +31,10 @@ public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
 	public List<Tweet> getTweetsByNameNFTs(String nameNFTs) {
 		searchByTag(nameNFTs);
 		scrollDown();
-		
+
 		ArrayList<Tweet> tweetList = getArrayTweetList();
 		putToFile(nameNFTs, tweetList);
-		
+
 		return tweetList;
 	};
 }
