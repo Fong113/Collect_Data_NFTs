@@ -3,45 +3,39 @@ package twitter.crawl.selenium;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openqa.selenium.WebElement;
-
 import twitter.crawl.ICrawler;
-import twitter.handle.Collection;
-
+import twitter.handle.Tweet;
 
 public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
-	
+
 	@Override
-	public void loginTwitter(){	
+	public void loginTwitter() {
 		visitWebsite("https://twitter.com/i/flow/login");
 		enterUsername("fongdo113");
 		enterPassword("Phong@2003");
 	};
 
 	@Override
-	public Collection[]  getTweetsNFTs() {
-		
+	public List<Tweet>  getTweetsNFTs() {
+
 		searchByTag("(nft OR nfts) (#nft OR #nfts)");
 		scrollDown();
-        List<WebElement> articleList = searchResults();
-        ArrayList<Collection> tweetList = getArrayTweetList(articleList);
-		putToFile("NFTs", tweetList);
+		List<Tweet> tweetList = getArrayTweetList();
 		
-		Collection [] tweets = new Collection[tweetList.size()];
-		tweets = tweetList.toArray(tweets);
-		return tweets;
-	};
+		putToFile("NFTs", tweetList);
 	
+		
+		return tweetList;
+	};
+
 	@Override
-	public Collection[]  getTweetsByNameNFTs(String nameNFTs) {
+	public List<Tweet> getTweetsByNameNFTs(String nameNFTs) {
 		searchByTag(nameNFTs);
 		scrollDown();
-        List<WebElement> articleList = searchResults();
-        ArrayList<Collection> tweetList = getArrayTweetList(articleList);
+		
+		ArrayList<Tweet> tweetList = getArrayTweetList();
 		putToFile(nameNFTs, tweetList);
 		
-		Collection [] tweets = new Collection[tweetList.size()];
-		tweets = tweetList.toArray(tweets);
-		return tweets;
+		return tweetList;
 	};
 }

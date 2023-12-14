@@ -1,10 +1,16 @@
 package twitter;
 
-import twitter.handle.Collection;
+import java.util.List;
+
+import twitter.handle.Tweet;
 
 public interface ITwitter {
-	Collection[] getTweetNFTs();
-	Collection[] getTweetByTag(String collectionName);
-	Collection[] getTrendingTags();
+	List<Tweet> getTweetsNFTs();
+
+	List<Tweet> getTweetsByNameNFTs(String collectionName);
+
+	List<String> getTrending();
 	
+	List<Tweet> getTweetsByTag(String tag);
+
 }
