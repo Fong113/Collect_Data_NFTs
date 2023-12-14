@@ -4,6 +4,7 @@ import java.util.List;
 
 import twitter.handle.Tweet;
 
+
 public interface ICrawler {
 
 	void loginTwitter();
@@ -11,4 +12,5 @@ public interface ICrawler {
 	List<Tweet> getTweetsNFTs();
 
 	List<Tweet> getTweetsByNameNFTs(String nameNFTs);
+	
 }

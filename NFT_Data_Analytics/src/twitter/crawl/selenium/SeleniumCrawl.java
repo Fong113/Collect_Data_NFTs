@@ -28,6 +28,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class SeleniumCrawl {
 	
 	protected static WebDriver driver = new ChromeDriver(new ChromeOptions().addArguments("--headless"));
+//	protected static WebDriver driver = new ChromeDriver();
     protected final int POST_QUANTITY = 100;
     
 	public void visitWebsite(String pathToWebsite) {
