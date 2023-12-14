@@ -61,6 +61,7 @@ public class Binance extends Crawler {
 			rows.add(row);
 		}
 		
+		data.addProperty("marketplaceName", "Binance");
 		data.add("createdAt", new JsonPrimitive(Crawler.getTime("MM/dd/yyy HH:MM:SS")));
 		data.add("chain", new JsonPrimitive(chain));
 		data.add("period", new JsonPrimitive(period));
@@ -69,6 +70,18 @@ public class Binance extends Crawler {
 	
 	@Override
 	public String getFileName() {
-		return ".\\data\\binance_" + period + "_" + chain + ".json";
+		return PATHSAVEFILE + "\\binance_" + period + "_" + chain + ".json";
+	}
+	
+	public static void crawlAllChainPeriod() {
+		for(BinanceChainType chain : BinanceChainType.values()) {
+			for(BinancePeriodType period: BinancePeriodType.values()) {
+				Binance binance = new Binance(chain.getValue(), period.getValue());
+				binance.crawlData();
+				System.out.println("Done " + binance.getFileName());
+			}
+		}
+		
+		System.out.println("Done Binance");
 	}
 }

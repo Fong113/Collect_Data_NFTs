@@ -11,6 +11,7 @@ public class Collection {
 	private int items;
 	private int owners;
 	
+
 	public Collection(String id, String logo, String name, double volume, double volumeChange, double floorPrice,
 	        double floorPriceChange, int items, int owners) {
 	    this.id = id;

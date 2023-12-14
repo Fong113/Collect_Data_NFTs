@@ -8,7 +8,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
@@ -35,11 +37,11 @@ public abstract class Crawler {
 	protected String respone;
 	protected int rows;
 	protected JsonObject data = new JsonObject();	
+	public static final String PATHSAVEFILE = ".\\data\\marketplace";
 	
 	protected abstract void getRespone();
 	
 	protected abstract void preprocessData();
-	
 	
 	protected void saveToFile(File file) {
 		try {
@@ -107,47 +109,18 @@ public abstract class Crawler {
 	
 	public static void crawlAllData() {
 		// Binance
-		for(BinanceChainType chain : BinanceChainType.values()) {
-			for(BinancePeriodType period: BinancePeriodType.values()) {
-				Binance binance = new Binance(chain.getValue(), period.getValue());
-				binance.crawlData();
-				System.out.println("Done " + binance.getFileName());
-			}
-		}
-		
-		System.out.println("Done Binance");
+		Binance.crawlAllChainPeriod();
 		// Rarible
-		for(RaribleChainType chain : RaribleChainType.values()) {
-			for(RariblePeriodType period: RariblePeriodType.values()) {
-				Rarible rarible = new Rarible(chain.getValue(), period.getValue());
-				rarible.crawlData();
-				System.out.println("Done " + rarible.getFileName());
-			}
-		}
-		System.out.println("Done Rarible");
+		Rarible.crawlAllChainPeriod();
 		// Niftygateway
-		for(NiftygatewayChainType chain : NiftygatewayChainType.values()) {
-			for(NiftygatewayPeriodType period: NiftygatewayPeriodType.values()) {
-				Niftygateway niftygateway = new Niftygateway(chain.getValue(), period.getValue());
-				niftygateway.crawlData();
-				System.out.println("Done " + niftygateway.getFileName());
-			}
-		}
-		System.out.println("Done Niftygateway");
+		Niftygateway.crawlAllChainPeriod();
 		// Opensea
-		for(OpenseaChainType chain : OpenseaChainType.values()) {
-			for(OpenseaPeriodType period: OpenseaPeriodType.values()) {
-				Opensea opensea = new Opensea(chain.getValue(), period.getValue());
-				opensea.crawlData();
-				System.out.println("Done " + opensea.getFileName());
-			}
-		}
-		System.out.println("Done Opensea");		
+		Opensea.crawlAllChainPeriod();
 	}
 	
 	public static void clearAllData() {
 		try {
-			FileUtils.cleanDirectory(new File(".\\data"));
+			FileUtils.cleanDirectory(new File(PATHSAVEFILE));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
