@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import com.google.gson.reflect.TypeToken;
 
@@ -15,14 +16,18 @@ import blog_news.helper.JsonIO;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 
 public class Todaynftnews_crawler implements ICrawler {
@@ -31,7 +36,7 @@ public class Todaynftnews_crawler implements ICrawler {
 	private String baseUrl = "https://www.todaynftnews.com/nft-news/";
 	
 	@Override
-	public void crawl() {
+	public void crawl() throws IOException, TimeoutException, RuntimeException {
 	    List<Article> existingArticles = Article_IO.loadJson(Article.getPATH());
 
 	    if (existingArticles == null || existingArticles.isEmpty()) {
@@ -48,15 +53,19 @@ public class Todaynftnews_crawler implements ICrawler {
 	}
 
 	
-	private List<Article> crawlTodayNFTnews(List<Article> existingArticles){
-    	System.setProperty("webdriver.chrome.driver", "E:\\chromedriver-win64\\chromedriver.exe");
+	private List<Article> crawlTodayNFTnews(List<Article> existingArticles) throws IOException, TimeoutException, RuntimeException{
+		WebDriverManager.chromedriver().setup();
+//    	ChromeOptions opt = new ChromeOptions();
+//		opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
+//		opt.addArguments("--headless");
+//		opt.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36");
     	WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.get(baseUrl);
 //        List<Article> articleList = new ArrayList<>();
         
     	try {
-    		    for (int morePage = 2; morePage <= 6; morePage++) {
+    		    for (int morePage = 2; morePage <= 3; morePage++) {
     		    	clickLoadMoreButton(driver);
     		    }
 
@@ -96,7 +105,11 @@ public class Todaynftnews_crawler implements ICrawler {
             }
                 	                
         } catch (IOException e) {
-            e.printStackTrace();
+            // Ném lại IOException với thông báo riêng
+            throw new IOException("Lỗi network");
+        } catch (TimeoutException te) {
+            // Ném lại TimeoutException với thông báo riêng
+            throw new TimeoutException("Timeout trong lúc crawl");
         } finally {
             // Đóng trình duyệt
         	System.out.println("Crawl https://todaynftnews.com/tags/nft done!!!");
@@ -117,7 +130,7 @@ public class Todaynftnews_crawler implements ICrawler {
 	    }
 	}
 
-	private static void clickLoadMoreButton(WebDriver driver) {
+	private static void clickLoadMoreButton(WebDriver driver) throws RuntimeException {
 	    try {
 	        // Đóng popup nếu có
 	        closePopup(driver);
@@ -132,31 +145,28 @@ public class Todaynftnews_crawler implements ICrawler {
 	            loadMoreButton.click();
 
 	            waitForPageLoad(driver); // Đợi một khoảng thời gian để trang load thêm dữ liệu
-	        } else {
-	            System.out.println("Không tìm thấy nút Load more posts.");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
+	        throw new RuntimeException("Lỗi xảy ra khi nhấn nút Load more posts.", e);
 	    }
 	}
 
 	private static void closePopup(WebDriver driver) {
 	    try {
-	        WebDriverWait popupWait = new WebDriverWait(driver, 5); // Thời gian chờ cho popup
+	        WebDriverWait popupWait = new WebDriverWait(driver, Duration.ofSeconds(6)); // Thời gian chờ cho popup
 	        popupWait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".pum-close.popmake-close")));
 	        WebElement closeButton = driver.findElement(By.cssSelector(".pum-close.popmake-close"));
 	        closeButton.click();
 	        System.out.println("Popup đã được đóng.");
 	        Thread.sleep(1000);
 	    } catch (Exception e) {
-	        // Xử lý exception
-	        // Nếu popup không xuất hiện hoặc đã hết thời gian chờ, tiếp tục thực hiện các bước tiếp theo
 	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
 	    }
 	}
 
 	private static void waitForPageLoad(WebDriver driver) {
-	    WebDriverWait wait = new WebDriverWait(driver, 30);
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
 
 	    // Sử dụng expected condition để kiểm tra trạng thái của trang
 	    wait.until((ExpectedCondition<Boolean>) wd ->
