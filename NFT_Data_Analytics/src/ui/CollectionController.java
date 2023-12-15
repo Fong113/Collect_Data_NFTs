@@ -2,8 +2,6 @@ package ui;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -30,18 +28,22 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.IMarketplace;
-import marketplace.crawl.MarketplaceType;
+import marketplace.crawl.type.MarketplaceType;
+import marketplace.handler.MarketplaceHandler;
+import marketplace.crawl.CrawlerManager;
+import marketplace.crawl.ICrawlerManager;
 import marketplace.crawl.binance.BinanceChainType;
 import marketplace.crawl.binance.BinancePeriodType;
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
 import marketplace.crawl.niftygateway.NiftygatewayChainType;
 import marketplace.crawl.niftygateway.NiftygatewayPeriodType;
 import marketplace.crawl.opensea.OpenseaChainType;
 import marketplace.crawl.opensea.OpenseaPeriodType;
 import marketplace.crawl.rarible.RaribleChainType;
 import marketplace.crawl.rarible.RariblePeriodType;
-import marketplace.handle.Collection;
-import marketplace.handle.Handler;
-import marketplace.handle.Trending;
+import marketplace.model.Collection;
+import marketplace.model.Trending;
 
 public class CollectionController implements Initializable {
 
@@ -99,12 +101,13 @@ public class CollectionController implements Initializable {
 	ObservableList<String> listChain = FXCollections.observableArrayList();
 	ObservableList<String> listPeriod = FXCollections.observableArrayList();
 	
+	ArrayList<Collection> list = new ArrayList<Collection>();
 	
 	String marketValueCurrent;
 	String chainValueCurrent;
 	String periodValueCurrent;
-	
-	 public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
+	String currency;
+	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
 		  root = FXMLLoader.load(getClass().getResource("Tag.fxml"));
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
@@ -118,17 +121,22 @@ public class CollectionController implements Initializable {
 			listChain.clear();
 			listPeriod.clear();
 			if (marketValue.equals("Opensea")) {
-				listChain.setAll("ARBITRUM", "AVALANCHE", "BNB", "BASE", "ETH", "KLAYTN", "OPTIMISM", "POLYGON",
-						"SOLANA", "ZORA");
-				listPeriod.setAll("ONEHOUR", "SIXHOURS", "ONEDAY", "ONEWEEK", "ONEMONTH");
-
+//				listChain.setAll("ARBITRUM", "AVALANCHE", "BNB", "BASE", "ETH", "KLAYTN", "OPTIMISM", "POLYGON",
+//						"SOLANA", "ZORA");
+//				listPeriod.setAll("ONEHOUR", "SIXHOURS", "ONEDAY", "ONEWEEK", "ONEMONTH");
+				listChain.setAll("BNB","ETH");
+				listPeriod.setAll("ONEDAY", "ONEWEEK", "ONEMONTH");
 			} else if (marketValue.equals("Binance")) {
-				listChain.setAll("BNB", "ETH", "BTC");
-				listPeriod.setAll("ONEHOUR", "SIXHOURS", "ONEDAY", "ONEWEEK");
+//				listChain.setAll("BNB", "ETH", "BTC");
+//				listPeriod.setAll("ONEHOUR", "SIXHOURS", "ONEDAY", "ONEWEEK");
+				listChain.setAll("BNB", "ETH");
+				listPeriod.setAll("ONEHOUR", "ONEDAY", "ONEWEEK");
 			} else if (marketValue.equals("Rarible")) {
-				listChain.setAll("ETH", "POLYGON", "TEZOS", "IMMUTABLEX");
+//				listChain.setAll("ETH", "POLYGON", "TEZOS", "IMMUTABLEX");
+//				listPeriod.setAll("ONEHOUR", "ONEDAY", "ONEWEEK", "ONEMONTH");
+				listChain.setAll("ETH", "POLYGON");
 				listPeriod.setAll("ONEHOUR", "ONEDAY", "ONEWEEK", "ONEMONTH");
-			} else {
+			} else if (marketValue.equals("Niftygateway")) {
 				listChain.setAll("ETH", "USD");
 				listPeriod.setAll("ONEDAY", "ONEWEEK", "ONEMONTH");
 			}
@@ -136,50 +144,41 @@ public class CollectionController implements Initializable {
 			marketValueCurrent = marketValue;
 		}
 	}
-
 	public void chainComboBoxChanged(ActionEvent e) {
 		if (chainComboBox.getValue() != null) {
 			chainValueCurrent = chainComboBox.getValue();
 		}
 	}
-
 	public void periodComboBoxChanged(ActionEvent e) {
 		if (periodComboBox.getValue() != null) {
 			periodValueCurrent = periodComboBox.getValue();
 		}
 	}
 
-	ArrayList<Collection> list = new ArrayList<Collection>();
-	IMarketplace m = new Handler();
-
-	public void clickBtnShow(ActionEvent e) {
+	public void clickBtnShow(ActionEvent e) throws Exception {
 		if (marketValueCurrent != null && chainValueCurrent != null && periodValueCurrent != null) {
-	       
+			IMarketplace m = new MarketplaceHandler();
 			Trending trend = null;
 			if(marketValueCurrent.toUpperCase().equals("OPENSEA")) {
 				trend = m.getTrending(
 						MarketplaceType.OPENSEA,
 						OpenseaChainType.valueOf(chainValueCurrent), 
-						OpenseaPeriodType.valueOf(periodValueCurrent),
-						100);
+						OpenseaPeriodType.valueOf(periodValueCurrent));
 			} else if(marketValueCurrent.toUpperCase().equals("BINANCE")) {
 				trend = m.getTrending(
 						MarketplaceType.BINANCE,
 						BinanceChainType.valueOf(chainValueCurrent), 
-						BinancePeriodType.valueOf(periodValueCurrent),
-						100);
+						BinancePeriodType.valueOf(periodValueCurrent));
 			} else if(marketValueCurrent.toUpperCase().equals("RARIBLE")) {
 				trend = m.getTrending(
 						MarketplaceType.RARIBLE,
 						RaribleChainType.valueOf(chainValueCurrent), 
-						RariblePeriodType.valueOf(periodValueCurrent),
-						100);
-			} else {
+						RariblePeriodType.valueOf(periodValueCurrent));
+			} else if(marketValueCurrent.toUpperCase().equals("NIFTYGATEWAY")){
 				trend = m.getTrending(
 						MarketplaceType.NIFTYGATEWAY,
 						NiftygatewayChainType.valueOf(chainValueCurrent), 
-						NiftygatewayPeriodType.valueOf(periodValueCurrent),
-						100);
+						NiftygatewayPeriodType.valueOf(periodValueCurrent));
 			}
 			
 
@@ -193,6 +192,9 @@ public class CollectionController implements Initializable {
 			for (Collection c : trend.getData()) {
 				list.add(c);
 			}
+			
+			currency = trend.getCurrency();
+
 			collectionList = FXCollections.observableArrayList(list);
 
 			table.setItems(collectionList);
@@ -203,15 +205,37 @@ public class CollectionController implements Initializable {
 		}
 	}
 
-	public void clickBtnCrawl(ActionEvent e) {
+	public void clickBtnCrawl(ActionEvent event) {
 //		m.clearData();
-		m.crawlAllData();
-		LocalDateTime currentTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedTime = currentTime.format(formatter);
-        labelTimeCrawl.setText(formattedTime);
+		ICrawlerManager crawlData = new CrawlerManager();
+		
+        long startTime = System.currentTimeMillis();
+		try {
+			crawlData.crawlAllTrending();
+		} catch (CrawlTimeoutException e) {
+			System.out.println(e.getMessage());
+		} catch (InternetConnectionException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
+
+		System.out.println(elapsedTime);
+//        Date date = new Date(elapsedTime);
+//        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+//        String formattedElapsedTime = sdf.format(date);
+//
+//        System.out.println("Elapsed Time: " + formattedElapsedTime);
         
-        System.out.println("Crawling data at: " + formattedTime);
+//		LocalDateTime currentTime = LocalDateTime.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        String formattedTime = currentTime.format(formatter);
+//        labelTimeCrawl.setText(formattedTime);
+        
+//        System.out.println("Crawling data at: " + formattedTime);
 	}
 	
 	@Override
@@ -276,7 +300,7 @@ public class CollectionController implements Initializable {
 		            super.updateItem(item, empty);
 
 		            if (item != null && !empty) {
-		                setText(String.format("%.3f", item));
+		                setText(String.format("%.3f", item) + " " + currency);
 		            } else {
 		                setText("");
 		            }
@@ -291,7 +315,7 @@ public class CollectionController implements Initializable {
 		            super.updateItem(item, empty);
 
 		            if (item != null && !empty) {
-		                setText(String.format("%.3f", item));
+		                setText(String.format("%.3f", item) + " " + currency);
 		            } else {
 		                setText("");
 		            }
@@ -306,7 +330,7 @@ public class CollectionController implements Initializable {
 		            super.updateItem(item, empty);
 
 		            if (item != null && !empty) {
-		                setText(String.format("%.4f", item));
+		                setText(String.format("%.3f", item) + " " + currency);
 		            } else {
 		                setText("");
 		            }
@@ -321,7 +345,7 @@ public class CollectionController implements Initializable {
 		            super.updateItem(item, empty);
 
 		            if (item != null && !empty) {
-		                setText(String.format("%.4f", item));
+		                setText(String.format("%.3f", item) + " " + currency);
 		            } else {
 		                setText("");
 		            }
