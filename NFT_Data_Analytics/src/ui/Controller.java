@@ -11,8 +11,8 @@ import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
-import marketplace.handle.CollectionFilter;
-import marketplace.handle.Handler;
+import marketplace.model.CollectionFilter;
+import marketplace.handler.MarketplaceHandler;
 import javafx.scene.image.Image;
 
 import java.util.Set;
@@ -70,11 +70,11 @@ public class Controller {
     @FXML
     private Button searchButton;
     
-    private Handler handler = new Handler();
+    private MarketplaceHandler handler = new MarketplaceHandler();
 //    private ObservableList<CollectionFilter> collectionList;
     Set<CollectionFilter> collectionList;
     
-    @FXML
+
     private void initialize() {
         // Set up cell value factories for each column using PropertyValueFactory
     	
@@ -201,12 +201,13 @@ public class Controller {
 //        tableView.setItems(collectionList);
         noResultsLabel.setVisible(false);
     }
-
-    @FXML
+    
     private void handleSearchButton(ActionEvent event) {
         try {
             String searchTerm = searchTextField.getText().trim();
-            Set<CollectionFilter> collectionList = handler.getCollectionList(searchTerm);
+            System.out.println(searchTerm);
+            collectionList.clear();
+            collectionList = handler.filterCollectionListByName("Bored Ape Yacht Club");
             System.out.println(collectionList);
             updateTableView(collectionList);
         } catch (Exception e) {

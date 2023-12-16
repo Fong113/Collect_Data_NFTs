@@ -1,21 +1,51 @@
 package test;
 
-import marketplace.IMarketplace;
-import marketplace.crawl.ChainType;
-import marketplace.crawl.MarketplaceType;
-import marketplace.crawl.opensea.OpenseaChainType;
-import marketplace.crawl.opensea.OpenseaPeriodType;
-import marketplace.handle.Collection;
-import marketplace.handle.Handler;
-import marketplace.handle.Trending;
+import marketplace.crawl.CrawlerManager;
+import marketplace.crawl.ICrawlerManager;
+import marketplace.crawl.exception.CrawlTimeoutException;
+import marketplace.crawl.exception.InternetConnectionException;
 
 public class Test {
 	public static void main(String[] args) {
-		IMarketplace m = new Handler();
-		Trending trend = m.getTrending(MarketplaceType.OPENSEA, OpenseaChainType.ETH, OpenseaPeriodType.ONEDAY, 100);
+		ICrawlerManager test = new CrawlerManager();
 		
-		for(Collection c : trend.getData()) {
-			System.out.println(c.toString());
+        long startTime = System.currentTimeMillis();
+		try {
+			test.crawlAllTrending();
+		} catch (CrawlTimeoutException e) {
+			System.out.println(e.getMessage());
+		} catch (InternetConnectionException e) {
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
+		
+		
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
+
+		System.out.println(elapsedTime);
+//		IMarketplace m = new MarketplaceHandler();
+//		
+//		try {
+//			Trending t =  m.getTrending(MarketplaceType.OPENSEA, OpenseaChainType.BNB, OpenseaPeriodType.ONEWEEK);
+//		}
+//		catch (DataNotFoundException e) {
+//			System.out.println(e.getMessage());
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		
+//		for(Collection c : t.getData()) {
+//			System.out.println(c.toString());
+//		}
+		
+//		Set<CollectionFilter> cs = m.filterCollectionListByName("A");
+//		
+//		for(CollectionFilter cf : cs) {
+//			System.out.println(cf.toString());
+//		}
 	}
 }

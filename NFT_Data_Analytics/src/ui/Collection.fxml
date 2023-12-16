@@ -8,7 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="915.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.Controller">
     <children>
         <ScrollPane layoutY="76.0" prefHeight="200.0" prefWidth="915.0">
             <content>
@@ -36,7 +36,7 @@
                 </AnchorPane>
             </content>
         </ScrollPane>
-        <Button fx:id="searchButton" layoutX="46.0" layoutY="25.0" mnemonicParsing="false" text="Search" />
+        <Button fx:id="searchButton" layoutX="46.0" layoutY="25.0" mnemonicParsing="false" onAction="#handleSearchButton" text="Search" />
         <TextField fx:id="searchTextField" layoutX="114.0" layoutY="25.0" />
     </children>
 </AnchorPane>
