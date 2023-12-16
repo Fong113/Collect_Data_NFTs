@@ -30,13 +30,13 @@ public abstract class Crawler  {
 	
 	protected abstract void preprocessData();
 	
-	protected void saveDataToFile(File file) {
+	protected void saveDataToFile(File file) throws Exception{
 		try {
 			FileWriter writer = new FileWriter(file);
 			writer.write(data.toString());
 			writer.close();
 		} catch (IOException e) {
-		    e.printStackTrace();
+		    throw new Exception("Something went wrong", e);
 		}
 	}
 	
@@ -46,7 +46,6 @@ public abstract class Crawler  {
 		preprocessData();			
 		saveDataToFile(file);	
 	}
-	
 	
 	protected static String sendRequest(HttpRequest request) throws CrawlTimeoutException, InternetConnectionException, Exception {
 		try {
@@ -75,6 +74,16 @@ public abstract class Crawler  {
 	protected static String getTimeCrawl(String format) {
 		LocalDateTime time = LocalDateTime.now();
 		return time.format(DateTimeFormatter.ofPattern(format));
+	}
+
+	
+	
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+
+	public void setChain(String chain) {
+		this.chain = chain;
 	}
 
 }
