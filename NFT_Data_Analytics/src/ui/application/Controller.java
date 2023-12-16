@@ -30,7 +30,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
 import twitter.ITwitter;
 import twitter.handle.Tweet;
-import twitter.handle.Handle;
+import twitter.handle.HandleTwitter;
 
 public class Controller implements Initializable {
 	@FXML
@@ -65,8 +65,8 @@ public class Controller implements Initializable {
 	private HandleArticleManager articleManager;
     private List<Article> currentArticles = new ArrayList<Article>();
     
-    private ITwitter twitterData = new Handle();
-    private List<Tweet> currentTweets = twitterData.getTweetsNFTs();
+    private ITwitter twitterData = new HandleTwitter();
+    private List<Tweet> currentTweets = twitterData.getTweetsAboutNFTs();
     private final int itemsPerPage = 5; 
 
     @Override
