@@ -62,7 +62,7 @@ public class Controller {
     private TableColumn<CollectionFilter, String> columnMarketplace;
 
     @FXML
-    private TextArea searchTextField; 
+    private TextField searchTextField; 
 
     @FXML
     private Label noResultsLabel;
@@ -75,7 +75,7 @@ public class Controller {
     Set<CollectionFilter> collectionList;
     
 
-    private void initialize() {
+    public void initialize() {
         // Set up cell value factories for each column using PropertyValueFactory
     	
     	columnNumber.setCellValueFactory(new Callback<CellDataFeatures<CollectionFilter, Integer>, ObservableValue<Integer>>() {
@@ -202,12 +202,12 @@ public class Controller {
         noResultsLabel.setVisible(false);
     }
     
-    private void handleSearchButton(ActionEvent event) {
+    public void handleSearchButton(ActionEvent event) {
         try {
             String searchTerm = searchTextField.getText().trim();
             System.out.println(searchTerm);
-            collectionList.clear();
-            collectionList = handler.filterCollectionListByName("Bored Ape Yacht Club");
+//            collectionList.clear();
+            collectionList = handler.filterCollectionListByName(searchTerm);
             System.out.println(collectionList);
             updateTableView(collectionList);
         } catch (Exception e) {
@@ -215,7 +215,7 @@ public class Controller {
         }
     }
 
-    private void updateTableView(Set<CollectionFilter> collectionList) {
+    public void updateTableView(Set<CollectionFilter> collectionList) {
         ObservableList<CollectionFilter> observableList = FXCollections.observableArrayList(collectionList);
         tableView.setItems(observableList);
 
