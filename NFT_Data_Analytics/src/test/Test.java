@@ -18,8 +18,8 @@ import marketplace.model.Trending;
 public class Test {
 	public static void main(String[] args) {
 		ICrawlerManager test = new CrawlerManager();
-		
-        long startTime = System.currentTimeMillis();
+
+		long startTime = System.currentTimeMillis();
 		try {
 			test.crawlAllTrending();
 		} catch (CrawlTimeoutException e) {
@@ -29,37 +29,39 @@ public class Test {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-	
-	
-       long endTime = System.currentTimeMillis();
-       long elapsedTime = endTime - startTime;
 
-       System.out.println(elapsedTime);
-       IMarketplace m = new MarketplaceHandler();
-       List<String> listMarketplace = MarketplaceType.getListMarktplaceName();
-       List<String> listChains = MarketplaceType.OPENSEA.getListChains();
-       List<String> listPeriods = MarketplaceType.OPENSEA.getListPeriods();
-       
-		try {
-			Trending t =  m.getTrending(MarketplaceType.valueOf(listMarketplace.get(0)), listChains.get(0), listPeriods.get(0));
-			System.out.println(listChains.get(0));
-			System.out.println(listPeriods.get(0));
-			for(Collection c : t.getData()) {
-				System.out.println(c.toString());
-			}
-			
-			Set<CollectionFilter> cs = m.filterCollectionListByName("A");
-			
-			for(CollectionFilter cf : cs) {
-				System.out.println(cf.toString());
-			}
-		}
-		catch (DataNotFoundException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		long endTime = System.currentTimeMillis();
+		long elapsedTime = endTime - startTime;
+
+		System.out.println(elapsedTime);
+		IMarketplace m = new MarketplaceHandler();
+		List<String> listMarketplace = MarketplaceType.getListMarktplaceName();
+		List<String> listChains = MarketplaceType.OPENSEA.getListChains();
+		List<String> listPeriods = MarketplaceType.OPENSEA.getListPeriods();
 		
+		for(String l: listChains) {
+			System.out.println(l);
+		}
+
+//		try {
+//			Trending t = m.getTrending(MarketplaceType.valueOf(listMarketplace.get(0)), listChains.get(0),
+//					listPeriods.get(0));
+//			System.out.println(listChains.get(0));
+//			System.out.println(listPeriods.get(0));
+//			for (Collection c : t.getData()) {
+//				System.out.println(c.toString());
+//			}
+//
+//			Set<CollectionFilter> cs = m.filterCollectionListByName("A");
+//
+//			for (CollectionFilter cf : cs) {
+//				System.out.println(cf.toString());
+//			}
+//		} catch (DataNotFoundException e) {
+//			System.out.println(e.getMessage());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 	}
 }

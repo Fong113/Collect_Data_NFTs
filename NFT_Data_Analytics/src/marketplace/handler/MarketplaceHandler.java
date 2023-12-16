@@ -93,6 +93,7 @@ public class MarketplaceHandler implements IMarketplace {
 	public void clearData() throws IOException{
 		try {
 			FileUtils.cleanDirectory(DB);
+			System.out.println("Clear data success !");
 		} catch (IOException e) {
 			throw e;
 		}

@@ -1,0 +1,29 @@
+.table-view .column-header-background .label{
+    -fx-background-color: #89CFF3;
+    -fx-text-fill: #000000;
+    -fx-font-size: 14;
+}
+
+.table-view .table-cell{
+    -fx-text-fill: #000000;
+    -fx-alignment: center;
+    -fx-border-style: solid;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #DAF5FF;
+    -fx-text-fill: #000000;
+    -fx-padding: 3 3 4 5;
+    -fx-font-size: 13;  
+}
+
+#btnShow {
+    -fx-padding: 8 8 8 8;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-font-size: 14;
+}
+
+#btnShow:pressed {
+    -fx-padding: 12 12 12 12;
+}

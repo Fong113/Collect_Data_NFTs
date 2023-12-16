@@ -10,11 +10,22 @@ public class Collection {
 	private double floorPriceChange;
 	private int items;
 	private int owners;
-	
-	public Collection(String id, String logo, String name, double volume, double volumeChange,
-			double floorPrice, double floorPriceChange, int items, int owners) {
-		super();
+
+	public Collection(String id, String logo, String name, double volume, double volumeChange, double floorPrice,
+			double floorPriceChange, int items, int owners) {
 		this.id = id;
+		this.logo = logo;
+		this.name = name;
+		this.volume = volume;
+		this.volumeChange = volumeChange;
+		this.floorPrice = floorPrice;
+		this.floorPriceChange = floorPriceChange;
+		this.items = items;
+		this.owners = owners;
+	}
+
+	public Collection(String logo, String name, double volume, double volumeChange, double floorPrice,
+			double floorPriceChange, int items, int owners) {
 		this.logo = logo;
 		this.name = name;
 		this.volume = volume;
@@ -27,7 +38,8 @@ public class Collection {
 
 	@Override
 	public String toString() {
-		return logo + " " + name + " " + " " + owners;
+		return logo + " " + name + " " + volume + " " + volumeChange + " " + floorPrice + " " + floorPriceChange + " "
+				+ items + " " + owners;
 	}
 
 	public String getId() {
@@ -65,4 +77,5 @@ public class Collection {
 	public int getOwners() {
 		return owners;
 	}
+
 }
