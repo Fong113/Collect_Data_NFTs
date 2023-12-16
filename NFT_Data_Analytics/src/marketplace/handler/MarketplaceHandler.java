@@ -20,9 +20,7 @@ import com.google.gson.JsonSyntaxException;
 import marketplace.IMarketplace;
 import marketplace.crawl.CrawlerManager;
 import marketplace.crawl.ICrawlerManager;
-import marketplace.crawl.type.ChainType;
-import marketplace.crawl.type.MarketplaceType;
-import marketplace.crawl.type.PeriodType;
+import marketplace.crawl.MarketplaceType;
 import marketplace.model.Collection;
 import marketplace.model.CollectionFilter;
 import marketplace.model.Trending;
@@ -38,7 +36,7 @@ public class MarketplaceHandler implements IMarketplace {
 	}
 
 	@Override
-	public Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period) throws DataNotFoundException, Exception {
+	public Trending getTrending(MarketplaceType marketplaceType, String chain, String period) throws DataNotFoundException, Exception {
 		File fileSaveTrendingData = new File(crawlerManager.getFileSaveData(marketplaceType, chain, period));
 		
 		try(Scanner sc = new Scanner(fileSaveTrendingData)) {
@@ -53,7 +51,7 @@ public class MarketplaceHandler implements IMarketplace {
 				colList.add(col);
 			}
 			
-			return new Trending(marketplaceType.getValue(), createdAt, chain.getValue(), period.getValue(), currency, colList);			
+			return new Trending(marketplaceType.name(), createdAt, chain, period, currency, colList);			
 		} catch (FileNotFoundException | NoSuchElementException e) {
 			throw new DataNotFoundException("Data not found", e);
 		} catch (Exception e) {
@@ -78,6 +76,7 @@ public class MarketplaceHandler implements IMarketplace {
 							col.setMarketPlaceName(data.get("marketplaceName").getAsString());
 							col.setChain(data.get("chain").getAsString());
 							col.setPeriod(data.get("period").getAsString());
+							col.setCurrency(data.get("currency").getAsString());
 							result.add(col);
 						}
 					}
@@ -87,30 +86,6 @@ public class MarketplaceHandler implements IMarketplace {
 				throw e;
 			}
 		}
-		return result;
-	}
-
-	@Override
-	public Set<String> getCollectionNameList() throws IOException, JsonSyntaxException{
-		Set<String> result = new HashSet<String>();
-		File filesList[] = DB.listFiles();
-		JsonObject data = null;
-		
-		for(File f : filesList) {
-			try (Scanner sc = new Scanner(f)) {
-				data = JsonParser.parseString(sc.nextLine()).getAsJsonObject();
-				
-				if(!data.get("data").isJsonNull()) {
-					for(int i = 0; i < 2; i++) {						
-						result.add(data.getAsJsonArray("data").get(i).getAsJsonObject().get("name").getAsString());
-					}
-				}
-				
-			} catch (IOException | JsonSyntaxException e) {
-				throw e;
-			}
-		}
-		
 		return result;
 	}
 

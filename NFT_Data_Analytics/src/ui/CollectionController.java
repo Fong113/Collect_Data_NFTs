@@ -28,20 +28,9 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.IMarketplace;
-import marketplace.crawl.type.MarketplaceType;
-import marketplace.handler.MarketplaceHandler;
-import marketplace.crawl.CrawlerManager;
-import marketplace.crawl.ICrawlerManager;
-import marketplace.crawl.binance.BinanceChainType;
-import marketplace.crawl.binance.BinancePeriodType;
-import marketplace.crawl.exception.CrawlTimeoutException;
-import marketplace.crawl.exception.InternetConnectionException;
-import marketplace.crawl.niftygateway.NiftygatewayChainType;
-import marketplace.crawl.niftygateway.NiftygatewayPeriodType;
-import marketplace.crawl.opensea.OpenseaChainType;
-import marketplace.crawl.opensea.OpenseaPeriodType;
-import marketplace.crawl.rarible.RaribleChainType;
-import marketplace.crawl.rarible.RariblePeriodType;
+import marketplace.crawl.MarketplaceType;
+
+
 import marketplace.model.Collection;
 import marketplace.model.Trending;
 
@@ -95,148 +84,77 @@ public class CollectionController implements Initializable {
 	private Parent root;
 	
 	private ObservableList<Collection> collectionList;
+	ArrayList<Collection> list = new ArrayList<Collection>();
 
-	ObservableList<String> listMarket = FXCollections.observableArrayList("Opensea", "Binance", "Rarible",
-			"Niftygateway");
+	ObservableList<String> listMarket = FXCollections.observableArrayList(MarketplaceType.getListMarktplaceName());
 	ObservableList<String> listChain = FXCollections.observableArrayList();
 	ObservableList<String> listPeriod = FXCollections.observableArrayList();
 	
-	ArrayList<Collection> list = new ArrayList<Collection>();
-	
-	String marketValueCurrent;
-	String chainValueCurrent;
-	String periodValueCurrent;
+	IMarketplace m;
 	String currency;
-	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
-		  root = FXMLLoader.load(getClass().getResource("Tag.fxml"));
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  stage.setScene(scene);
-		  stage.show();
-		 }
 	
 	public void marketComboBoxChanged(ActionEvent e) {
-		String marketValue = marketComboBox.getValue();
-		if (marketComboBox.getValue() != null) {
 			listChain.clear();
 			listPeriod.clear();
-			if (marketValue.equals("Opensea")) {
-//				listChain.setAll("ARBITRUM", "AVALANCHE", "BNB", "BASE", "ETH", "KLAYTN", "OPTIMISM", "POLYGON",
-//						"SOLANA", "ZORA");
-//				listPeriod.setAll("ONEHOUR", "SIXHOURS", "ONEDAY", "ONEWEEK", "ONEMONTH");
-				listChain.setAll("BNB","ETH");
-				listPeriod.setAll("ONEDAY", "ONEWEEK", "ONEMONTH");
-			} else if (marketValue.equals("Binance")) {
-//				listChain.setAll("BNB", "ETH", "BTC");
-//				listPeriod.setAll("ONEHOUR", "SIXHOURS", "ONEDAY", "ONEWEEK");
-				listChain.setAll("BNB", "ETH");
-				listPeriod.setAll("ONEHOUR", "ONEDAY", "ONEWEEK");
-			} else if (marketValue.equals("Rarible")) {
-//				listChain.setAll("ETH", "POLYGON", "TEZOS", "IMMUTABLEX");
-//				listPeriod.setAll("ONEHOUR", "ONEDAY", "ONEWEEK", "ONEMONTH");
-				listChain.setAll("ETH", "POLYGON");
-				listPeriod.setAll("ONEHOUR", "ONEDAY", "ONEWEEK", "ONEMONTH");
-			} else if (marketValue.equals("Niftygateway")) {
-				listChain.setAll("ETH", "USD");
-				listPeriod.setAll("ONEDAY", "ONEWEEK", "ONEMONTH");
-			}
-
-			marketValueCurrent = marketValue;
-		}
+			
+			listChain.setAll(MarketplaceType.valueOf(marketComboBox.getValue()).getListChains());
+			listPeriod.setAll(MarketplaceType.valueOf(marketComboBox.getValue()).getListPeriods());
 	}
-	public void chainComboBoxChanged(ActionEvent e) {
-		if (chainComboBox.getValue() != null) {
-			chainValueCurrent = chainComboBox.getValue();
-		}
+	
+	public void createIMarketplace(IMarketplace iMarketplace) {
+		m = iMarketplace;
 	}
-	public void periodComboBoxChanged(ActionEvent e) {
-		if (periodComboBox.getValue() != null) {
-			periodValueCurrent = periodComboBox.getValue();
-		}
-	}
-
-	public void clickBtnShow(ActionEvent e) throws Exception {
-		if (marketValueCurrent != null && chainValueCurrent != null && periodValueCurrent != null) {
-			IMarketplace m = new MarketplaceHandler();
+	
+	public void displayChanged(ActionEvent e) {
+		if (marketComboBox.getValue() != null && chainComboBox.getValue() != null && periodComboBox.getValue() != null) {
 			Trending trend = null;
-			if(marketValueCurrent.toUpperCase().equals("OPENSEA")) {
-				trend = m.getTrending(
-						MarketplaceType.OPENSEA,
-						OpenseaChainType.valueOf(chainValueCurrent), 
-						OpenseaPeriodType.valueOf(periodValueCurrent));
-			} else if(marketValueCurrent.toUpperCase().equals("BINANCE")) {
-				trend = m.getTrending(
-						MarketplaceType.BINANCE,
-						BinanceChainType.valueOf(chainValueCurrent), 
-						BinancePeriodType.valueOf(periodValueCurrent));
-			} else if(marketValueCurrent.toUpperCase().equals("RARIBLE")) {
-				trend = m.getTrending(
-						MarketplaceType.RARIBLE,
-						RaribleChainType.valueOf(chainValueCurrent), 
-						RariblePeriodType.valueOf(periodValueCurrent));
-			} else if(marketValueCurrent.toUpperCase().equals("NIFTYGATEWAY")){
-				trend = m.getTrending(
-						MarketplaceType.NIFTYGATEWAY,
-						NiftygatewayChainType.valueOf(chainValueCurrent), 
-						NiftygatewayPeriodType.valueOf(periodValueCurrent));
-			}
 			
-
-			if (table.getItems() != null) {
+			try {
+				trend = m.getTrending(
+						MarketplaceType.valueOf(marketComboBox.getValue()),
+						chainComboBox.getValue(), 
+						periodComboBox.getValue());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			if(table.getItems() != null) {
 				table.getItems().clear();
-	            collectionList.clear();
-	            list.clear();
-	            
+		        collectionList.clear();
+		        list.clear();
 			}
-			
 			for (Collection c : trend.getData()) {
 				list.add(c);
 			}
-			
 			currency = trend.getCurrency();
-
+			
 			collectionList = FXCollections.observableArrayList(list);
-
 			table.setItems(collectionList);
+			
+			System.out.println(marketComboBox.getValue() + " - " + chainComboBox.getValue() + " - " + periodComboBox.getValue());
 			System.out.println(collectionList);
-			System.out.println(marketValueCurrent + " - " + chainValueCurrent + " - " + periodValueCurrent);
 		} else {
 			System.out.println("nullll");
 		}
 	}
-
-	public void clickBtnCrawl(ActionEvent event) {
-//		m.clearData();
-		ICrawlerManager crawlData = new CrawlerManager();
-		
-        long startTime = System.currentTimeMillis();
-		try {
-			crawlData.crawlAllTrending();
-		} catch (CrawlTimeoutException e) {
-			System.out.println(e.getMessage());
-		} catch (InternetConnectionException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		
-        long endTime = System.currentTimeMillis();
-        long elapsedTime = endTime - startTime;
-
-		System.out.println(elapsedTime);
-//        Date date = new Date(elapsedTime);
-//        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-//        String formattedElapsedTime = sdf.format(date);
-//
-//        System.out.println("Elapsed Time: " + formattedElapsedTime);
-        
-//		LocalDateTime currentTime = LocalDateTime.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        String formattedTime = currentTime.format(formatter);
-//        labelTimeCrawl.setText(formattedTime);
-        
-//        System.out.println("Crawling data at: " + formattedTime);
+	
+	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Tag.fxml"));
+		  root = loader.load();
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();
 	}
+	
+	public void switchToHome(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Loading.fxml"));
+		  root = loader.load();
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();
+	}
+	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

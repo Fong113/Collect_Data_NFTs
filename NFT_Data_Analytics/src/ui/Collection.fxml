@@ -15,12 +15,12 @@
    <children>
       <HBox alignment="CENTER" cacheShape="false" prefHeight="50.0" prefWidth="1000.0">
          <children>
-            <Button fx:id="btnCrawl" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#clickBtnCrawl" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Crawl" textFill="WHITE">
+            <Button fx:id="btnHome" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#switchToHome" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="HOME" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnMarket" alignment="CENTER" lineSpacing="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="299.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Marketplace" textFill="WHITE">
+            <Button fx:id="btnMarket" alignment="CENTER" lineSpacing="10.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="350.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="MARKETPLACE" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -28,7 +28,7 @@
                   <SVGPath content="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0M1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5M4 15h3v-5H4zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1zm3 0h-2v3h2z" fill="WHITE" translateX="-10.0" />
                </graphic>
             </Button>
-            <Button fx:id="btnBlogAndTwitter" alignment="CENTER" mnemonicParsing="false" onAction="#switchToSceneBlogAndTwitter" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Blog and Twitter" textFill="WHITE">
+            <Button fx:id="btnBlogAndTwitter" alignment="CENTER" mnemonicParsing="false" onAction="#switchToSceneBlogAndTwitter" prefHeight="50.0" prefWidth="350.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="BLOG AND TWITTER" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -36,7 +36,7 @@
                   <SVGPath content="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15" fill="WHITE" translateX="-10.0" />
                </graphic>
             </Button>
-            <Button fx:id="BtnContrast" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="300.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="Contrast" textFill="WHITE">
+            <Button fx:id="BtnContrast" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="350.0" style="-fx-background-color: #537d90; -fx-border-style: solid;" text="CONTRAST" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -62,49 +62,35 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <VBox layoutX="70.0" layoutY="70.0" prefHeight="74.0" prefWidth="154.0">
+      <VBox alignment="CENTER" layoutX="111.0" layoutY="68.0" prefHeight="74.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="155.0" text="Market place" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="200.0" text="Market place" textAlignment="CENTER">
                <font>
-                  <Font name="Century Gothic Bold" size="18.0" />
+                  <Font name="Century Gothic Bold" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="marketComboBox" minHeight="-Infinity" onAction="#marketComboBoxChanged" prefHeight="34.0" prefWidth="159.0" promptText="Market place" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
+            <ComboBox fx:id="marketComboBox" minHeight="-Infinity" minWidth="-Infinity" onAction="#marketComboBoxChanged" prefHeight="34.0" prefWidth="200.0" promptText="Market place" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
          </children>
       </VBox>
-      <VBox layoutX="266.0" layoutY="70.0" prefHeight="74.0" prefWidth="154.0">
+      <VBox alignment="CENTER" layoutX="398.0" layoutY="68.0" prefHeight="74.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="155.0" text="Chain type" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="200.0" text="Chain type" textAlignment="CENTER">
                <font>
-                  <Font name="Century Gothic Bold" size="18.0" />
+                  <Font name="Century Gothic Bold" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="chainComboBox" minHeight="-Infinity" onAction="#chainComboBoxChanged" prefHeight="34.0" prefWidth="157.0" promptText="Chain type" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
+            <ComboBox fx:id="chainComboBox" minHeight="-Infinity" onAction="#displayChanged" prefHeight="34.0" prefWidth="200.0" promptText="Chain type" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
          </children>
       </VBox>
-      <VBox layoutX="461.0" layoutY="70.0" prefHeight="74.0" prefWidth="154.0">
+      <VBox alignment="CENTER" layoutX="681.0" layoutY="68.0" prefHeight="74.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="48.0" prefWidth="250.0" text="Period type" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="48.0" prefWidth="200.0" text="Period type" textAlignment="CENTER">
                <font>
-                  <Font name="Century Gothic Bold" size="18.0" />
+                  <Font name="Century Gothic Bold" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="periodComboBox" minHeight="-Infinity" onAction="#periodComboBoxChanged" prefHeight="34.0" prefWidth="157.0" promptText="Period type" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
+            <ComboBox fx:id="periodComboBox" minHeight="-Infinity" onAction="#displayChanged" prefHeight="34.0" prefWidth="200.0" promptText="Period type" style="-fx-background-color: #3A98B9; -fx-border-style: solid;" />
          </children>
       </VBox>
-      <Button fx:id="btnShow" alignment="CENTER" contentDisplay="CENTER" layoutX="663.0" layoutY="107.0" mnemonicParsing="false" onAction="#clickBtnShow" prefHeight="39.0" prefWidth="82.0" style="-fx-background-color: #253f4b; -fx-background-radius: 50;" text="Show" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="15.0" />
-         </font></Button>
-      <Label layoutX="819.0" layoutY="70.0" prefHeight="30.0" prefWidth="116.0" text="Time crawl">
-         <font>
-            <Font name="Century Gothic Bold" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="labelTimeCrawl" alignment="CENTER" layoutX="795.0" layoutY="107.0" prefHeight="39.0" prefWidth="164.0">
-         <font>
-            <Font name="System Italic" size="18.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
