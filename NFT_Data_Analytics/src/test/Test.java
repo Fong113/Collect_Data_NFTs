@@ -1,21 +1,32 @@
 package test;
 
-import marketplace.IMarketplace;
-import marketplace.crawl.ChainType;
-import marketplace.crawl.MarketplaceType;
-import marketplace.crawl.opensea.OpenseaChainType;
-import marketplace.crawl.opensea.OpenseaPeriodType;
-import marketplace.handle.Collection;
-import marketplace.handle.Handler;
-import marketplace.handle.Trending;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Arrays;
+import java.util.List;
+
+import twitter.ITwitter;
+import twitter.handle.HandleTwitter;
+import twitter.handle.HandleTwitter.TimePeriodType;
+import twitter.handle.Tweet;
+
 
 public class Test {
 	public static void main(String[] args) {
-		IMarketplace m = new Handler();
-		Trending trend = m.getTrending(MarketplaceType.OPENSEA, OpenseaChainType.ETH, OpenseaPeriodType.ONEDAY, 100);
+
+		ITwitter t = new HandleTwitter();
+		t.refreshData();
+//		
+//		List<Tweet> tweets = t.getTweetsAboutNFTs();
+//		
+//		for(Tweet test : tweets) {
+//			System.out.println(Arrays.toString(test.getTags()));
+//		}
 		
-		for(Collection c : trend.getData()) {
-			System.out.println(c.toString());
-		}
+		
+//		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
+//		for(String test : tags) {
+//			System.out.println(test);
+//		}
 	}
 }

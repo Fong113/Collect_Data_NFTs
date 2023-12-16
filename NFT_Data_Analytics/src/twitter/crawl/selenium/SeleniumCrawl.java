@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
@@ -28,14 +27,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class SeleniumCrawl {
 
-	protected static WebDriver driver = new ChromeDriver(new ChromeOptions().addArguments("--headless"));
-//	protected static WebDriver driver = new ChromeDriver();
-	protected final int POST_QUANTITY = 5;
+	// protected static WebDriver driver = new ChromeDriver(new
+	// ChromeOptions().addArguments("--headless"));
+	protected static WebDriver driver = new ChromeDriver();
+	protected final int POST_QUANTITY = 100;
 
 	public void visitWebsite(String pathToWebsite) {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-		// driver.manage().window().setPosition(new Point(-2000, 0));
-		//driver.navigate().to(pathToWebsite);
+		// driver.navigate().to(pathToWebsite);
 		driver.get(pathToWebsite);
 	}
 
@@ -83,8 +82,7 @@ public abstract class SeleniumCrawl {
 
 			WebElement body = driver.findElement(By.tagName("body"));
 			body.sendKeys(Keys.END);
-			
-			
+
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -169,13 +167,17 @@ public abstract class SeleniumCrawl {
 		return (new Tweet(author, content, tags, imageURL, date));
 	}
 
+	public void quitTwitter() {
+		driver.quit();
+	}
+
 	public void putToFile(String fileName, List<Tweet> tweetList) {
 		Gson gson = new GsonBuilder()
 				.disableHtmlEscaping()
 				.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
 				.create();
 		String convertFileName = fileName.replace(" ", "_").toLowerCase();
-		String pathFile = ".\\data\\" + convertFileName + ".json";
+		String pathFile = ".\\data\\twitter\\" + convertFileName + ".json";
 		try {
 			FileWriter writer = new FileWriter(pathFile);
 			gson.toJson(tweetList, writer);
