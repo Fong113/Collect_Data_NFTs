@@ -26,6 +26,10 @@ import marketplace.crawl.ICrawlerManager;
 import marketplace.crawl.exception.CrawlTimeoutException;
 import marketplace.crawl.exception.InternetConnectionException;
 import marketplace.handler.MarketplaceHandler;
+import twitter.ITwitter;
+import twitter.crawl.ICrawler;
+import twitter.handle.HandleTwitter;
+
 
 public class LoadingController implements Initializable{
 //	@FXML
@@ -59,8 +63,9 @@ public class LoadingController implements Initializable{
 //	}
 	
 	public void clickBtnCrawl(ActionEvent event) {
-		ICrawlerManager crawlData = new CrawlerManager();
-
+		ICrawlerManager crawlDataMarket = new CrawlerManager();
+		ITwitter crawlDataTwitter = new HandleTwitter();
+		
 		// startAutoIncrease
 //        timeline = new Timeline(
 //                new KeyFrame(Duration.seconds(0.5), e -> increaseProgress())
@@ -68,10 +73,16 @@ public class LoadingController implements Initializable{
 //        timeline.setCycleCount(Timeline.INDEFINITE);
 //        timeline.play();
 		
+		try {
+			crawlDataTwitter.refreshData();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		try {
 			m.clearData();
-			crawlData.crawlAllTrending();
+			crawlDataMarket.crawlAllTrending();
 //			Image image = new Image(getClass().getResourceAsStream("/img/done.jpg"));
 //	        gifLoading.setImage(image);
 			
