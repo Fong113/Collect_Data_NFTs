@@ -65,11 +65,12 @@ public class BlogAndTwitterController implements Initializable {
 	private VBox tagsBox;
 
 	private IArticleManager articleManager = new HandleArticleManager();
-    private List<Article> currentArticles = new ArrayList<Article>();
+    private List<Article> currentArticles = articleManager.getAllArticles();
+//    private List<String> currentArticlesTags = new ArrayList<String>();
     
     private ITwitter twitterData = new HandleTwitter();
     private List<Tweet> currentTweets = twitterData.getTweetsAboutNFTs();
-    private List<String> currentTwitterTags = new ArrayList<String>();
+//    private List<String> currentTwitterTags = new ArrayList<String>();
     
     private final int itemsPerPage = 5; 
 
@@ -200,30 +201,43 @@ public class BlogAndTwitterController implements Initializable {
     }
     private TimePeriodType getTimePeriodFromChoice(String timeChoice) {
         switch (timeChoice) {
-            case "1 hour":
-                return TimePeriodType.DAILY;
-            case "1 day":
-                return TimePeriodType.DAILY;
-            case "1 week":
-                return TimePeriodType.WEEKLY;
-            case "1 month":
-                return TimePeriodType.MONTHLY;
-            default:
-                return TimePeriodType.DAILY;
+        	case "1 hour":
+        		return TimePeriodType.DAILY; 
+        	case "1 day":
+        		return TimePeriodType.DAILY;
+        	case "1 week":
+        		return TimePeriodType.WEEKLY;
+        	case "1 month":
+        		return TimePeriodType.MONTHLY;
+        	default:
+        		return TimePeriodType.DAILY;
         }
+                	
     }
     
     private void displayAllTags(VBox tagsContainer, TimePeriodType timePeriodType, String typeTag) {
         tagsContainer.getChildren().clear();
-        List<String> tags;
-        Set<String> blogTags = articleManager.extractUniqueTags();
-        
-        if (typeTag.equals("Twitter")){
+        List<String> tags = new ArrayList<>();
+
+        if (typeTag.equals("Twitter")) {
             tags = twitterData.getHotTags(timePeriodType);
-        } else {
-            tags =  new ArrayList<>(blogTags);
+        } else if (typeTag.equals("Blog")) {
+            switch (timePeriodType) {
+                case DAILY:
+                    tags = articleManager.findHotTagsForDay();
+                    break;
+                case WEEKLY:
+                    tags = articleManager.findHotTagsForWeek();
+                    break;
+                case MONTHLY:
+                    tags = articleManager.findHotTagsForMonth();
+                    break;
+                default:
+                    tags = new ArrayList<>(articleManager.extractUniqueTags());
+                    break;
+            }
         }
-        
+
         for (String tag : tags) {
             Label tagLabel = new Label(tag);
             tagLabel.getStyleClass().add("tag-label");
@@ -231,4 +245,5 @@ public class BlogAndTwitterController implements Initializable {
             tagsContainer.getChildren().add(new Separator());
         }
     }
+
 }

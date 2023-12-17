@@ -16,5 +16,4 @@ public interface IArticleManager {
 	 public List<String> findHotTagsForDay();
 	 public List<String> findHotTagsForWeek();
 	 public List<String> findHotTagsForMonth();
-	 
 }
