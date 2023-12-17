@@ -43,7 +43,7 @@ public class Cointelegraph_crawler implements ICrawler {
             }
 
     	    List<Article> crawledArticles = crawlCoinTelegraph(existingArticles);
-    	    Article_IO.writeToJson(crawledArticles, Article.getPATH());
+    	    Article_IO.writeToJsonWithInitialization(crawledArticles, Article.getPATH());
     	}
 
     	private List<Article> crawlCoinTelegraph(List<Article> existingArticles) throws IOException, TimeoutException{
