@@ -10,6 +10,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.util.Callback;
 import marketplace.model.CollectionFilter;
 import marketplace.handler.MarketplaceHandler;
@@ -59,7 +62,7 @@ public class Controller {
     private TableColumn<CollectionFilter, String> columnPeriod;
 
     @FXML
-    private TableColumn<CollectionFilter, String> columnMarketplace;
+    private TableColumn<CollectionFilter, String> columnMarketplaceName;
 
     @FXML
     private TextField searchTextField; 
@@ -105,25 +108,74 @@ public class Controller {
     	columnNumber.setSortable(false);
     	
     	
+//    	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
+//		columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
+//			private final ImageView imageView = new ImageView();
+//
+//			@Override
+//			protected void updateItem(String logoUrl, boolean empty) {
+//				super.updateItem(logoUrl, empty);
+//
+//				if (empty || logoUrl == null || logoUrl.isEmpty()) {
+//					setGraphic(null);
+//				} else {
+//					Image image = new Image(logoUrl, true);
+//					System.out.println(logoUrl);
+//					imageView.setImage(image);
+//					imageView.setFitWidth(75);
+//					imageView.setFitHeight(75);
+//					setGraphic(imageView);
+//				}
+//			}
+//		});
     	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
-		columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
-			private final ImageView imageView = new ImageView();
+    	columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
+    		private final ImageView imageView = new ImageView();
+    	    private final MediaView mediaView = new MediaView();
+    	    private String lastUrl = "";
 
-			@Override
-			protected void updateItem(String logoUrl, boolean empty) {
-				super.updateItem(logoUrl, empty);
+    	    @Override
+    	    protected void updateItem(String logoUrl, boolean empty) {
+    	        super.updateItem(logoUrl, empty);
 
-				if (empty || logoUrl == null || logoUrl.isEmpty()) {
-					setGraphic(null);
-				} else {
-					Image image = new Image(logoUrl, true);
-					imageView.setImage(image);
-					imageView.setFitWidth(75);
-					imageView.setFitHeight(75);
-					setGraphic(imageView);
-				}
-			}
-		});
+    	        if (empty || logoUrl == null || logoUrl.isEmpty()) {
+    	            setGraphic(null);
+    	        } else {
+    	        	if (isImage(logoUrl)) {
+    	                if (!logoUrl.equals(lastUrl)) {
+    	                    Image image = new Image(logoUrl, true);
+    	                    System.out.println(logoUrl);
+    	                    imageView.setImage(image);
+    	                    imageView.setFitWidth(75);
+    	                    imageView.setFitHeight(75);
+    	                    setGraphic(imageView);
+    	                }
+    	            } else if (isVideo(logoUrl)) {
+    	                if (!logoUrl.equals(lastUrl)) {
+    	                    Media media = new Media(logoUrl);
+    	                    MediaPlayer mediaPlayer = new MediaPlayer(media);
+    	                    mediaView.setMediaPlayer(mediaPlayer);
+    	                    mediaView.setFitWidth(75);
+    	                    mediaView.setFitHeight(75);
+    	                    setGraphic(mediaView);
+    	                    mediaPlayer.play();
+    	                }
+    	            } else {
+    	                System.out.println("Unsupported media type");
+    	                setGraphic(null);
+    	            }
+    	        	lastUrl = logoUrl;
+    	        }
+    	    }
+    	    private boolean isVideo(String url) {
+    	        return url.toLowerCase().endsWith(".mp4");
+    	    }
+
+    	    private boolean isImage(String url) {
+    	        return url.toLowerCase().endsWith(".jpg") || url.toLowerCase().endsWith(".jpeg") || url.toLowerCase().endsWith(".png");
+    	    }
+    	});
+
     	
         columnName.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("name"));
         
@@ -196,9 +248,9 @@ public class Controller {
         columnCurrency.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("currency"));
         columnChain.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("chain"));
         columnPeriod.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("period"));
-        columnMarketplace.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("marketplace"));
+        
+        columnMarketplaceName.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("marketplaceName"));
 
-//        tableView.setItems(collectionList);
         noResultsLabel.setVisible(false);
     }
     
@@ -206,7 +258,6 @@ public class Controller {
         try {
             String searchTerm = searchTextField.getText().trim();
             System.out.println(searchTerm);
-//            collectionList.clear();
             collectionList = handler.filterCollectionListByName(searchTerm);
             System.out.println(collectionList);
             updateTableView(collectionList);

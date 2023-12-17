@@ -28,7 +28,7 @@
                                 <TableColumn fx:id="columnCurrency" prefWidth="94" text="Currency" />
                                 <TableColumn fx:id="columnChain" prefWidth="89" text="Chain" />
                                 <TableColumn fx:id="columnPeriod" prefWidth="76.0" text="Period" />
-                                <TableColumn fx:id="columnMarketplace" prefWidth="123" text="Marketplace" />
+                                <TableColumn fx:id="columnMarketplaceName" prefWidth="123" text="Marketplace" />
                             </columns>
                         </TableView>
                         <Label fx:id="noResultsLabel" layoutX="10.0" layoutY="10.0" text="No results found." visible="false" />
