@@ -49,7 +49,7 @@ public class Todaynftnews_crawler implements ICrawler {
         }
 
 	    List<Article> crawledArticles = crawlTodayNFTnews(existingArticles);
-	    Article_IO.writeToJson(crawledArticles, Article.getPATH());
+	    Article_IO.writeToJsonWithInitialization(crawledArticles, Article.getPATH());
 	}
 
 	
