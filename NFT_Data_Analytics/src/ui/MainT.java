@@ -10,10 +10,10 @@ public class MainT extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/ui/application/Tag.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/ui/application/BlogAndTwitter.fxml"));
 			
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/ui/application/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/ui/application/BlogAndTwitter.css").toExternalForm());
 			
 			primaryStage.setWidth(1000);
 			primaryStage.setHeight(600);

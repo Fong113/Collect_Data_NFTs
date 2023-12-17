@@ -24,9 +24,9 @@ public class Test {
 //		}
 		
 		
-//		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
-//		for(String test : tags) {
-//			System.out.println(test);
-//		}
+		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
+		for(String test : tags) {
+			System.out.println(test);
+		}
 	}
 }
