@@ -2,6 +2,7 @@ package blog_news.handle;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,22 +19,43 @@ public class FindHotTags {
         FindHotTags.articles = articles;
     }
     
+    private List<String> getTop5Tags(Map<String, Integer> tagCountMap) {
+        // Sắp xếp Map theo giảm dần của giá trị (số lần xuất hiện)
+        List<Map.Entry<String, Integer>> entryList = new ArrayList<>(tagCountMap.entrySet());
+        entryList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        // Lấy top 5 tags
+        List<String> top5Tags = new ArrayList<>();
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : entryList) {
+            top5Tags.add(entry.getKey());
+            count++;
+            if (count == 5) {
+                break;
+            }
+        }
+
+        return top5Tags;
+    }
+    
     // Hot tags của 1 ngày
-    public Map<String, Integer> findHotTagsForDay() {
-    	String day = findLatestDate();
+    public List<String> findHotTagsForDay() {
+        String day = findLatestDate();
         Map<String, Integer> tagCountMap = new HashMap<>();
-//        System.out.println(day);
+
         for (Article article : articles) {
             if (isHotForDay(article, day)) {
                 List<String> tags = article.getTags();
                 for (String tag : tags) {
-                	if (!tag.equalsIgnoreCase("#NFT market") && !tag.equalsIgnoreCase("#NFT")) {
+                    if (!tag.equalsIgnoreCase("#NFT market") && !tag.equalsIgnoreCase("#NFT")) {
                         tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
                     }
                 }
             }
         }
-        return tagCountMap;
+
+        List<String> hotTags = getTop5Tags(tagCountMap);
+        return hotTags;
     }
 
     private boolean isHotForDay(Article article, String day) {
@@ -45,7 +67,7 @@ public class FindHotTags {
     }
     
  // Hot tags của 1 tuần
-    public Map<String, Integer> findHotTagsForWeek() {
+    public List<String> findHotTagsForWeek() {
     	String day = findLatestDate();
         Map<String, Integer> tagCountMap = new HashMap<>();
 //        System.out.println(day);
@@ -60,8 +82,9 @@ public class FindHotTags {
                 }
             }
         }
-
-        return tagCountMap;
+        
+        List<String> hotTags = getTop5Tags(tagCountMap);
+        return hotTags;
     }
 
     private boolean isHotForWeek(Article article, String day) {
@@ -79,7 +102,7 @@ public class FindHotTags {
     }
 
     
-    public Map<String, Integer> findHotTagsForMonth() {
+    public List<String> findHotTagsForMonth() {
     	String day = findLatestDate();
 //    	String latestMonth = getLatestMonth();
         Map<String, Integer> tagCountMap = new HashMap<>();
@@ -93,7 +116,8 @@ public class FindHotTags {
                 }
             }
         }
-        return tagCountMap;
+        List<String> hotTags = getTop5Tags(tagCountMap);
+        return hotTags;
     }
     
 //    private String getLatestMonth() {
