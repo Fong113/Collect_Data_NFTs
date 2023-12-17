@@ -15,7 +15,7 @@ public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
 
 	@Override
 	public List<Tweet> crawlTweetsAboutNFTs() throws InterruptedException {
-		int  tweetsQuantity = 100;
+		int  tweetsQuantity = 20;
 		loginTwitter();
 		searchByTag("(nft OR nfts) (#nft OR #nfts)");
 		

@@ -17,14 +17,14 @@ public class Test {
 	public static void main(String[] args) throws InterruptedException {
 
 		ITwitter t = new HandleTwitter();
-//		t.refreshData();
+		t.refreshData();
 		
-		List<Tweet> tweets = t.getTweetsByNameNFTs("phong");
-		
-		for(Tweet test : tweets) {
-			System.out.println(Arrays.toString(test.getTags().stream().toArray()));
-		}
-		
+//		List<Tweet> tweets = t.getTweetsByNameNFTs("luna");
+//		
+//		for(Tweet test : tweets) {
+//			System.out.println(Arrays.toString(test.getTags().stream().toArray()));
+//		}
+//		
 		
 //		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
 //		int i = 0;
