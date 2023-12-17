@@ -27,7 +27,8 @@ import marketplace.crawl.exception.CrawlTimeoutException;
 import marketplace.crawl.exception.InternetConnectionException;
 import marketplace.handler.MarketplaceHandler;
 import twitter.ITwitter;
-import twitter.crawl.ICrawler;
+import blog_news.crawl.HandleBlognewsCrawler;
+import blog_news.crawl.ICrawler;
 import twitter.handle.HandleTwitter;
 
 
@@ -65,6 +66,7 @@ public class LoadingController implements Initializable{
 	public void clickBtnCrawl(ActionEvent event) {
 		ICrawlerManager crawlDataMarket = new CrawlerManager();
 		ITwitter crawlDataTwitter = new HandleTwitter();
+		ICrawler crawlDataBlogAndNews = new HandleBlognewsCrawler();
 		
 		// startAutoIncrease
 //        timeline = new Timeline(
@@ -72,6 +74,12 @@ public class LoadingController implements Initializable{
 //        );
 //        timeline.setCycleCount(Timeline.INDEFINITE);
 //        timeline.play();
+		try {
+			crawlDataBlogAndNews.crawl();
+		} catch (IOException | RuntimeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		try {
 			crawlDataTwitter.refreshData();
