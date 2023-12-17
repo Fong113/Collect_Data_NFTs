@@ -1,17 +1,16 @@
 package marketplace;
 
+import java.io.IOException;
 import java.util.Set;
 
-import marketplace.crawl.ChainType;
+import com.google.gson.JsonSyntaxException;
+
 import marketplace.crawl.MarketplaceType;
-import marketplace.crawl.PeriodType;
-import marketplace.handle.CollectionFilter;
-import marketplace.handle.Trending;
+import marketplace.model.CollectionFilter;
+import marketplace.model.Trending;
 
 public interface IMarketplace {
-	Trending getTrending(MarketplaceType marketplaceType, ChainType chain, PeriodType period, int row);
-	Set<CollectionFilter> getCollectionList(String collectionName);
-	Set<String> getCollectionNameList();
-	void crawlAllData();
-	void clearData();
+	Trending getTrending(MarketplaceType marketplaceType, String chain, String period) throws Exception;
+	Set<CollectionFilter> filterCollectionListByName(String collectionName) throws IOException, JsonSyntaxException;
+	void clearData() throws IOException;
 }
