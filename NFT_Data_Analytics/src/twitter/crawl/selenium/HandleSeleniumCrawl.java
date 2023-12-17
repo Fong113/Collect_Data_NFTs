@@ -14,11 +14,12 @@ public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
 	};
 
 	@Override
-	public List<Tweet> crawlTweetsAboutNFTs() {
-
+	public List<Tweet> crawlTweetsAboutNFTs() throws InterruptedException {
+		int  tweetsQuantity = 100;
+		loginTwitter();
 		searchByTag("(nft OR nfts) (#nft OR #nfts)");
-		scrollDown();
-		List<Tweet> tweetList = getArrayTweetList();
+		
+		List<Tweet> tweetList = getArrayTweetList(tweetsQuantity);
 		putToFile("NFTs", tweetList);
 		quitTwitter();
 
@@ -26,11 +27,11 @@ public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
 	};
 
 	@Override
-	public List<Tweet> crawlTweetsByNameNFTs(String nameNFTs) {
+	public List<Tweet> crawlTweetsByNameNFTs(String nameNFTs) throws InterruptedException {
+		int tweetsQuantity = 10;
 		loginTwitter();
 		searchByTag(nameNFTs);
-		scrollDown();
-		List<Tweet> tweetList = getArrayTweetList();
+		List<Tweet> tweetList = getArrayTweetList(tweetsQuantity);
 		quitTwitter();
 
 		return tweetList;

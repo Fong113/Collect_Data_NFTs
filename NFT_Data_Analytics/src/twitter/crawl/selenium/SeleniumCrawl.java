@@ -27,15 +27,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class SeleniumCrawl {
 
-	// protected static WebDriver driver = new ChromeDriver(new
-	// ChromeOptions().addArguments("--headless"));
-	protected static WebDriver driver = new ChromeDriver();
-	protected final int POST_QUANTITY = 100;
+	protected static WebDriver driver = new ChromeDriver(new ChromeOptions().addArguments("--headless"));
+//	protected static WebDriver driver = new ChromeDriver();
 
 	public void visitWebsite(String pathToWebsite) {
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
-		// driver.navigate().to(pathToWebsite);
-		driver.get(pathToWebsite);
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.navigate().to(pathToWebsite);
 	}
 
 	public void enterUsername(String usename) {
@@ -53,49 +50,39 @@ public abstract class SeleniumCrawl {
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 	}
 
-	public void searchByTag(String tag) {
+	public void searchByTag(String tag) throws InterruptedException {
 
 		driver.findElement(By.xpath("//a[@data-testid='AppTabBar_Explore_Link']")).click();
 		WebElement search = driver.findElement(By.xpath("//input[@data-testid='SearchBox_Search_Input']"));
 		search.sendKeys(tag);
 		search.sendKeys(Keys.ENTER);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		wait.until(ExpectedConditions.presenceOfElementLocated(
 				By.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']")));
-
+		
 	}
 
-	public ArrayList<Tweet> getArrayTweetList() {
+	public List<Tweet> getArrayTweetList(int tweetsQuantity) throws InterruptedException {
+		
 		System.out.println("Getting tweet......");
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
-		List<WebElement> posts = driver
-				.findElements(By.xpath(
-						"//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
-		ArrayList<Tweet> tweetList = getArrayTweetList(posts);
-
-		while (posts.size() < POST_QUANTITY) {
-
-			WebElement body = driver.findElement(By.tagName("body"));
-			body.sendKeys(Keys.END);
-
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-			List<WebElement> newPosts = driver.findElements(By.xpath(
-					"//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
-
+		List<WebElement> posts = new ArrayList<WebElement>();
+		
+		List<Tweet> tweetList = new ArrayList<Tweet>();
+		
+		while (posts.size() < tweetsQuantity) {
+			
+			scrollDown();
+			Thread.sleep(1000);
+			List<WebElement> newPosts = driver.findElements(By
+					.xpath("//div[@data-testid='cellInnerDiv']//article[@data-testid='tweet']//time/ancestor::article"));
+			
 			for (WebElement post : newPosts) {
 				if (!posts.contains(post)) {
 					posts.add(post);
-					tweetList.add(getTweet(post));
+					Tweet convertTweet = takeTweet(post);
+					System.out.println(convertTweet.toString());
+					tweetList.add(convertTweet);
 				}
 			}
 		}
@@ -110,27 +97,21 @@ public abstract class SeleniumCrawl {
 		return tweet.findElement(By.xpath(".//div[@data-testid='tweetText']")).getText();
 	}
 
-	public String[] getTag(WebElement tweet) {
-		List<WebElement> tweet_tag = tweet.findElements(By.partialLinkText("#"));
-		List<String> tweetTexts = tweet_tag.stream()
+	public List<String> getTags(WebElement tweet) {
+		List<WebElement> crawlTags = tweet.findElements(By.partialLinkText("#"));
+		List<String> tags = crawlTags.stream()
 				.map(WebElement::getText)
 				.collect(Collectors.toList());
-		String[] tags = tweetTexts.toArray(new String[0]);
-
-		if (tags.length == 0) {
-			tags = new String[] { "#NFTS" };
-		}
-
+		if (tags.size() == 0) tags.add("#nfts");
 		return tags;
 	}
 
 	public String getImageURL(WebElement tweet) {
 		List<WebElement> images = tweet.findElements(By.xpath(".//div[@data-testid='tweetPhoto']//img"));
-		if (!images.isEmpty()) {
-			return images.get(0).getAttribute("src");
-		} else {
-			return "";
-		}
+		if (!images.isEmpty()) return images.get(0).getAttribute("src");
+		
+		return "";
+		
 	}
 
 	public LocalDate getTimePost(WebElement tweet) {
@@ -141,27 +122,12 @@ public abstract class SeleniumCrawl {
 		return localDate;
 	}
 
-	public ArrayList<Tweet> getArrayTweetList(List<WebElement> articleList) {
 
-		ArrayList<Tweet> tweetList = new ArrayList<>();
-
-		for (WebElement tweet : articleList) {
-			String author = getAuthor(tweet);
-			String[] tags = getTag(tweet);
-			String content = getContent(tweet);
-			String imageURL = getImageURL(tweet);
-			LocalDate date = getTimePost(tweet);
-			tweetList.add(new Tweet(author, content, tags, imageURL, date));
-		}
-		return tweetList;
-	}
-
-	public Tweet getTweet(WebElement tweet) {
-
+	public Tweet takeTweet(WebElement tweet) {
 		String author = getAuthor(tweet);
-		String[] tags = getTag(tweet);
+		List<String> tags = getTags(tweet);
 		String content = getContent(tweet);
-		String imageURL = getImageURL(tweet);
+		String imageURL = "";
 		LocalDate date = getTimePost(tweet);
 
 		return (new Tweet(author, content, tags, imageURL, date));
