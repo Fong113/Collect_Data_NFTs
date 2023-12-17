@@ -13,7 +13,7 @@ public class ArticleManager implements IArticleManager {
 	}
 	
 	@Override
-	public String getAllArticles() {
+	public List<Article> getAllArticles() {
 		ShowAllAriticles showAllArticle = new ShowAllAriticles(articles);
 		return showAllArticle.getAllArticles();
 	}
@@ -35,19 +35,19 @@ public class ArticleManager implements IArticleManager {
 	}
 
 	@Override
-	public Map<String, Integer> findHotTagsForDay() {
+	public List<String> findHotTagsForDay() {
 		FindHotTags FindHotTags = new FindHotTags(articles);
 		return FindHotTags.findHotTagsForDay();
 	} 
 	
 	@Override
-	public Map<String, Integer> findHotTagsForWeek(){
+	public List<String> findHotTagsForWeek(){
 		FindHotTags FindHotTags = new FindHotTags(articles);
 		return FindHotTags.findHotTagsForWeek();
 	}
 	
 	@Override
-	public Map<String, Integer> findHotTagsForMonth(){
+	public List<String> findHotTagsForMonth(){
 		FindHotTags FindHotTags = new FindHotTags(articles);
 		return FindHotTags.findHotTagsForMonth();
 	}

@@ -10,11 +10,11 @@ public interface IArticleManager {
 //	 void filterArticlesByTags(); // Chỉ để test trong console
 	// function chính
 	 List<?> filterArticlesByTags(String[] targetTags); 
-	 public String getAllArticles();
+	 public List<Article> getAllArticles();
 	 public Set<String> extractUniqueTags();
 	 public Article findArticleById(int id);
-	 public Map<String, Integer> findHotTagsForDay();
-	 public Map<String, Integer> findHotTagsForWeek();
-	 public Map<String, Integer> findHotTagsForMonth();
+	 public List<String> findHotTagsForDay();
+	 public List<String> findHotTagsForWeek();
+	 public List<String> findHotTagsForMonth();
 	 
 }
