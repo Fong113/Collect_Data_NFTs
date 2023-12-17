@@ -10,11 +10,7 @@ public class ShowAllAriticles {
 		ShowAllAriticles.articles = articles;
 	}
 
-	public String getAllArticles() {
-        StringBuilder result = new StringBuilder();
-        for (Article article : articles) {
-            result.append(article.toString()).append("\n");
-        }
-        return result.toString();
+	public List<Article> getAllArticles() {
+		return articles;
     }
 }

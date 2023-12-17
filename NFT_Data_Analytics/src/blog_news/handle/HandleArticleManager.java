@@ -24,7 +24,7 @@ public class HandleArticleManager implements IArticleManager {
 	
 	// function chính
 	@Override
-	public String getAllArticles() {
+	public List<Article> getAllArticles() {
 		return ArticleManager.getAllArticles();
 	}
 	
@@ -44,17 +44,17 @@ public class HandleArticleManager implements IArticleManager {
     };
     
     @Override
-	public Map<String, Integer> findHotTagsForDay() {
+	public List<String> findHotTagsForDay() {
 		return ArticleManager.findHotTagsForDay();
 	}
     
     @Override
-	public Map<String, Integer> findHotTagsForWeek() {
+	public List<String> findHotTagsForWeek() {
 		return ArticleManager.findHotTagsForWeek();
 	}
     
     @Override
-	public Map<String, Integer> findHotTagsForMonth() {
+	public List<String> findHotTagsForMonth() {
 		return ArticleManager.findHotTagsForMonth();
 	}
     
@@ -106,25 +106,21 @@ public class HandleArticleManager implements IArticleManager {
 //            System.out.println("Ngày đã nhập: " + userInput);
 //            System.out.println("Ngày đã nhập: " + userInput);
             // Gọi phương thức
-//            Map<String, Integer> hotTagsMap = findHotTagsForDay();
-//            Map<String, Integer> hotTagsMap = findHotTagsForWeek();
-            Map<String, Integer> hotTagsMap = findHotTagsForMonth();
-            List<Map.Entry<String, Integer>> hotTagsList = new ArrayList<>(hotTagsMap.entrySet());
+//    		List<String> hotTagsMap = findHotTagsForDay();
+//    		List<String> hotTagsMap = findHotTagsForWeek();
+            List<String> hotTagsMap = findHotTagsForMonth();
+    		List<String> hotTagsList = new ArrayList<>(hotTagsMap);
 
             // Sắp xếp List theo giảm dần số lần xuất hiện
-            hotTagsList.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
             // In kết quả tags hot theo xếp hạng
 //            System.out.println("Top tags hot trong ngày:");
 //            System.out.println("Top tags hot trong 7 ngày gần nhất:");
             System.out.println("Top tags hot trong tháng:");
             int count = 0;
-            for (Map.Entry<String, Integer> entry : hotTagsList) {
-                System.out.println("Top " + (count + 1) + ": " +entry.getKey() + ": " + entry.getValue() + " bài");
+            for (String tag : hotTagsList) {
+                System.out.println("Top " + (count + 1) + ": " + tag );
                 count++;
-                if (count == 5) {
-                    break; // Đã in ra top 5, thoát khỏi vòng lặp
-                }
             }
     	}
     }
@@ -140,8 +136,7 @@ public class HandleArticleManager implements IArticleManager {
         handleArticleManager.test(handleArticleManager);
         
         // test getAllAricles
-//        String foundArticle = handleArticleManager.getAllArticles();
-//        System.out.println(foundArticle);
+//        System.out.println(handleArticleManager.getAllArticles());
         
         //test Get Tags
 //        Set<String> result = handleArticleManager.extractUniqueTags();
