@@ -29,14 +29,16 @@ public enum MarketplaceType {
 	
 	BINANCE(
 			Arrays.asList(
+//					"ALL",
 //					"BSC", 
 					"ETH", 
 					"BTC"
 					),
 			Map.of(
-					"One Hour", "1H", 
-					"One Week", "SEVEN_DAY", 
-					"One Month", "THIRTY_DAY"
+//					"One Hour", "1H",
+//					"Six Hours", "6H",
+					"One Day", "24H",
+					"One Week", "7D"
 					)),
 
 	
@@ -48,7 +50,7 @@ public enum MarketplaceType {
 					"POLYGON"
 					),
 			Map.of(
-					"One Hour", "H1", 
+//					"One Hour", "H1", 
 					"One Day", "DAY", 
 					"One Week", "WEEK", 
 					"One Month", "MONTH"
