@@ -22,7 +22,7 @@
 
 <AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.application.BlogAndTwitterController">
    <children>
-      <TabPane fx:id="resultPane" layoutX="380.0" layoutY="116.0" prefHeight="476.0" prefWidth="605.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="380.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="116.0">
+      <TabPane fx:id="resultPane" layoutX="380.0" layoutY="127.0" prefHeight="465.0" prefWidth="605.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="380.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="127.0">
         <tabs>
             <Tab fx:id="blogTab" text="Blog/Site">
     <content>
@@ -45,7 +45,7 @@
             </Tab>
         </tabs>
       </TabPane>
-      <AnchorPane prefHeight="54.0" prefWidth="1000.0">
+      <AnchorPane prefHeight="63.0" prefWidth="1000.0">
          <children>
             <Label layoutX="136.0" layoutY="10.0" prefHeight="35.0" prefWidth="44.0" text="Nhật" />
             <Label layoutX="478.0" layoutY="13.0" prefHeight="35.0" prefWidth="44.0" text="Toàn" />
@@ -53,12 +53,12 @@
          </children></AnchorPane>
       <AnchorPane layoutX="377.0" layoutY="52.8" prefHeight="63.0" prefWidth="623.0" AnchorPane.leftAnchor="377.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
          <children>
-            <TextField fx:id="searchField" alignment="CENTER" layoutX="533.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#search" prefHeight="34.0" prefWidth="246.0" promptText="Search By Hastag/Tag/Keywords " AnchorPane.bottomAnchor="14.000000000000007" AnchorPane.rightAnchor="221.0" AnchorPane.topAnchor="14.0">
+            <TextField fx:id="searchField" alignment="CENTER" layoutX="155.0" layoutY="28.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#search" prefHeight="34.0" prefWidth="246.0" promptText="Search By Hastag/Tag/Keywords " AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="222.0" AnchorPane.topAnchor="28.0">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button fx:id="searchButton" alignment="CENTER" layoutX="779.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#search" prefHeight="34.0" prefWidth="98.0" text="Search" textOverrun="CENTER_ELLIPSIS" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="123.0" AnchorPane.topAnchor="14.0">
+            <Button fx:id="searchButton" alignment="CENTER" layoutX="401.0" layoutY="28.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#search" prefHeight="34.0" prefWidth="98.0" text="Search" textOverrun="CENTER_ELLIPSIS" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="124.0" AnchorPane.topAnchor="28.0">
                <font>
                   <Font size="14.0" />
                </font>
@@ -70,9 +70,9 @@
       </AnchorPane>
       <AnchorPane layoutX="31.0" layoutY="62.0" prefHeight="476.0" prefWidth="299.0">
          <children>
-            <ChoiceBox fx:id="typeTagChoice" layoutX="14.0" layoutY="21.0" prefHeight="31.0" prefWidth="138.0" />
-            <ChoiceBox fx:id="hourChoice" layoutX="177.0" layoutY="21.0" prefHeight="31.0" prefWidth="108.0" />
-            <ScrollPane fx:id="tagsPane" layoutX="15.0" layoutY="71.0" prefHeight="386.0" prefWidth="267.0">
+            <ChoiceBox fx:id="typeTagChoice" layoutX="16.0" layoutY="53.0" prefHeight="31.0" prefWidth="138.0" />
+            <ChoiceBox fx:id="hourChoice" layoutX="177.0" layoutY="53.0" prefHeight="31.0" prefWidth="108.0" />
+            <ScrollPane fx:id="tagsPane" layoutX="16.0" layoutY="104.0" prefHeight="386.0" prefWidth="267.0">
                <content>
                   <VBox fx:id="tagsBox" prefHeight="377.0" prefWidth="263.0" />
                </content>

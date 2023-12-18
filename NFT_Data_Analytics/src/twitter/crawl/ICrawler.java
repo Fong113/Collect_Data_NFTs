@@ -7,8 +7,8 @@ public interface ICrawler {
 
 	void loginTwitter();
 
-	List<Tweet> crawlTweetsAboutNFTs();
+	List<Tweet> crawlTweetsAboutNFTs() throws InterruptedException;
 
-	List<Tweet> crawlTweetsByNameNFTs(String nameNFTs);
+	List<Tweet> crawlTweetsByNameNFTs(String nameNFTs) throws InterruptedException;
 
 }

@@ -31,46 +31,34 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
 import twitter.ITwitter;
 import twitter.handle.Tweet;
+import twitter.handle.AHandle.TimePeriodType;
 import twitter.handle.HandleTwitter;
-import twitter.handle.HandleTwitter.TimePeriodType;
 
 public class BlogAndTwitterController implements Initializable {
 	@FXML
 	private TextField searchField;
-	@FXML
-	private Label authorLabel;
+//	@FXML
+//	private Label authorLabel;
 	@FXML
 	private Button searchButton;
 	@FXML
 	private TabPane resultPane;
 	@FXML
-	private Tab blogTab;
+	private Tab blogTab, twitterTab;
 	@FXML
-	private Tab twitterTab;
+	private VBox articlesBlog, articlesTwitter, tagsBox;
 	@FXML
-	private VBox articlesBlog;
+	private Pagination blogPagination, tweetPagination;
 	@FXML
-	private VBox articlesTwitter;
-	@FXML
-	private Pagination blogPagination;
-	@FXML
-	private Pagination tweetPagination;
-	@FXML
-	private ChoiceBox<String> hourChoice;
-	@FXML
-	private ChoiceBox<String> typeTagChoice;
+	private ChoiceBox<String> hourChoice, typeTagChoice;
 	@FXML 
 	private ScrollPane tagsPane;
-	@FXML
-	private VBox tagsBox;
 
 	private IArticleManager articleManager = new HandleArticleManager();
     private List<Article> currentArticles = articleManager.getAllArticles();
-//    private List<String> currentArticlesTags = new ArrayList<String>();
     
     private ITwitter twitterData = new HandleTwitter();
     private List<Tweet> currentTweets = twitterData.getTweetsAboutNFTs();
-//    private List<String> currentTwitterTags = new ArrayList<String>();
     
     private final int itemsPerPage = 5; 
 
@@ -92,8 +80,8 @@ public class BlogAndTwitterController implements Initializable {
     }
     
     public void setChoiceBox() {
-    	hourChoice.getItems().addAll("1 hour", "1 day", "1 week", "1 month");
-    	hourChoice.setValue("1 hour");
+    	hourChoice.getItems().addAll("1 day", "1 week", "1 month");
+    	hourChoice.setValue("1 day");
     	
     	typeTagChoice.getItems().addAll("Blog", "Twitter");
     	typeTagChoice.setValue("Blog");
@@ -185,6 +173,7 @@ public class BlogAndTwitterController implements Initializable {
 
         Label contentLabel = new Label(tweet.getContent());
         contentLabel.getStyleClass().add("tweet-content");
+        contentLabel.setWrapText(true);
 
         tweetBox.getChildren().addAll(authorLabel, contentLabel);
         return tweetBox;
@@ -201,8 +190,6 @@ public class BlogAndTwitterController implements Initializable {
     }
     private TimePeriodType getTimePeriodFromChoice(String timeChoice) {
         switch (timeChoice) {
-        	case "1 hour":
-        		return TimePeriodType.DAILY; 
         	case "1 day":
         		return TimePeriodType.DAILY;
         	case "1 week":

@@ -1,19 +1,21 @@
 package twitter.handle;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 public class Tweet {
 
 	private int id;
 	private String author;
 	private String content;
-	private String[] tags;
+	private List<String> tags;
 	private String imageURL;
 	private LocalDate date;
 
 	private static int nextId = 1;
 
-	public Tweet(String author, String content, String[] tags, String imageURL, LocalDate date) {
+	public Tweet(String author, String content, List<String> tags, String imageURL, LocalDate date) {
 		this();
 		this.author = author;
 		this.content = content;
@@ -39,7 +41,7 @@ public class Tweet {
 		return content;
 	}
 
-	public String[] getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 
@@ -49,6 +51,10 @@ public class Tweet {
 
 	public LocalDate getDate() {
 		return date;
+	}
+	
+	public String toString() {
+		return id + ": " + author + " : " + content + " " + Arrays.toString((tags).stream().toArray()) + " " + date.toString();
 	}
 
 }
