@@ -1,47 +1,39 @@
 package twitter.crawl.selenium;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.openqa.selenium.WebElement;
-
 import twitter.crawl.ICrawler;
-import twitter.handle.Collection;
-
+import twitter.handle.Tweet;
 
 public class HandleSeleniumCrawl extends SeleniumCrawl implements ICrawler {
-	
+
 	@Override
-	public void loginTwitter(){	
+	public void loginTwitter() {
 		visitWebsite("https://twitter.com/i/flow/login");
 		enterUsername("fongdo113");
 		enterPassword("Phong@2003");
 	};
 
 	@Override
-	public Collection[]  getTweetsNFTs() {
-		
+	public List<Tweet> crawlTweetsAboutNFTs() throws InterruptedException {
+		int  tweetsQuantity = 100;
+		loginTwitter();
 		searchByTag("(nft OR nfts) (#nft OR #nfts)");
-		scrollDown();
-        List<WebElement> articleList = searchResults();
-        ArrayList<Collection> tweetList = getArrayTweetList(articleList);
+		
+		List<Tweet> tweetList = getArrayTweetList(tweetsQuantity);
 		putToFile("NFTs", tweetList);
-		
-		Collection [] tweets = new Collection[tweetList.size()];
-		tweets = tweetList.toArray(tweets);
-		return tweets;
+		quitTwitter();
+
+		return tweetList;
 	};
-	
+
 	@Override
-	public Collection[]  getTweetsByNameNFTs(String nameNFTs) {
+	public List<Tweet> crawlTweetsByNameNFTs(String nameNFTs) throws InterruptedException {
+		int tweetsQuantity = 10;
+		loginTwitter();
 		searchByTag(nameNFTs);
-		scrollDown();
-        List<WebElement> articleList = searchResults();
-        ArrayList<Collection> tweetList = getArrayTweetList(articleList);
-		putToFile(nameNFTs, tweetList);
-		
-		Collection [] tweets = new Collection[tweetList.size()];
-		tweets = tweetList.toArray(tweets);
-		return tweets;
+		List<Tweet> tweetList = getArrayTweetList(tweetsQuantity);
+		quitTwitter();
+
+		return tweetList;
 	};
 }

@@ -1,9 +1,14 @@
 package twitter.crawl;
-import twitter.handle.Collection;
+
+import java.util.List;
+import twitter.handle.Tweet;
 
 public interface ICrawler {
-	
+
 	void loginTwitter();
-	Collection[] getTweetsNFTs();
-	Collection[] getTweetsByNameNFTs(String nameNFTs);
+
+	List<Tweet> crawlTweetsAboutNFTs() throws InterruptedException;
+
+	List<Tweet> crawlTweetsByNameNFTs(String nameNFTs) throws InterruptedException;
+
 }
