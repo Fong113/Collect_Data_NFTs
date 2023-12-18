@@ -20,7 +20,7 @@ import javafx.scene.image.Image;
 
 import java.util.Set;
 
-public class Controller {
+public class ContrastController {
 
     @FXML
     private TableView<CollectionFilter> tableView;
