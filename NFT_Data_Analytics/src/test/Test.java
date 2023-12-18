@@ -17,7 +17,7 @@ public class Test {
 	public static void main(String[] args) throws InterruptedException {
 
 		ITwitter t = new HandleTwitter();
-		t.refreshData();
+//		t.refreshData();
 		
 //		List<Tweet> tweets = t.getTweetsByNameNFTs("luna");
 //		
@@ -26,12 +26,12 @@ public class Test {
 //		}
 //		
 		
-//		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
-//		int i = 0;
-//		for(String test : tags) {
-//			System.out.println(i + " " + test);
-//			i++;
-//		}
+		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
+		int i = 0;
+		for(String test : tags) {
+			System.out.println(i + " " + test);
+			i++;
+		}
 
 		
 	}

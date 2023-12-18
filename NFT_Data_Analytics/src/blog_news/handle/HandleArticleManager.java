@@ -21,7 +21,7 @@ public class HandleArticleManager implements IArticleManager {
 		 List<Article> articles = Article_IO.loadJson(Article.getPATH());
 	     this.ArticleManager = new ArticleManager(articles);
 	 }	
-	
+
 	// function chính
 	@Override
 	public List<Article> getAllArticles() {

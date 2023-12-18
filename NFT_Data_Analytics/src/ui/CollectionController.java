@@ -138,10 +138,12 @@ public class CollectionController implements Initializable {
 	}
 	
 	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Tag.fxml"));
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/application/BlogAndTwitter.fxml"));
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("/ui/application/BlogAndTwitter.css").toExternalForm());
+		  stage.setTitle("Hastag");
 		  stage.setScene(scene);
 		  stage.show();
 	}

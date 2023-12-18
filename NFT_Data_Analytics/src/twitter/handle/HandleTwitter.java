@@ -53,7 +53,7 @@ public class HandleTwitter extends AHandle implements ITwitter {
         switch (periodType) {
             case DAILY:
                 List<Tweet> tweetsInDay = tweets.stream()
-                        .filter(tweet -> tweet.getDate().equals(LocalDate.now().minusDays(2)))
+                        .filter(tweet -> tweet.getDate().equals(LocalDate.now().minusDays(1)))
                         .collect(Collectors.toList());
                 return getMostUsedTags(tweetsInDay);
             case WEEKLY:
