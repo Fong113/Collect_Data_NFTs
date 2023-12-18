@@ -134,6 +134,20 @@ public class ContrastController {
 		  stage.setScene(scene);
 		  stage.show();
 	}
+	
+	public void handlerToggle(ActionEvent event) {
+    	if (tweetVBox.isVisible()) {
+    		tweetVBox.setVisible(false);
+    	}else {
+    		tweetVBox.setVisible(true);
+    	}
+    	
+    	if (blogVBox.isVisible()) {
+    		blogVBox.setVisible(false);
+    	}else {
+    		blogVBox.setVisible(true);
+    	}
+    }
 
     public void initialize() {
         // Set up cell value factories for each column using PropertyValueFactory
