@@ -1,4 +1,4 @@
-package ui.application;
+package ui.blogandtwitter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,6 +16,7 @@ import blog_news.handle.IArticleManager;
 import blog_news.helper.JsonIO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
@@ -26,9 +27,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import twitter.ITwitter;
 import twitter.handle.Tweet;
 import twitter.handle.AHandle.TimePeriodType;
@@ -61,6 +65,43 @@ public class BlogAndTwitterController implements Initializable {
     private List<Tweet> currentTweets = twitterData.getTweetsAboutNFTs();
     
     private final int itemsPerPage = 5; 
+    
+    private Stage stage;
+	private Scene scene;
+	private Parent root;
+    
+    
+    public void switchToHome(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/Loading.fxml"));
+		  root = loader.load();
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("Collection.css").toExternalForm());
+		  stage.setScene(scene);
+		  stage.show();
+	}
+	
+	public void switchToSceneMarketplace(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/marketplace/Collection.fxml"));
+		  root = loader.load();
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("/ui/marketplace/Collection.css").toExternalForm());
+		  stage.setTitle("Markertplace");
+		  stage.setScene(scene);
+		  stage.show();
+	}
+	
+	public void switchToSceneConTrast(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/contrast/Contrast.fxml"));
+		  root = loader.load();
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("/ui/contrast/Contrast.css").toExternalForm());
+		  stage.setTitle("Contrast");
+		  stage.setScene(scene);
+		  stage.show();
+	}
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

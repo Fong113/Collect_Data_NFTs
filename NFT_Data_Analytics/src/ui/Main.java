@@ -14,7 +14,6 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("Loading.fxml"));
 			
 			Scene scene = new Scene(root,1000,600);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.getIcons().add(new Image("file:"+System.getProperty("user.dir")+"/img/icon.png"));
 
 //			primaryStage.setTitle("NFT");

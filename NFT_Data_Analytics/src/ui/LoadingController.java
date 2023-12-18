@@ -31,6 +31,7 @@ import twitter.ITwitter;
 import blog_news.crawl.HandleBlognewsCrawler;
 import blog_news.crawl.ICrawler;
 import twitter.handle.HandleTwitter;
+import ui.marketplace.CollectionController;
 
 
 public class LoadingController implements Initializable{
@@ -117,7 +118,7 @@ public class LoadingController implements Initializable{
 	}
 	
 	public void switchToMarketplace(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Collection.fxml"));
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/marketplace/Collection.fxml"));
 		  root = loader.load();
 		  CollectionController collectionController  = loader.getController();
 		  collectionController.createIMarketplace(m);
