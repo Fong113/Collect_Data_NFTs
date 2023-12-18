@@ -1,4 +1,4 @@
-package ui.contrast;
+package ui;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -6,27 +6,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Orientation;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.model.CollectionFilter;
+import twitter.handle.HandleTwitter;
+import twitter.handle.Tweet;
 import marketplace.handler.MarketplaceHandler;
 import javafx.scene.image.Image;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
-public class ContrastController {
+public class Controller {
 
     @FXML
     private TableView<CollectionFilter> tableView;
@@ -79,49 +78,24 @@ public class ContrastController {
     @FXML
     private Button searchButton;
     
+    @FXML
+    private ToggleButton toggleButton;
+    
+    @FXML
+    private ListView<Tweet> tweetListView;
+
+    @FXML
+    private VBox tweetVBox;
+    
+    @FXML
+    private VBox blogVBox;
+    
     private MarketplaceHandler handler = new MarketplaceHandler();
-//    private ObservableList<CollectionFilter> collectionList;
+    private HandleTwitter tweetService = new HandleTwitter();
     Set<CollectionFilter> collectionList;
-    
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
-    
-	
-	public void switchToHome(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/Loading.fxml"));
-		  root = loader.load();
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("Collection.css").toExternalForm());
-		  stage.setScene(scene);
-		  stage.show();
-	}
-	
-	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/blogandtwitter/BlogAndTwitter.fxml"));
-		  root = loader.load();
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/blogandtwitter/BlogAndTwitter.css").toExternalForm());
-		  stage.setTitle("Hastag");
-		  stage.setScene(scene);
-		  stage.show();
-	}
-	
-	public void switchToSceneMarketplace(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/marketplace/Collection.fxml"));
-		  root = loader.load();
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/marketplace/Collection.css").toExternalForm());
-		  stage.setTitle("Markertplace");
-		  stage.setScene(scene);
-		  stage.show();
-	}
+    List<Tweet> tweets;
 
     public void initialize() {
-        // Set up cell value factories for each column using PropertyValueFactory
     	
     	columnNumber.setCellValueFactory(new Callback<CellDataFeatures<CollectionFilter, Integer>, ObservableValue<Integer>>() {
 			@Override
@@ -149,27 +123,6 @@ public class ContrastController {
 		});
     	columnNumber.setSortable(false);
     	
-    	
-//    	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
-//		columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
-//			private final ImageView imageView = new ImageView();
-//
-//			@Override
-//			protected void updateItem(String logoUrl, boolean empty) {
-//				super.updateItem(logoUrl, empty);
-//
-//				if (empty || logoUrl == null || logoUrl.isEmpty()) {
-//					setGraphic(null);
-//				} else {
-//					Image image = new Image(logoUrl, true);
-//					System.out.println(logoUrl);
-//					imageView.setImage(image);
-//					imageView.setFitWidth(75);
-//					imageView.setFitHeight(75);
-//					setGraphic(imageView);
-//				}
-//			}
-//		});
     	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
     	columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
     		private final ImageView imageView = new ImageView();
@@ -290,29 +243,54 @@ public class ContrastController {
         columnCurrency.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("currency"));
         columnChain.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("chain"));
         columnPeriod.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("period"));
-        
         columnMarketplaceName.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("marketplaceName"));
-
+        
+        
         noResultsLabel.setVisible(false);
     }
     
-    public void handleSearchButton(ActionEvent event) {
+    public void handleSearchButton(ActionEvent event)  throws InterruptedException{
         try {
             String searchTerm = searchTextField.getText().trim();
             System.out.println(searchTerm);
             collectionList = handler.filterCollectionListByName(searchTerm);
             System.out.println(collectionList);
             updateTableView(collectionList);
+            
+            tweets = tweetService.getTweetsByNameNFTs(searchTerm);
+            for (Tweet tweet : tweets) {
+//                Label tweetLabel = new Label("Author: " + tweet.getAuthor() + "\nContent: " + tweet.getContent());
+                Label authorLabel = new Label(tweet.getAuthor());
+                System.out.println(tweet.getAuthor());
+                Label contentLabel = new Label(tweet.getContent());
+                Label tagLabel = new Label(String.join(", ", tweet.getTags()));
+                Label dateLabel = new Label(tweet.getDate().toString());
+                tweetVBox.getChildren().addAll(authorLabel, contentLabel, tagLabel, dateLabel);
+                tweetVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+            }
+            
         } catch (Exception e) {
             e.printStackTrace(); 
         }
     }
-
+    
+    public void handlerToggle(ActionEvent event) {
+    	if (tweetVBox.isVisible()) {
+    		tweetVBox.setVisible(false);
+    	}else {
+    		tweetVBox.setVisible(true);
+    	}
+    	
+    	if (blogVBox.isVisible()) {
+    		blogVBox.setVisible(false);
+    	}else {
+    		blogVBox.setVisible(true);
+    	}
+    }
+    
     public void updateTableView(Set<CollectionFilter> collectionList) {
         ObservableList<CollectionFilter> observableList = FXCollections.observableArrayList(collectionList);
         tableView.setItems(observableList);
-
-        // Show or hide the "No results found" label based on the search results
         noResultsLabel.setVisible(collectionList.isEmpty());
     }
 }
