@@ -1,10 +1,13 @@
 package ui;
 	
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 
 public class Main extends Application {
 	@Override
@@ -12,9 +15,11 @@ public class Main extends Application {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("Loading.fxml"));
 			
-			Scene scene = new Scene(root,900,600);
+			Scene scene = new Scene(root,1000,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setTitle("NFT");
+			primaryStage.getIcons().add(new Image("file:"+System.getProperty("user.dir")+"/img/icon.png"));
+
+//			primaryStage.setTitle("NFT");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
