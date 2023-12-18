@@ -16,7 +16,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root,1000,600);
 			primaryStage.getIcons().add(new Image("file:"+System.getProperty("user.dir")+"/img/icon.png"));
 
-//			primaryStage.setTitle("NFT");
+			primaryStage.setTitle("NFT");
 			primaryStage.setScene(scene);
 			primaryStage.show();
 			
