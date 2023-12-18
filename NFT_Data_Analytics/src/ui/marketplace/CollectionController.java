@@ -1,4 +1,4 @@
-package ui;
+package ui.marketplace;
 
 import java.io.IOException;
 import java.net.URL;
@@ -137,20 +137,34 @@ public class CollectionController implements Initializable {
 		}
 	}
 	
-	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Tag.fxml"));
+	public void switchToHome(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/Loading.fxml"));
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("Collection.css").toExternalForm());
 		  stage.setScene(scene);
 		  stage.show();
 	}
 	
-	public void switchToHome(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Loading.fxml"));
+	public void switchToSceneBlogAndTwitter(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/blogandtwitter/BlogAndTwitter.fxml"));
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("/ui/blogandtwitter/BlogAndTwitter.css").toExternalForm());
+		  stage.setTitle("Hastag");
+		  stage.setScene(scene);
+		  stage.show();
+	}
+	
+	public void switchToSceneConTrast(ActionEvent event) throws IOException {
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/contrast/Contrast.fxml"));
+		  root = loader.load();
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  scene.getStylesheets().add(getClass().getResource("/ui/contrast/Contrast.css").toExternalForm());
+		  stage.setTitle("Contrast");
 		  stage.setScene(scene);
 		  stage.show();
 	}

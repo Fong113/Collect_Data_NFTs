@@ -3,6 +3,7 @@ package ui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 
 import javafx.scene.image.Image;
 
@@ -30,11 +31,12 @@ import twitter.ITwitter;
 import blog_news.crawl.HandleBlognewsCrawler;
 import blog_news.crawl.ICrawler;
 import twitter.handle.HandleTwitter;
+import ui.marketplace.CollectionController;
 
 
 public class LoadingController implements Initializable{
-//	@FXML
-//	private ProgressBar myProgressBar;
+	@FXML
+	private ProgressBar loadingProgressBar;
 	
 	@FXML
     private ImageView gifLoading;
@@ -49,19 +51,19 @@ public class LoadingController implements Initializable{
 	private Scene scene;
 	private Parent root;
 	
-//    private Timeline timeline;
+    private Timeline timeline;
     
 	IMarketplace m = new MarketplaceHandler();
 
-//	public void increaseProgress() {
-//		double increment = 0.1;
-//        myProgressBar.setProgress(Math.min(1.0, myProgressBar.getProgress() + increment));
-//        percentLabel.setText(String.format("%d%%", (int) Math.round(myProgressBar.getProgress() * 100)));
-//        if (myProgressBar.getProgress() >= 1.0) {
-//            timeline.stop();
-//            loadingLabel.setText("Done");
-//        }
-//	}
+	public void increaseProgress() {
+		double increment = 0.1;
+		loadingProgressBar.setProgress(Math.min(1.0, loadingProgressBar.getProgress() + increment));
+        percentLabel.setText(String.format("%d%%", (int) Math.round(loadingProgressBar.getProgress() * 100)));
+        if (loadingProgressBar.getProgress() >= 1.0) {
+            timeline.stop();
+            loadingLabel.setText("Done");
+        }
+	}
 	
 	public void clickBtnCrawl(ActionEvent event) {
 		ICrawlerManager crawlDataMarket = new CrawlerManager();
@@ -69,43 +71,54 @@ public class LoadingController implements Initializable{
 		ICrawler crawlDataBlogAndNews = new HandleBlognewsCrawler();
 		
 		// startAutoIncrease
-//        timeline = new Timeline(
-//                new KeyFrame(Duration.seconds(0.5), e -> increaseProgress())
-//        );
-//        timeline.setCycleCount(Timeline.INDEFINITE);
-//        timeline.play();
-		try {
-			crawlDataBlogAndNews.crawl();
-		} catch (IOException | RuntimeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			crawlDataTwitter.refreshData();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), e -> increaseProgress())
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
 
-		try {
-			m.clearData();
-			crawlDataMarket.crawlAllTrending();
-//			Image image = new Image(getClass().getResourceAsStream("/img/done.jpg"));
-//	        gifLoading.setImage(image);
-			
-			loadingLabel.setText("Done");
-		} catch (CrawlTimeoutException e) {
-			System.out.println(e.getMessage());
-		} catch (InternetConnectionException e) {
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+		 try {
+		        // Crawl blog and news data
+		        System.out.println("Crawling blog and news data...");
+		        crawlDataBlogAndNews.crawl();
+		        System.out.println("Blog and news data crawling completed.");
+
+		    } catch (IOException | RuntimeException e) {
+		        System.out.println("Error while crawling blog and news data:");
+		        e.printStackTrace();
+		    }
+
+		 try {
+		        // Refresh Twitter data
+		        System.out.println("Refreshing Twitter data...");
+		        crawlDataTwitter.refreshData();
+		        System.out.println("Twitter data refresh completed.");
+
+		    } catch (InterruptedException e) {
+		        System.out.println("Error while refreshing Twitter data:");
+		        e.printStackTrace();
+		    }
+
+		 try {
+		        // Clear existing data and crawl market data
+		        System.out.println("Clearing existing data and crawling market data...");
+		        m.clearData();
+		        crawlDataMarket.crawlAllTrending();
+		        System.out.println("Market data crawling completed.");
+
+		        loadingLabel.setText("Done");
+
+		    } catch (CrawlTimeoutException e) {
+		        System.out.println("Error while crawling market data: " + e.getMessage());
+		    } catch (InternetConnectionException e) {
+		        System.out.println("Internet connection error: " + e.getMessage());
+		    } catch (Exception e) {
+		        System.out.println("Unexpected error: " + e.getMessage());
+		    }
 	}
 	
 	public void switchToMarketplace(ActionEvent event) throws IOException {
-		  FXMLLoader loader = new FXMLLoader(getClass().getResource("Collection.fxml"));
+		  FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/marketplace/Collection.fxml"));
 		  root = loader.load();
 		  CollectionController collectionController  = loader.getController();
 		  collectionController.createIMarketplace(m);
@@ -117,6 +130,6 @@ public class LoadingController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-//	    myProgressBar.setStyle("-fx-accent: #00FF00;");
+		loadingProgressBar.setStyle("-fx-accent: #00FF00;");
 	}
 }
