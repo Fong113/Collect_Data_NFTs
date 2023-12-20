@@ -1,29 +1,94 @@
-.table-view .column-header-background .label{
-    -fx-background-color: #89CFF3;
-    -fx-text-fill: #000000;
-    -fx-font-size: 14;
+#anchorPane {
+    -fx-background-color: linear-gradient(to right, white, #31304D);
 }
 
-.table-view .table-cell{
-    -fx-text-fill: #000000;
-    -fx-alignment: center;
-    -fx-border-style: solid;
+/* CSS Button */
+#btnMarket {
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
 }
 
-.combo-box .list-cell {
-    -fx-background-color: #DAF5FF;
-    -fx-text-fill: #000000;
-    -fx-padding: 3 3 4 5;
-    -fx-font-size: 13;  
+#btnBlogAndTwitter,
+#btnContrast,
+#btnHome {
+	-fx-background-color: linear-gradient(to right, rgba(5, 237, 251, 1), rgba(31, 248, 153, 1));
+    -fx-text-fill: black;
+    -fx-opacity:0.8;
+    -fx-cursor: hand;
 }
 
-#btnShow {
-    -fx-padding: 8 8 8 8;
-    -fx-background-radius: 8;
+#btnBlogAndTwitter:hover,
+#btnContrast:hover,
+#btnHome:hover {
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
+    -fx-cursor: hand; 
+}
+
+/* CSS Combobox */
+.combo-box {
+	-fx-cursor: hand; 
+    -fx-font-size: 14px;
+    -fx-background-color: transparent; 
+}
+
+.combo-box .arrow {
+    -fx-background-color: #000000;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #13f3c9;
+}
+
+.combo-box:showing .list-cell, .combo-box:hover .list-cell {
+    -fx-background-color: #000000;
+    -fx-text-fill: #13f3c9;
+}
+
+.combo-box .list-cell  {
+    -fx-background-color: #13f3c9;
+    -fx-text-fill: #000000;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #000000;
+}
+
+.combo-box .list-view .list-cell {
+	-fx-cursor: hand; 
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
+}
+
+.combo-box .list-view .list-cell:hover {
+    -fx-background-color: #000000;
+    -fx-text-fill: #13f3c9; 
+}
+
+/* CSS Table - view */
+.table-view {
+    -fx-control-inner-background: transparent ;
+}
+
+.table-view .column-header {
+    -fx-background-color: linear-gradient(to right, #0EA293, #27E1C1);
+    -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
-    -fx-font-size: 14;
 }
 
-#btnShow:pressed {
-    -fx-padding: 12 12 12 12;
+.table-row-cell {
+    -fx-background-color: linear-gradient(to right, #2D9596, #0E8388);
+    -fx-text-fill: black;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: linear-gradient(to right, #5C8374, #2E4F4F); /* Alternate background color for odd rows */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #000000;
+}
+
+.table-cell {
+    -fx-alignment: CENTER;
 }
