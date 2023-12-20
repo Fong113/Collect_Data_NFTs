@@ -1,3 +1,32 @@
+#anchorPane {
+    -fx-background-color: linear-gradient(to right, white, #31304D);
+}
+
+/* CSS Button */
+#btnBlogAndTwitter {
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
+}
+
+#btnMarket,
+#btnContrast,
+#btnHome {
+	-fx-background-color: linear-gradient(to right, rgba(5, 237, 251, 1), rgba(31, 248, 153, 1));
+    -fx-text-fill: black;
+    -fx-opacity:0.8;
+    -fx-cursor: hand;
+}
+
+#btnContrast:hover,
+#btnMarket:hover,
+#btnHome:hover {
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
+    -fx-cursor: hand; 
+}
+
+
+
 .button {
     -fx-background-color: rgba(40, 70, 100, 0.8);
     -fx-text-fill: white; 
@@ -42,3 +71,4 @@
 	-fx-font-style: italic; 
     -fx-font-size: 12px;
 }
+

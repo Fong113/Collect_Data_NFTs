@@ -17,7 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -29,10 +28,11 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import marketplace.IMarketplace;
 import marketplace.crawl.MarketplaceType;
-
-
+import marketplace.handler.MarketplaceHandler;
 import marketplace.model.Collection;
 import marketplace.model.Trending;
+import java.io.File;
+
 
 public class CollectionController implements Initializable {
 
@@ -75,9 +75,11 @@ public class CollectionController implements Initializable {
 	@FXML
 	private ComboBox<String> periodComboBox;
 
-	@FXML
-	private Label labelTimeCrawl;
+	@FXML 
+	private ImageView imgLogo;
 	
+	@FXML 
+	private ImageView logoNFT;
 	
 	private Stage stage;
 	private Scene scene;
@@ -90,7 +92,8 @@ public class CollectionController implements Initializable {
 	ObservableList<String> listChain = FXCollections.observableArrayList();
 	ObservableList<String> listPeriod = FXCollections.observableArrayList();
 	
-	IMarketplace m;
+	IMarketplace m = new MarketplaceHandler();
+
 	String currency;
 	
 	public void marketComboBoxChanged(ActionEvent e) {
@@ -99,11 +102,30 @@ public class CollectionController implements Initializable {
 			
 			listChain.setAll(MarketplaceType.valueOf(marketComboBox.getValue()).getListChains());
 			listPeriod.setAll(MarketplaceType.valueOf(marketComboBox.getValue()).getListPeriods());
+			
+			setLogoImage();
 	}
 	
-	public void createIMarketplace(IMarketplace iMarketplace) {
-		m = iMarketplace;
-	}
+	private void setLogoImage() {
+        if (marketComboBox.getValue() != null) {
+            String imagePath = System.getProperty("user.dir") + "/img/" + marketComboBox.getValue().toLowerCase() + ".png";
+            try {
+                File file = new File(imagePath);
+                if (file.exists()) {
+                	logoNFT.setVisible(false);
+                    Image image = new Image(file.toURI().toString());
+                    imgLogo.setImage(image);
+                } else {
+                    System.err.println("Image not found: " + imagePath);
+                    imgLogo.setImage(null);
+                }
+            } catch (Exception e) {
+                imgLogo.setImage(null);
+            	logoNFT.setVisible(true);
+                System.err.println("Error loading image: " + e.getMessage());
+            }
+        }
+    }
 	
 	public void displayChanged(ActionEvent e) {
 		if (marketComboBox.getValue() != null && chainComboBox.getValue() != null && periodComboBox.getValue() != null) {
@@ -152,7 +174,6 @@ public class CollectionController implements Initializable {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/blogandtwitter/BlogAndTwitter.css").toExternalForm());
 		  stage.setTitle("Hastag");
 		  stage.setScene(scene);
 		  stage.show();
@@ -163,7 +184,6 @@ public class CollectionController implements Initializable {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/contrast/Contrast.css").toExternalForm());
 		  stage.setTitle("Contrast");
 		  stage.setScene(scene);
 		  stage.show();
@@ -172,7 +192,6 @@ public class CollectionController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
 		marketComboBox.setItems(listMarket);
 		chainComboBox.setItems(listChain);
 		periodComboBox.setItems(listPeriod);

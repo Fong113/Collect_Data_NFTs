@@ -1,0 +1,27 @@
+#anchorPane {
+    -fx-background-color: linear-gradient(to right, white, #31304D);
+}
+
+
+/* CSS Button */
+#btnContrast {
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
+}
+
+#btnMarket,
+#btnBlogAndTwitter,
+#btnHome {
+	-fx-background-color: linear-gradient(to right, rgba(5, 237, 251, 1), rgba(31, 248, 153, 1));
+    -fx-text-fill: black;
+    -fx-opacity:0.8;
+    -fx-cursor: hand;
+}
+
+#btnBlogAndTwitter:hover,
+#btnMarket:hover,
+#btnHome:hover {
+    -fx-background-color: #000000;
+    -fx-text-fill: #c8d0da;
+    -fx-cursor: hand; 
+}

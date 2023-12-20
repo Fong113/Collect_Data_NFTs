@@ -38,7 +38,6 @@ public class CollectionFilter extends Collection {
 	}
 	
 	public String getMarketPlaceName() {
-//		System.out.println("Getting marketplaceName: " + marketplaceName);
 		return marketplaceName;
 	}
 

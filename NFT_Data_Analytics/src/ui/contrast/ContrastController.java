@@ -24,6 +24,7 @@ import javafx.util.Callback;
 import marketplace.model.CollectionFilter;
 import twitter.handle.HandleTwitter;
 import twitter.handle.Tweet;
+import marketplace.IMarketplace;
 import marketplace.handler.MarketplaceHandler;
 import javafx.scene.image.Image;
 
@@ -93,7 +94,7 @@ public class ContrastController {
     @FXML
     private VBox blogVBox;
 
-    private MarketplaceHandler handler = new MarketplaceHandler();
+    private IMarketplace handler = new MarketplaceHandler();
     private HandleTwitter tweetService = new HandleTwitter();
     Set<CollectionFilter> collectionList;
     List<Tweet> tweets;
@@ -108,7 +109,7 @@ public class ContrastController {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("Collection.css").toExternalForm());
+		  stage.setTitle("Loading...");
 		  stage.setScene(scene);
 		  stage.show();
 	}
@@ -118,7 +119,6 @@ public class ContrastController {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/blogandtwitter/BlogAndTwitter.css").toExternalForm());
 		  stage.setTitle("Hastag");
 		  stage.setScene(scene);
 		  stage.show();
@@ -129,7 +129,6 @@ public class ContrastController {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/marketplace/Collection.css").toExternalForm());
 		  stage.setTitle("Markertplace");
 		  stage.setScene(scene);
 		  stage.show();
@@ -179,26 +178,26 @@ public class ContrastController {
     	columnNumber.setSortable(false);
 
 
-//    	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
-//		columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
-//			private final ImageView imageView = new ImageView();
-//
-//			@Override
-//			protected void updateItem(String logoUrl, boolean empty) {
-//				super.updateItem(logoUrl, empty);
-//
-//				if (empty || logoUrl == null || logoUrl.isEmpty()) {
-//					setGraphic(null);
-//				} else {
-//					Image image = new Image(logoUrl, true);
-//					System.out.println(logoUrl);
-//					imageView.setImage(image);
-//					imageView.setFitWidth(75);
-//					imageView.setFitHeight(75);
-//					setGraphic(imageView);
-//				}
-//			}
-//		});
+    	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
+		columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
+			private final ImageView imageView = new ImageView();
+
+			@Override
+			protected void updateItem(String logoUrl, boolean empty) {
+				super.updateItem(logoUrl, empty);
+
+				if (empty || logoUrl == null || logoUrl.isEmpty()) {
+					setGraphic(null);
+				} else {
+					Image image = new Image(logoUrl, true);
+					System.out.println(logoUrl);
+					imageView.setImage(image);
+					imageView.setFitWidth(75);
+					imageView.setFitHeight(75);
+					setGraphic(imageView);
+				}
+			}
+		});
     	columnLogo.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("logo"));
     	columnLogo.setCellFactory(param -> new TableCell<CollectionFilter, String>() {
     		private final ImageView imageView = new ImageView();
@@ -330,20 +329,22 @@ public class ContrastController {
             String searchTerm = searchTextField.getText().trim();
             System.out.println(searchTerm);
             collectionList = handler.filterCollectionListByName(searchTerm);
-            System.out.println(collectionList);
-            updateTableView(collectionList);
+		    for(CollectionFilter c : collectionList) {
+			    System.out.println(c);
+
+		    }            updateTableView(collectionList);
             
-            tweets = tweetService.getTweetsByNameNFTs(searchTerm);
-            for (Tweet tweet : tweets) {
-//                Label tweetLabel = new Label("Author: " + tweet.getAuthor() + "\nContent: " + tweet.getContent());
-                Label authorLabel = new Label(tweet.getAuthor());
-                System.out.println(tweet.getAuthor());
-                Label contentLabel = new Label(tweet.getContent());
-                Label tagLabel = new Label(String.join(", ", tweet.getTags()));
-                Label dateLabel = new Label(tweet.getDate().toString());
-                tweetVBox.getChildren().addAll(authorLabel, contentLabel, tagLabel, dateLabel);
-                tweetVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
-            }
+//            tweets = tweetService.getTweetsByNameNFTs(searchTerm);
+//            for (Tweet tweet : tweets) {
+////                Label tweetLabel = new Label("Author: " + tweet.getAuthor() + "\nContent: " + tweet.getContent());
+//                Label authorLabel = new Label(tweet.getAuthor());
+//                System.out.println(tweet.getAuthor());
+//                Label contentLabel = new Label(tweet.getContent());
+//                Label tagLabel = new Label(String.join(", ", tweet.getTags()));
+//                Label dateLabel = new Label(tweet.getDate().toString());
+//                tweetVBox.getChildren().addAll(authorLabel, contentLabel, tagLabel, dateLabel);
+//                tweetVBox.getChildren().add(new Separator(Orientation.HORIZONTAL));
+//            }
         } catch (Exception e) {
             e.printStackTrace(); 
         }

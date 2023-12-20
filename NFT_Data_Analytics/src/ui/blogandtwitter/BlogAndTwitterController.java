@@ -76,7 +76,6 @@ public class BlogAndTwitterController implements Initializable {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("Collection.css").toExternalForm());
 		  stage.setScene(scene);
 		  stage.show();
 	}
@@ -86,7 +85,6 @@ public class BlogAndTwitterController implements Initializable {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/marketplace/Collection.css").toExternalForm());
 		  stage.setTitle("Markertplace");
 		  stage.setScene(scene);
 		  stage.show();
@@ -97,7 +95,6 @@ public class BlogAndTwitterController implements Initializable {
 		  root = loader.load();
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
-		  scene.getStylesheets().add(getClass().getResource("/ui/contrast/Contrast.css").toExternalForm());
 		  stage.setTitle("Contrast");
 		  stage.setScene(scene);
 		  stage.show();
