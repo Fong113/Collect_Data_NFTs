@@ -17,7 +17,7 @@
 
 <AnchorPane fx:id="anchorPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="600.0" prefWidth="1000.0" stylesheets="@BlogAndTwitter.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.blogandtwitter.BlogAndTwitterController">
    <children>
-      <HBox alignment="CENTER" cacheShape="false" prefHeight="50.0" prefWidth="1000.0">
+      <HBox fx:id="hboxHeader" alignment="CENTER" cacheShape="false" prefHeight="50.0" prefWidth="1000.0">
          <children>
             <Button fx:id="btnHome" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#switchToHome" prefHeight="50.0" prefWidth="133.0" text="HOME" textFill="WHITE">
                <font>

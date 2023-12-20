@@ -1,5 +1,10 @@
 #anchorPane {
-    -fx-background-color: linear-gradient(to right, white, #31304D);
+    -fx-background-color: linear-gradient(to bottom, #F3F8FF, #FFDFDF);
+}
+
+/* Styles for HBox */
+#hboxHeader {
+    -fx-background-color: linear-gradient(to right, rgba(5, 237, 251, 1), rgba(31, 248, 153, 1)); 
 }
 
 /* CSS Button */
@@ -11,9 +16,8 @@
 #btnMarket,
 #btnContrast,
 #btnHome {
-	-fx-background-color: linear-gradient(to right, rgba(5, 237, 251, 1), rgba(31, 248, 153, 1));
+	-fx-background-color: transparent;
     -fx-text-fill: black;
-    -fx-opacity:0.8;
     -fx-cursor: hand;
 }
 

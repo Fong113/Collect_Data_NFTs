@@ -15,7 +15,7 @@
 
 <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" stylesheets="@Collection.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.marketplace.CollectionController">
    <children>
-      <HBox alignment="CENTER" cacheShape="false" prefHeight="50.0" prefWidth="1000.0">
+      <HBox fx:id="hboxHeader" alignment="CENTER" cacheShape="false" prefHeight="50.0" prefWidth="1000.0">
          <children>
             <Button fx:id="btnHome" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#switchToHome" prefHeight="50.0" prefWidth="133.0" text="HOME" textFill="WHITE">
                <font>
@@ -66,7 +66,7 @@
       </TableView>
       <VBox alignment="CENTER" layoutX="328.0" layoutY="68.0" prefHeight="74.0" prefWidth="170.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="170.0" text="Market place" textAlignment="CENTER" textFill="WHITE">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="170.0" text="Market place" textAlignment="CENTER">
                <font>
                   <Font name="Century Gothic Bold" size="20.0" />
                </font>
@@ -76,7 +76,7 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="547.0" layoutY="68.0" prefHeight="74.0" prefWidth="170.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="200.0" text="Chain type" textAlignment="CENTER" textFill="WHITE">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="39.0" prefWidth="200.0" text="Chain type" textAlignment="CENTER">
                <font>
                   <Font name="Century Gothic Bold" size="20.0" />
                </font>
@@ -86,7 +86,7 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="769.0" layoutY="68.0" prefHeight="74.0" prefWidth="170.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="48.0" prefWidth="170.0" text="Period type" textAlignment="CENTER" textFill="WHITE">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="48.0" prefWidth="170.0" text="Period type" textAlignment="CENTER">
                <font>
                   <Font name="Century Gothic Bold" size="20.0" />
                </font>
