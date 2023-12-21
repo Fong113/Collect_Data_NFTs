@@ -1,4 +1,4 @@
-package twitter.helper.format;
+package helper.format;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

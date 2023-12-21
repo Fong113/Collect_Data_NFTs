@@ -2,15 +2,15 @@ package test;
 
 import java.util.List;
 
-import twitter.handle.HandleTwitter;
-import twitter.handle.AHandle.TimePeriodType;
-import twitter.interfaceTwitter.ITwitter;
+import dao.twitter.DAOTwitter;
+import dao.twitter.IDAOTwitter;
+import handle.twitter.AHandle.TimePeriodType;
 
 
 public class Test {
 	public static void main(String[] args) throws InterruptedException {
 
-		ITwitter t = new HandleTwitter();
+		IDAOTwitter t = new DAOTwitter();
 //		t.refreshData();
 		
 //		List<Tweet> tweets = t.getTweetsByNameNFTs("luna");

@@ -1,16 +1,17 @@
-package twitter.handle;
+package dao.twitter;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import crawler.twitter.ICrawler;
+import crawler.twitter.selenium.HandleSeleniumCrawl;
+import handle.twitter.AHandle;
+import helper.exception.InternetConnectionException;
+import model.Tweet;
+
 import java.time.LocalDate;
 
-import twitter.crawl.ICrawler;
-import twitter.crawl.selenium.HandleSeleniumCrawl;
-import twitter.helper.exception.InternetConnectionException;
-import twitter.interfaceTwitter.ITwitter;
-import twitter.model.Tweet;
-
-public class HandleTwitter extends AHandle implements ITwitter {
+public class DAOTwitter extends AHandle implements IDAOTwitter {
 
     @Override
     public List<Tweet> getTweetsAboutNFTs() {
@@ -18,13 +19,6 @@ public class HandleTwitter extends AHandle implements ITwitter {
         List<Tweet> tweets = getTweetsFromJsonFile("nfts");
 
         return tweets;
-    };
-
-    @Override
-    public void refreshData() throws  InternetConnectionException, InterruptedException {
-        System.setProperty("webdriver.chrome.driver", ".\\lib\\chromedriver-win64\\chromedriver.exe");
-        ICrawler takeData = new HandleSeleniumCrawl();
-        takeData.crawlTweetsAboutNFTs();
     };
 
     @Override

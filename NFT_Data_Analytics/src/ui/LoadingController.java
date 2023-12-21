@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import crawler.twitter.ICrawler;
+import dao.twitter.DAOTwitter;
+import dao.twitter.IDAOTwitter;
 import javafx.scene.image.Image;
 
 import javafx.fxml.FXML;
@@ -26,9 +29,6 @@ import marketplace.crawl.ICrawlerManager;
 import marketplace.crawl.exception.CrawlTimeoutException;
 import marketplace.crawl.exception.InternetConnectionException;
 import marketplace.handler.MarketplaceHandler;
-import twitter.crawl.ICrawler;
-import twitter.handle.HandleTwitter;
-import twitter.interfaceTwitter.ITwitter;
 
 
 public class LoadingController implements Initializable{
@@ -64,7 +64,7 @@ public class LoadingController implements Initializable{
 	
 	public void clickBtnCrawl(ActionEvent event) {
 		ICrawlerManager crawlDataMarket = new CrawlerManager();
-		ITwitter crawlDataTwitter = new HandleTwitter();
+		IDAOTwitter crawlDataTwitter = new DAOTwitter();
 		
 		// startAutoIncrease
 //        timeline = new Timeline(
@@ -73,15 +73,15 @@ public class LoadingController implements Initializable{
 //        timeline.setCycleCount(Timeline.INDEFINITE);
 //        timeline.play();
 		
-		try {
-			crawlDataTwitter.refreshData();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (twitter.helper.exception.InternetConnectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			crawlDataTwitter.refreshData();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (twitter.helper.exception.InternetConnectionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		try {
 			m.clearData();

@@ -1,4 +1,4 @@
-package twitter.crawl.selenium;
+package crawler.twitter.selenium;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -7,9 +7,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import twitter.helper.exception.InternetConnectionException;
-import twitter.model.Tweet;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -20,6 +17,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import helper.exception.InternetConnectionException;
+import model.Tweet;
 
 public class ActionOnTwitter {
 

@@ -1,4 +1,4 @@
-package twitter.helper.format;
+package helper.format;
 
 public class FormatName {
 	

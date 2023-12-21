@@ -1,14 +1,15 @@
-package twitter.crawl;
+package crawler.twitter;
 
 import java.util.List;
 
-import twitter.helper.exception.InternetConnectionException;
-import twitter.model.Tweet;
+import helper.exception.InternetConnectionException;
+import model.Tweet;
 
 public interface ICrawler {
 
 	List<Tweet> crawlTweetsAboutNFTs() throws InternetConnectionException, InterruptedException;
 
 	List<Tweet> crawlTweetsByNameNFTs(String nameNFTs) throws InterruptedException, InternetConnectionException;
-
+	
+	void refreshData() throws  InternetConnectionException, InterruptedException;
 }

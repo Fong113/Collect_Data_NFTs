@@ -1,4 +1,4 @@
-package twitter.crawl.selenium;
+package crawler.twitter.selenium;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,11 +8,11 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import twitter.crawl.ICrawler;
-import twitter.helper.exception.InternetConnectionException;
-import twitter.helper.format.FormatName;
-import twitter.helper.format.LocalDateAdapter;
-import twitter.model.Tweet;
+import crawler.twitter.ICrawler;
+import helper.exception.InternetConnectionException;
+import helper.format.FormatName;
+import helper.format.LocalDateAdapter;
+import model.Tweet;
 
 public class HandleSeleniumCrawl implements ICrawler {
 
@@ -48,6 +48,11 @@ public class HandleSeleniumCrawl implements ICrawler {
 		return tweetList;
 	};
 	
+	 @Override
+	 public void refreshData() throws  InternetConnectionException, InterruptedException {
+	        crawlTweetsAboutNFTs();
+	    };
+	    
 	public void putToFile(String fileName, List<Tweet> tweetList) {
 		Gson gson = new GsonBuilder()
 				.disableHtmlEscaping()

@@ -1,4 +1,4 @@
-package twitter.handle;
+package handle.twitter;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,9 +14,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import twitter.helper.format.FormatName;
-import twitter.helper.format.LocalDateAdapter;
-import twitter.model.Tweet;
+import helper.format.FormatName;
+import helper.format.LocalDateAdapter;
+import model.Tweet;
 
 public abstract class AHandle {
 		

@@ -1,4 +1,4 @@
-package twitter.helper.exception;
+package helper.exception;
 
 @SuppressWarnings("serial")
 public class CrawlTimeoutException extends Exception{
