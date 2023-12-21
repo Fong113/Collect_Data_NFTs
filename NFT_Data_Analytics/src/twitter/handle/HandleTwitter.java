@@ -1,13 +1,14 @@
 package twitter.handle;
 
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
-import twitter.ITwitter;
+
 import twitter.crawl.ICrawler;
 import twitter.crawl.selenium.HandleSeleniumCrawl;
-
+import twitter.helper.exception.InternetConnectionException;
+import twitter.interfaceTwitter.ITwitter;
+import twitter.model.Tweet;
 
 public class HandleTwitter extends AHandle implements ITwitter {
 
@@ -20,7 +21,7 @@ public class HandleTwitter extends AHandle implements ITwitter {
     };
 
     @Override
-    public void refreshData() throws InterruptedException {
+    public void refreshData() throws  InternetConnectionException, InterruptedException {
         System.setProperty("webdriver.chrome.driver", ".\\lib\\chromedriver-win64\\chromedriver.exe");
         ICrawler takeData = new HandleSeleniumCrawl();
         takeData.crawlTweetsAboutNFTs();
@@ -29,8 +30,7 @@ public class HandleTwitter extends AHandle implements ITwitter {
     @Override
     public List<Tweet> getTweetsByNameNFTs(String searchKey) throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", ".\\lib\\chromedriver-win64\\chromedriver.exe");
-        ICrawler takeData = new HandleSeleniumCrawl();
-        List<Tweet> tweets = takeData.crawlTweetsByNameNFTs(searchKey);
+        List<Tweet> tweets = getTweetsFromJsonFile(searchKey);
 
         return tweets;
     };
@@ -53,7 +53,7 @@ public class HandleTwitter extends AHandle implements ITwitter {
         switch (periodType) {
             case DAILY:
                 List<Tweet> tweetsInDay = tweets.stream()
-                        .filter(tweet -> tweet.getDate().equals(LocalDate.now().minusDays(2)))
+                        .filter(tweet -> tweet.getDate().equals(LocalDate.now()))
                         .collect(Collectors.toList());
                 return getMostUsedTags(tweetsInDay);
             case WEEKLY:

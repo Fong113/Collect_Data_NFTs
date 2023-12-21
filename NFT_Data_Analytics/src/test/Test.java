@@ -1,23 +1,17 @@
 package test;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 
-import twitter.ITwitter;
 import twitter.handle.HandleTwitter;
 import twitter.handle.AHandle.TimePeriodType;
-import twitter.handle.Tweet;
+import twitter.interfaceTwitter.ITwitter;
 
 
 public class Test {
 	public static void main(String[] args) throws InterruptedException {
 
 		ITwitter t = new HandleTwitter();
-		t.refreshData();
+//		t.refreshData();
 		
 //		List<Tweet> tweets = t.getTweetsByNameNFTs("luna");
 //		
@@ -26,12 +20,12 @@ public class Test {
 //		}
 //		
 		
-//		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
-//		int i = 0;
-//		for(String test : tags) {
-//			System.out.println(i + " " + test);
-//			i++;
-//		}
+		List<String> tags = t.getHotTags(TimePeriodType.DAILY);
+		int i = 0;
+		for(String test : tags) {
+			System.out.println(i + " " + test);
+			i++;
+		}
 
 		
 	}

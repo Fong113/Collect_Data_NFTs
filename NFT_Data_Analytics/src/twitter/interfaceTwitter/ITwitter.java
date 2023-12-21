@@ -1,8 +1,10 @@
-package twitter;
+package twitter.interfaceTwitter;
 
 import java.util.List;
-import twitter.handle.Tweet;
+
 import twitter.handle.AHandle.TimePeriodType;
+import twitter.helper.exception.InternetConnectionException;
+import twitter.model.Tweet;
 
 public interface ITwitter {
 	
@@ -14,5 +16,5 @@ public interface ITwitter {
 
 	List<String> getHotTags(TimePeriodType periodType);
 	
-	void refreshData() throws InterruptedException;
+	void refreshData() throws  InternetConnectionException, InterruptedException;
 }

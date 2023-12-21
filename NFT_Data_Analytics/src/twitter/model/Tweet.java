@@ -1,4 +1,4 @@
-package twitter.handle;
+package twitter.model;
 
 import java.time.LocalDate;
 import java.util.Arrays;

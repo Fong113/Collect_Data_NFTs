@@ -14,7 +14,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import twitter.crawl.selenium.LocalDateAdapter;
+import twitter.helper.format.FormatName;
+import twitter.helper.format.LocalDateAdapter;
+import twitter.model.Tweet;
 
 public abstract class AHandle {
 		
@@ -27,7 +29,7 @@ public abstract class AHandle {
 	                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
 	                .create();
 	        List<Tweet> dataList = new ArrayList<>();
-	        try (FileReader reader = new FileReader(".\\data\\twitter\\" + fileName + ".json")) {
+	        try (FileReader reader = new FileReader(".\\data\\twitter\\" + FormatName.formatNameFile(fileName) + ".json")) {
 	            Type listType = new TypeToken<ArrayList<Tweet>>() {
 	            }.getType();
 	            dataList = gson.fromJson(reader, listType);
@@ -72,7 +74,7 @@ public abstract class AHandle {
 	        for (Tweet tweet : tweets) {
 	        	
 	            for (String tag : tweet.getTags()) {
-	                 if (!tag.toLowerCase().startsWith("#nft")) {
+	                 if (!tag.toLowerCase().startsWith("#nfts")) {
 	                 tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
 	                 }
 	            }

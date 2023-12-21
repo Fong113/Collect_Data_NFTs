@@ -1,7 +1,5 @@
 package twitter.crawl.selenium;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,10 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import twitter.handle.Tweet;
+import twitter.helper.exception.InternetConnectionException;
+import twitter.model.Tweet;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -25,32 +21,31 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public abstract class SeleniumCrawl {
+public class ActionOnTwitter {
 
-	protected static WebDriver driver = new ChromeDriver(new ChromeOptions().addArguments("--headless"));
-//	protected static WebDriver driver = new ChromeDriver();
+	private static  WebDriver driver = new ChromeDriver(new ChromeOptions().addArguments("--headless"));
 
-	public void visitWebsite(String pathToWebsite) {
+	public static void visitWebsite(String pathToWebsite) throws InternetConnectionException {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 		driver.navigate().to(pathToWebsite);
 	}
 
-	public void enterUsername(String usename) {
+	public static void enterUsername(String usename) {
 		driver.findElement(By.xpath("//input[@autocomplete='username']")).sendKeys(usename);
 		driver.findElement(By.xpath("//input[@autocomplete='username']/following::div[@role='button']")).click();
 	}
 
-	public void enterPassword(String password) {
+	public static void enterPassword(String password) {
 		driver.findElement(By.xpath("//input[@name='password']")).sendKeys(password);
 		driver.findElement(By.xpath("//div[@data-testid='LoginForm_Login_Button']")).click();
 	}
 
-	public void scrollDown() {
+	public static void scrollDown() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
 	}
 
-	public void searchByTag(String tag) throws InterruptedException {
+	public static void searchByTag(String tag) throws InterruptedException {
 
 		driver.findElement(By.xpath("//a[@data-testid='AppTabBar_Explore_Link']")).click();
 		WebElement search = driver.findElement(By.xpath("//input[@data-testid='SearchBox_Search_Input']"));
@@ -62,7 +57,7 @@ public abstract class SeleniumCrawl {
 		
 	}
 
-	public List<Tweet> getArrayTweetList(int tweetsQuantity) throws InterruptedException {
+	public static List<Tweet> getArrayTweetList(int tweetsQuantity) throws InterruptedException {
 		
 		System.out.println("Getting tweet......");
 
@@ -89,15 +84,15 @@ public abstract class SeleniumCrawl {
 		return tweetList;
 	}
 
-	public String getAuthor(WebElement tweet) {
+	public static String getAuthor(WebElement tweet) {
 		return tweet.findElement(By.xpath(".//div[@data-testid='User-Name']//a")).getText();
 	}
 
-	public String getContent(WebElement tweet) {
+	public static String getContent(WebElement tweet) {
 		return tweet.findElement(By.xpath(".//div[@data-testid='tweetText']")).getText();
 	}
 
-	public List<String> getTags(WebElement tweet) {
+	public static List<String> getTags(WebElement tweet) {
 		List<WebElement> crawlTags = tweet.findElements(By.partialLinkText("#"));
 		List<String> tags = crawlTags.stream()
 				.map(WebElement::getText)
@@ -106,15 +101,13 @@ public abstract class SeleniumCrawl {
 		return tags;
 	}
 
-	public String getImageURL(WebElement tweet) {
+	public static String getImageURL(WebElement tweet) {
 		List<WebElement> images = tweet.findElements(By.xpath(".//div[@data-testid='tweetPhoto']//img"));
 		if (!images.isEmpty()) return images.get(0).getAttribute("src");
-		
 		return "";
-		
 	}
 
-	public LocalDate getTimePost(WebElement tweet) {
+	public static LocalDate getTimePost(WebElement tweet) {
 		WebElement timePost = tweet.findElement(By.xpath(".//div[@data-testid='User-Name']//time"));
 		String dateString = timePost.getAttribute("datetime");
 		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX");
@@ -123,34 +116,23 @@ public abstract class SeleniumCrawl {
 	}
 
 
-	public Tweet takeTweet(WebElement tweet) {
+	public static Tweet takeTweet(WebElement tweet) {
 		String author = getAuthor(tweet);
 		List<String> tags = getTags(tweet);
 		String content = getContent(tweet);
-		String imageURL = "";
+		String imageURL = getImageURL(tweet);
 		LocalDate date = getTimePost(tweet);
 
 		return (new Tweet(author, content, tags, imageURL, date));
 	}
 
-	public void quitTwitter() {
+	public static void quitTwitter() {
 		driver.quit();
 	}
+	public String formartNameFile(String nameFile) {
+		
+		String convertName = nameFile.replace(' ', '_').toLowerCase();
+		return convertName;
+ }
 
-	public void putToFile(String fileName, List<Tweet> tweetList) {
-		Gson gson = new GsonBuilder()
-				.disableHtmlEscaping()
-				.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
-				.create();
-		String convertFileName = fileName.replace(" ", "_").toLowerCase();
-		String pathFile = ".\\data\\twitter\\" + convertFileName + ".json";
-		try {
-			FileWriter writer = new FileWriter(pathFile);
-			gson.toJson(tweetList, writer);
-			writer.close();
-			System.out.println("Add file " + fileName + " succ");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

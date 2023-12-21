@@ -1,4 +1,4 @@
-package twitter.crawl.selenium;
+package twitter.helper.format;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;

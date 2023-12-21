@@ -26,9 +26,9 @@ import marketplace.crawl.ICrawlerManager;
 import marketplace.crawl.exception.CrawlTimeoutException;
 import marketplace.crawl.exception.InternetConnectionException;
 import marketplace.handler.MarketplaceHandler;
-import twitter.ITwitter;
 import twitter.crawl.ICrawler;
 import twitter.handle.HandleTwitter;
+import twitter.interfaceTwitter.ITwitter;
 
 
 public class LoadingController implements Initializable{
@@ -76,6 +76,9 @@ public class LoadingController implements Initializable{
 		try {
 			crawlDataTwitter.refreshData();
 		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (twitter.helper.exception.InternetConnectionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
