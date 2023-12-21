@@ -43,7 +43,7 @@ public class Test {
 	    try {
 	    	collectionList = m.filterCollectionListByName("star");
 		    for(CollectionFilter c : collectionList) {
-			    System.out.println(c);
+			    System.out.println(c.toString());
 
 		    }
 		} catch (JsonSyntaxException e) {
