@@ -1,4 +1,4 @@
-package blog_news.crawl;
+package crawler.blog_news;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,10 +9,10 @@ import java.io.IOException;
 
 import com.google.gson.reflect.TypeToken;
 
-import blog_news.Article;
-import blog_news.helper.DateIO;
-import blog_news.helper.JsonIO;
+import helper.DateIO;
+import helper.JsonIO;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import model.Article;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,22 +28,19 @@ public class CryptoNews_crawler implements ICrawler {
     	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
     	String baseUrl = "https://crypto.news/tag/nft/";
 
-  
     	@Override
     	public void crawl() throws IOException, TimeoutException {
     	    List<Article> existingArticles = Article_IO.loadJson(Article.getPATH());
 
     	    if (existingArticles == null || existingArticles.isEmpty()) {
-    	        // Nếu danh sách là null hoặc trống, khởi tạo danh sách mới
     	        existingArticles = new ArrayList<>();
     	    } else {
-                // Reset idCounter based on the maximum ID in existing articles
                 int maxId = existingArticles.stream().mapToInt(Article::getId).max().orElse(0);
                 Article.resetIdCounter(maxId);
             }
 
     	    List<Article> crawledArticles = crawlCryptoNews(existingArticles);
-    	    Article_IO.writeToJsonWithInitialization(crawledArticles, Article.getPATH());
+    	    Article_IO.writeToJson(crawledArticles, Article.getPATH());
     	}
 
     	private List<Article> crawlCryptoNews(List<Article> existingArticles) throws IOException, TimeoutException{
@@ -51,16 +48,14 @@ public class CryptoNews_crawler implements ICrawler {
 	    	ChromeOptions opt = new ChromeOptions();
 			opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
 			opt.addArguments("--headless");
-//			opt.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36");
 			opt.addArguments("--remote-allow-origins=*");
 			WebDriver driver = new ChromeDriver(opt);
-//	        driver.manage().window().maximize();
 	        driver.get(baseUrl);
-	        for (int i = 1; i <= 3; i++) {
+	        for (int i = 1; i <= 2; i++) {
             	((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
             	((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -1000);");
             	try {
-            		Thread.sleep(2000); // Tạm dừng để đợi dữ liệu mới tải
+            		Thread.sleep(2000);
             	} catch (InterruptedException e) {
             		e.printStackTrace();
             	}
@@ -90,12 +85,9 @@ public class CryptoNews_crawler implements ICrawler {
 		                    }
 		                    currentArticle.setAbsoluteURL(article.select("a").attr("href"));
 		                    Document articleDoc = Jsoup.connect(currentArticle.getAbsoluteURL()).get();
-		
-		                    // Lấy nội dung bài viết
-//		                    String leadtext = articleDoc.select("div.post__block_lead-text p.post__lead").text();
+
 		                    Elements content = articleDoc.select("div[class='post-detail__content blocks']");
 		                    String fullContent = content.text();
-//		                    String fullContent = leadtext + "\n" + combinedContent;
 		                    currentArticle.setFullContent(fullContent);
 		
 		                    // Lấy tags/keywords
