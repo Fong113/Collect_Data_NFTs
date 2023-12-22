@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import blog_news.Article;
+import blog_news.handle.FindHotTags.TimePeriodType;
 
 public class ArticleManager implements IArticleManager {
 	private static List<Article> articles;
@@ -50,6 +51,12 @@ public class ArticleManager implements IArticleManager {
 	public List<String> findHotTagsForMonth(){
 		FindHotTags FindHotTags = new FindHotTags(articles);
 		return FindHotTags.findHotTagsForMonth();
+	}
+
+	@Override
+	public List<String> getHotTags(TimePeriodType periodType) {
+		FindHotTags FindHotTags = new FindHotTags(articles);
+		return FindHotTags.getHotTags(periodType);
 	}
 
 	

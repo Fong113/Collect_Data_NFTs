@@ -19,7 +19,7 @@ public class DateIO {
     }
 
     public static String formatDate(String inputDate) {
-        return formatHelper(inputDate, "yyyy-MM-dd", "dd/MM/yyyy");
+        return formatHelper(inputDate, "yyyy-MM-dd'T'HH:mm:ssXXX", "dd/MM/yyyy");
     }
 
     public static String formatCustomDate(String inputDate) {

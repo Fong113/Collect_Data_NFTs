@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import blog_news.Article;
+import blog_news.handle.FindHotTags.TimePeriodType;
 
 public interface IArticleManager {
 //	 void filterArticlesByTags(); // Chỉ để test trong console
@@ -16,5 +17,6 @@ public interface IArticleManager {
 	 public List<String> findHotTagsForDay();
 	 public List<String> findHotTagsForWeek();
 	 public List<String> findHotTagsForMonth();
+	 public List<String> getHotTags(TimePeriodType periodType);
 	 
 }
