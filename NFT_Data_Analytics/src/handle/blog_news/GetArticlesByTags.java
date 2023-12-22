@@ -1,6 +1,5 @@
-package blog_news.handle;
+package handle.blog_news;
 
-import blog_news.Article;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,11 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ShowArticlesByTags {
+import model.Article;
+
+public class GetArticlesByTags {
     private static List<Article> articles;
 
-    public ShowArticlesByTags(List<Article> articles) {
-        ShowArticlesByTags.articles = articles;
+    public GetArticlesByTags(List<Article> articles) {
+        GetArticlesByTags.articles = articles;
     }
     
  // function chính

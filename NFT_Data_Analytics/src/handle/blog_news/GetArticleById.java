@@ -1,12 +1,13 @@
-package blog_news.handle;
+package handle.blog_news;
 
 import java.util.List;
-import blog_news.Article;
 
-public class ShowAnArticle {
+import model.Article;
+
+public class GetArticleById {
 	private static List<Article> articles;
-	public ShowAnArticle(List<Article> articles) {
-		ShowAnArticle.articles = articles;
+	public GetArticleById(List<Article> articles) {
+		GetArticleById.articles = articles;
 	}
 
 	public Article findArticleById(int inputId) {

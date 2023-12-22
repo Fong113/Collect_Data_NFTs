@@ -1,4 +1,4 @@
-package blog_news;
+package model;
 import java.util.List;
 
 public class Article {
