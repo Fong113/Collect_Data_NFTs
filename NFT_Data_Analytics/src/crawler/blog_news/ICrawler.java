@@ -1,4 +1,4 @@
-package blog_news.crawl;
+package crawler.blog_news;
 
 import java.io.IOException;
 

@@ -1,11 +1,11 @@
-package blog_news.crawl;
+package crawler.blog_news;
 
 import java.io.IOException;
 
 import org.openqa.selenium.TimeoutException;
 
-import blog_news.Article;
-import blog_news.helper.JsonIO;
+import helper.JsonIO;
+import model.Article;
 
 public class HandleBlognewsCrawler implements ICrawler {
 

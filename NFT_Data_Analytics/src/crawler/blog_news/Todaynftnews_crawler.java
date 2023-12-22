@@ -1,4 +1,4 @@
-package blog_news.crawl;
+package crawler.blog_news;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,21 +10,21 @@ import java.time.Duration;
 
 import com.google.gson.reflect.TypeToken;
 
-import blog_news.Article;
-import blog_news.helper.DateIO;
-import blog_news.helper.JsonIO;
+import helper.DateIO;
+import helper.JsonIO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import model.Article;
+
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -32,7 +32,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Todaynftnews_crawler implements ICrawler {
 	private static final JsonIO<Article> Article_IO = new JsonIO<>(new TypeToken<ArrayList<Article>>() {}.getType());
-//	private final static String PATH = ".\\data\\blog_news.json";
 	private String baseUrl = "https://www.todaynftnews.com/nft-news/";
 	
 	@Override
@@ -40,30 +39,22 @@ public class Todaynftnews_crawler implements ICrawler {
 	    List<Article> existingArticles = Article_IO.loadJson(Article.getPATH());
 
 	    if (existingArticles == null || existingArticles.isEmpty()) {
-	        // Nếu danh sách là null hoặc trống, khởi tạo danh sách mới
 	        existingArticles = new ArrayList<>();
 	    } else {
-            // Reset idCounter based on the maximum ID in existing articles
             int maxId = existingArticles.stream().mapToInt(Article::getId).max().orElse(0);
             Article.resetIdCounter(maxId);
         }
 
 	    List<Article> crawledArticles = crawlTodayNFTnews(existingArticles);
-	    Article_IO.writeToJsonWithInitialization(crawledArticles, Article.getPATH());
+	    Article_IO.writeToJson(crawledArticles, Article.getPATH());
 	}
 
 	
 	private List<Article> crawlTodayNFTnews(List<Article> existingArticles) throws IOException, TimeoutException, RuntimeException{
 		WebDriverManager.chromedriver().setup();
-//    	ChromeOptions opt = new ChromeOptions();
-//		opt.setPageLoadStrategy(PageLoadStrategy.EAGER);
-//		opt.addArguments("--headless");
-//		opt.addArguments("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36");
     	WebDriver driver = new ChromeDriver();
-        driver.manage().window().maximize();
+//        driver.manage().window().maximize();
         driver.get(baseUrl);
-//        List<Article> articleList = new ArrayList<>();
-        
     	try {
     		    for (int morePage = 2; morePage <= 3; morePage++) {
     		    	clickLoadMoreButton(driver);
@@ -105,10 +96,8 @@ public class Todaynftnews_crawler implements ICrawler {
             }
                 	                
         } catch (IOException e) {
-            // Ném lại IOException với thông báo riêng
             throw new IOException("Lỗi network");
         } catch (TimeoutException te) {
-            // Ném lại TimeoutException với thông báo riêng
             throw new TimeoutException("Timeout trong lúc crawl");
         } finally {
             // Đóng trình duyệt
@@ -121,10 +110,8 @@ public class Todaynftnews_crawler implements ICrawler {
 	private static void scrollNearEnd(WebDriver driver) {
 	    try {
 	        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-
-	        // Scroll đến vị trí gần cuối trang
 	        jsExecutor.executeScript("window.scrollTo(0, document.body.scrollHeight-1000);");
-	        Thread.sleep(2000); // Đợi 2 giây để trang load thêm dữ liệu
+	        Thread.sleep(2000);
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
@@ -132,19 +119,13 @@ public class Todaynftnews_crawler implements ICrawler {
 
 	private static void clickLoadMoreButton(WebDriver driver) throws RuntimeException {
 	    try {
-	        // Đóng popup nếu có
 	        closePopup(driver);
-
-	        // Scroll xuống gần cuối trang
 	        scrollNearEnd(driver);
-
 	        List<WebElement> loadMoreButtons = driver.findElements(By.cssSelector("div#load-posts a"));
 	        if (!loadMoreButtons.isEmpty()) {
 	            WebElement loadMoreButton = loadMoreButtons.get(0);
-	            // Thực hiện click vào nút Load more posts
 	            loadMoreButton.click();
-
-	            waitForPageLoad(driver); // Đợi một khoảng thời gian để trang load thêm dữ liệu
+	            Thread.sleep(2000);
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -164,13 +145,4 @@ public class Todaynftnews_crawler implements ICrawler {
 	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
 	    }
 	}
-
-	private static void waitForPageLoad(WebDriver driver) {
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-
-	    // Sử dụng expected condition để kiểm tra trạng thái của trang
-	    wait.until((ExpectedCondition<Boolean>) wd ->
-	            ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	}
-
 }
