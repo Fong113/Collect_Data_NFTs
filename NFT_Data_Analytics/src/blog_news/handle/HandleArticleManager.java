@@ -10,6 +10,7 @@ import java.util.Set;
 import com.google.gson.reflect.TypeToken;
 
 import blog_news.Article;
+import blog_news.handle.FindHotTags.TimePeriodType;
 import blog_news.helper.JsonIO;
 
 public class HandleArticleManager implements IArticleManager {
@@ -57,6 +58,11 @@ public class HandleArticleManager implements IArticleManager {
 	public List<String> findHotTagsForMonth() {
 		return ArticleManager.findHotTagsForMonth();
 	}
+    
+    @Override
+   	public List<String> getHotTags(TimePeriodType periodType) {
+   		return ArticleManager.getHotTags(periodType);
+   	}
     
     public void test(HandleArticleManager handleArticleManager) {
     	try (Scanner scanner = new Scanner(System.in)) {
@@ -107,8 +113,8 @@ public class HandleArticleManager implements IArticleManager {
 //            System.out.println("Ngày đã nhập: " + userInput);
             // Gọi phương thức
 //    		List<String> hotTagsMap = findHotTagsForDay();
-//    		List<String> hotTagsMap = findHotTagsForWeek();
-            List<String> hotTagsMap = findHotTagsForMonth();
+    		List<String> hotTagsMap = findHotTagsForWeek();
+//            List<String> hotTagsMap = findHotTagsForMonth();
     		List<String> hotTagsList = new ArrayList<>(hotTagsMap);
 
             // Sắp xếp List theo giảm dần số lần xuất hiện
@@ -116,7 +122,7 @@ public class HandleArticleManager implements IArticleManager {
             // In kết quả tags hot theo xếp hạng
 //            System.out.println("Top tags hot trong ngày:");
 //            System.out.println("Top tags hot trong 7 ngày gần nhất:");
-            System.out.println("Top tags hot trong tháng:");
+//            System.out.println("Top tags hot trong tháng:");
             int count = 0;
             for (String tag : hotTagsList) {
                 System.out.println("Top " + (count + 1) + ": " + tag );
@@ -133,12 +139,13 @@ public class HandleArticleManager implements IArticleManager {
         
         HandleArticleManager handleArticleManager = new HandleArticleManager();
         
-        handleArticleManager.test(handleArticleManager);
-        
+//        handleArticleManager.test(handleArticleManager);
+//        System.out.println(handleArticleManager.findHotTagsForDay());
+        System.out.println(handleArticleManager.getHotTags(TimePeriodType.MONTHLY));
         // test getAllAricles
 //        System.out.println(handleArticleManager.getAllArticles());
         
-        //test Get Tags
+//        //test Get Tags
 //        Set<String> result = handleArticleManager.extractUniqueTags();
 //        System.out.println(result);
     }

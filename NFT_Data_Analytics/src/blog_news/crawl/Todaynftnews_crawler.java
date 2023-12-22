@@ -159,7 +159,7 @@ public class Todaynftnews_crawler implements ICrawler {
 	        WebElement closeButton = driver.findElement(By.cssSelector(".pum-close.popmake-close"));
 	        closeButton.click();
 	        System.out.println("Popup đã được đóng.");
-	        Thread.sleep(1000);
+	        Thread.sleep(500);
 	    } catch (Exception e) {
 	        System.out.println("Popup không xuất hiện hoặc đã hết thời gian chờ.");
 	    }

@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import blog_news.Article;
 import blog_news.helper.DateIO;
@@ -175,7 +176,69 @@ public class FindHotTags {
         }
 
         return latestDateStr;
-    }    
+    }  
+    
+    public enum TimePeriodType {
+        DAILY, WEEKLY, MONTHLY
+    }
+    
+    public List<String> getMostUsedTags(List<Article> searchedArticles) {
+    	
+        Map<String, Integer> tagCountMap = new HashMap<>();
+        
+        for (Article article : searchedArticles) {
+        	
+            for (String tag : article.getTags()) {
+            	if (!tag.equalsIgnoreCase("#NFT market") && !tag.equalsIgnoreCase("#NFT")) {
+                    tagCountMap.put(tag, tagCountMap.getOrDefault(tag, 0) + 1);
+                }
+            }
+        }
+
+        List<Map.Entry<String, Integer>> sortedEntries = tagCountMap.entrySet()
+                .stream()
+                .sorted((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()))
+                .limit(5)
+                .collect(Collectors.toList());
+
+        return sortedEntries.stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getHotTags(TimePeriodType periodType) {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        switch (periodType) {
+            case DAILY:
+                List<Article> blogsInDays = articles.stream()
+                        .filter(article -> LocalDate.parse(article.getPublishDate(), formatter).isEqual(now.minusDays(2)))
+                        .collect(Collectors.toList());
+                return getMostUsedTags(blogsInDays);
+            case WEEKLY:
+                LocalDate endOfWeek = now.minusDays(7);
+                List<Article> blogsInWeek = articles.stream()
+                        .filter(article -> {
+                            LocalDate publishDate = LocalDate.parse(article.getPublishDate(), formatter);
+                            return publishDate.isAfter(endOfWeek.minusDays(1)) && publishDate.isBefore(now.plusDays(1));
+                        })
+                        .collect(Collectors.toList());
+                return getMostUsedTags(blogsInWeek);
+            case MONTHLY:
+                LocalDate startOfMonth = now.withDayOfMonth(1);
+                LocalDate endOfMonth = now.withDayOfMonth(now.lengthOfMonth());
+                List<Article> blogsInMonth = articles.stream()
+                        .filter(article -> {
+                            LocalDate publishDate = LocalDate.parse(article.getPublishDate(), formatter);
+                            return publishDate.isAfter(startOfMonth.minusDays(1)) && publishDate.isBefore(endOfMonth.plusDays(1));
+                        })
+                        .collect(Collectors.toList());
+                return getMostUsedTags(blogsInMonth);
+        }
+        return null;
+    }
+
 }
 
 
