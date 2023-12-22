@@ -14,9 +14,10 @@ public interface IArticleManager {
 	 public List<Article> getAllArticles();
 	 public Set<String> extractUniqueTags();
 	 public Article findArticleById(int id);
-	 public List<String> findHotTagsForDay();
-	 public List<String> findHotTagsForWeek();
-	 public List<String> findHotTagsForMonth();
 	 public List<String> getHotTags(TimePeriodType periodType);
+//	 public List<String> findHotTagsForDay();
+//	 public List<String> findHotTagsForWeek();
+//	 public List<String> findHotTagsForMonth();
+	 
 	 
 }

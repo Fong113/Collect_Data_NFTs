@@ -56,7 +56,7 @@ public class CryptoNews_crawler implements ICrawler {
 			WebDriver driver = new ChromeDriver(opt);
 //	        driver.manage().window().maximize();
 	        driver.get(baseUrl);
-//	        for (int i = 1; i <= 5; i++) {
+	        for (int i = 1; i <= 3; i++) {
             	((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
             	((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -1000);");
             	try {
@@ -64,11 +64,11 @@ public class CryptoNews_crawler implements ICrawler {
             	} catch (InterruptedException e) {
             		e.printStackTrace();
             	}
-//            }
+            }
 	        
 	    	try {
 	                Document doc = Jsoup.parse(driver.getPageSource());
-	                Elements articles = doc.select("article");
+	                Elements articles = doc.select("div.post-loop.post-loop--style-horizontal.post-loop--category-news");
 	                
 	                for (Element article : articles) {
 	                	try {
@@ -78,7 +78,7 @@ public class CryptoNews_crawler implements ICrawler {
 		                    parent.hasClass("related-posts__inner"));
 
 		                    if (!isRelated) {
-		                        String title = titleElements.text();
+		                        String title = titleElements.text().replace("Read more -", "").trim();
 		                        if (existingArticles.stream().anyMatch(existingArticle -> existingArticle.getTitle().equals(title))) {
 		                            System.out.println("Article already exists: " + title);
 		                            continue; // Skip further processing for this article
