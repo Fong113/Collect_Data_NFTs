@@ -34,30 +34,30 @@ public class ArticleManager implements IArticleManager {
 		ShowAnArticle showAnArticle = new ShowAnArticle(articles);
 		return showAnArticle.findArticleById(id);
 	}
-
-	@Override
-	public List<String> findHotTagsForDay() {
-		FindHotTags FindHotTags = new FindHotTags(articles);
-		return FindHotTags.findHotTagsForDay();
-	} 
 	
-	@Override
-	public List<String> findHotTagsForWeek(){
-		FindHotTags FindHotTags = new FindHotTags(articles);
-		return FindHotTags.findHotTagsForWeek();
-	}
-	
-	@Override
-	public List<String> findHotTagsForMonth(){
-		FindHotTags FindHotTags = new FindHotTags(articles);
-		return FindHotTags.findHotTagsForMonth();
-	}
-
 	@Override
 	public List<String> getHotTags(TimePeriodType periodType) {
 		FindHotTags FindHotTags = new FindHotTags(articles);
 		return FindHotTags.getHotTags(periodType);
 	}
+	
+//	@Override
+//	public List<String> findHotTagsForDay() {
+//		FindHotTags FindHotTags = new FindHotTags(articles);
+//		return FindHotTags.findHotTagsForDay();
+//	} 
+//	
+//	@Override
+//	public List<String> findHotTagsForWeek(){
+//		FindHotTags FindHotTags = new FindHotTags(articles);
+//		return FindHotTags.findHotTagsForWeek();
+//	}
+//	
+//	@Override
+//	public List<String> findHotTagsForMonth(){
+//		FindHotTags FindHotTags = new FindHotTags(articles);
+//		return FindHotTags.findHotTagsForMonth();
+//	}
 
 	
 	
