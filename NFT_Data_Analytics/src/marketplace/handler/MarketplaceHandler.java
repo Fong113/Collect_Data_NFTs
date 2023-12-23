@@ -73,7 +73,7 @@ public class MarketplaceHandler implements IMarketplace {
 					for(JsonElement e : data.get("data").getAsJsonArray()) {
 						if(e.getAsJsonObject().get("name").getAsString().contains(collectionName)) {
 							CollectionFilter col = new Gson().fromJson(e, CollectionFilter.class);
-							col.setMarketPlaceName(data.get("marketplaceName").getAsString());
+							col.setMarketplaceName(data.get("marketplaceName").getAsString());
 							col.setChain(data.get("chain").getAsString());
 							col.setPeriod(data.get("period").getAsString());
 							col.setCurrency(data.get("currency").getAsString());

@@ -5,8 +5,7 @@ public class CollectionFilter extends Collection {
 	private String currency;
 	private String chain;
 	private String period;
-	
-	
+
 	public CollectionFilter(String id, String logo, String name, double volume, double volumeChange, double floorPrice,
 			double floorPriceChange, int items, int owners, String marketplaceName, String currency, String chain,
 			String period) {
@@ -37,20 +36,21 @@ public class CollectionFilter extends Collection {
 		return false;
 	}
 	
-	public String getMarketPlaceName() {
+	public String getMarketplaceName() {
 		return marketplaceName;
 	}
 
-	public void setMarketPlaceName(String marketPlaceName) {
-		this.marketplaceName = marketPlaceName;
+	public void setMarketplaceName(String marketplaceName) {
+		this.marketplaceName = marketplaceName;
 	}
+
 
 	public String getCurrency() {
 		return currency;
 	}
 
-	public void setCurrency(String chain) {
-		this.currency = chain;
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public String getPeriod() {

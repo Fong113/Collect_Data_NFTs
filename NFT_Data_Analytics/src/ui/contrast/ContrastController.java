@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import blog_news.Article;
+
 public class ContrastController {
 
     @FXML
@@ -79,21 +81,27 @@ public class ContrastController {
     @FXML
     private TextField searchTextField; 
 
-    @FXML
-    private Label noResultsLabel;
 
     @FXML
     private Button searchButton;
-    
-    @FXML
-    private ToggleButton toggleButton;
     
     @FXML
     private VBox tweetVBox;
     
     @FXML
     private VBox blogVBox;
-
+    
+    @FXML
+	private Tab blogTab, twitterTab;
+    
+    @FXML
+	private Pagination blogPagination, tweetPagination;
+    
+    @FXML
+	private TabPane resultPane;
+    
+    private final int itemsPerPage = 5; 
+    
     private IMarketplace handler = new MarketplaceHandler();
     private HandleTwitter tweetService = new HandleTwitter();
     Set<CollectionFilter> collectionList;
@@ -134,19 +142,6 @@ public class ContrastController {
 		  stage.show();
 	}
 	
-	public void handlerToggle(ActionEvent event) {
-    	if (tweetVBox.isVisible()) {
-    		tweetVBox.setVisible(false);
-    	}else {
-    		tweetVBox.setVisible(true);
-    	}
-    	
-    	if (blogVBox.isVisible()) {
-    		blogVBox.setVisible(false);
-    	}else {
-    		blogVBox.setVisible(true);
-    	}
-    }
 
     public void initialize() {
         // Set up cell value factories for each column using PropertyValueFactory
@@ -242,7 +237,12 @@ public class ContrastController {
     	    }
 
     	    private boolean isImage(String url) {
-    	        return url.toLowerCase().endsWith(".jpg") || url.toLowerCase().endsWith(".jpeg") || url.toLowerCase().endsWith(".png");
+    	    	try {
+    	            new Image(url);
+    	            return true;  
+    	        } catch (Exception e) {
+    	            return false;
+    	        }
     	    }
     	});
 
@@ -321,22 +321,49 @@ public class ContrastController {
 
         columnMarketplaceName.setCellValueFactory(new PropertyValueFactory<CollectionFilter, String>("marketplaceName"));
         
-        noResultsLabel.setVisible(false);
+        
+        tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+            	System.out.println("Button");
+                displayTweetsForSelectedRow(newSelection);
+            }
+        });
+    }
+    
+    public void displayTweetsForSelectedRow(CollectionFilter selectedCollection) {
+        try {
+//            tweets = tweetService.getTweetsByNameNFTs(selectedCollection.getName());
+            Tab selectedTab = resultPane.getSelectionModel().getSelectedItem();
+            
+//            if (selectedTab == blogTab) {
+//            	if (!searchText.isEmpty()) {
+//                	currentArticles = (List<Article>) articleManager.filterArticlesByTags(new String[]{searchText});
+//                	setupPagination(currentArticles);
+//                }
+//            } 
+            if (selectedTab == twitterTab) {
+                	tweets = tweetService.getTweetsByNameNFTs(selectedCollection.getName());
+                	setupPagination(tweets);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    
     public void handleSearchButton(ActionEvent event) {
         try {
             String searchTerm = searchTextField.getText().trim();
-            System.out.println(searchTerm);
+//            System.out.println(searchTerm);
             collectionList = handler.filterCollectionListByName(searchTerm);
-		    for(CollectionFilter c : collectionList) {
-			    System.out.println(c);
-
-		    }            updateTableView(collectionList);
+//		    for(CollectionFilter c : collectionList) {
+//			    System.out.println(c);
+//
+//		    }
+		    updateTableView(collectionList);
             
 //            tweets = tweetService.getTweetsByNameNFTs(searchTerm);
 //            for (Tweet tweet : tweets) {
-////                Label tweetLabel = new Label("Author: " + tweet.getAuthor() + "\nContent: " + tweet.getContent());
 //                Label authorLabel = new Label(tweet.getAuthor());
 //                System.out.println(tweet.getAuthor());
 //                Label contentLabel = new Label(tweet.getContent());
@@ -355,6 +382,80 @@ public class ContrastController {
         tableView.setItems(observableList);
 
         // Show or hide the "No results found" label based on the search results
-        noResultsLabel.setVisible(collectionList.isEmpty());
+//        noResultsLabel.setVisible(collectionList.isEmpty());
+    }
+    
+    public Node createTweetNode(Tweet tweet) {
+        VBox tweetBox = new VBox(10);
+        tweetBox.getStyleClass().add("tweet-box");
+
+        Label authorLabel = new Label(tweet.getAuthor());
+        authorLabel.getStyleClass().add("tweet-author");
+
+        Label contentLabel = new Label(tweet.getContent());
+        contentLabel.getStyleClass().add("tweet-content");
+        contentLabel.setWrapText(true);
+
+        tweetBox.getChildren().addAll(authorLabel, contentLabel);
+        return tweetBox;
+    }
+    public Node createArticleNode(Article article) {
+        VBox articleBox = new VBox(10);
+        articleBox.getStyleClass().add("article-box");
+
+        Label titleLabel = new Label(article.getTitle());
+        titleLabel.getStyleClass().add("article-title");
+        titleLabel.setWrapText(true);
+
+        Label dateLabel = new Label(article.getPublishDate());
+        dateLabel.getStyleClass().add("article-date");
+
+        Label contentLabel = new Label(article.getFullContent());
+        contentLabel.getStyleClass().add("article-content");
+        contentLabel.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
+        
+        articleBox.getChildren().addAll(titleLabel, contentLabel, dateLabel);
+        return articleBox;
+    }
+    public Node createPage(List<?> items, int pageIndex) {
+        if (items.isEmpty()) {
+            return new ScrollPane();
+        }
+
+        VBox targetBox = null;
+        if (items.get(0) instanceof Article) {
+        	blogVBox.getChildren().clear();
+            targetBox = blogVBox;
+        } else if (items.get(0) instanceof Tweet) {
+            tweetVBox.getChildren().clear();
+            targetBox = tweetVBox;
+        }
+
+        int start = pageIndex * itemsPerPage;
+        int end = Math.min(start + itemsPerPage, items.size());
+        for (int i = start; i < end; i++) {
+            Object item = items.get(i);
+            Node node = (item instanceof Article) ? 
+            		createArticleNode((Article) item) : createTweetNode((Tweet) item);
+            targetBox.getChildren().add(node);
+            if (i < end - 1) {
+                targetBox.getChildren().add(new Separator());
+            }
+   
+        }
+        return new ScrollPane(targetBox);
+    }
+    
+    public void setupPagination(List<?> items) {
+        int pageCount = (int) Math.ceil((double) items.size() / itemsPerPage);
+        Pagination targetPagination = null;
+        
+        if (items.get(0) instanceof Article) {
+        	targetPagination = blogPagination;
+        } else if (items.get(0) instanceof Tweet) {
+        	targetPagination = tweetPagination;
+        }
+        targetPagination.setPageCount(pageCount);
+        targetPagination.setPageFactory(pageIndex -> createPage(items, pageIndex));
     }
 }
